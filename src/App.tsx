@@ -10,12 +10,14 @@ import initialTheme from './theme/theme';
 import { useState } from 'react';
 
 // Import Landing Page
-import LandingPage from 'views/landing/LandingPage';
+import LandingPage from './views/Landing/landingPage';
+import Header from 'components/Header';
 
 export default function Main() {
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
   return (
     <ChakraProvider theme={currentTheme}>
+
       <Routes>
         {/* Landing Page Route */}
         <Route path="/" element={<LandingPage />} />

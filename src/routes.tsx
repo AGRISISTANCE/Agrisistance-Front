@@ -25,7 +25,7 @@ import RTL from 'views/admin/rtl';
 import SignInCentered from 'views/auth/signIn';
 
 // Landing Page Import
-import LandingPage from 'views/landing/LandingPage'; // <== Import the Landing Page Component
+import LandingPage from 'views/Landing/landingPage'; // <== Import the Landing Page Component
 
 
 const routes = [

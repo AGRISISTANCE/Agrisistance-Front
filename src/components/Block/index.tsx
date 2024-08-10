@@ -8,7 +8,7 @@ interface Props {
 const Block = ({ title, content }: Props) => {
   return (
     <Container>
-      <h6>{title}</h6>
+      <h6 className="green">{title}</h6>
       <TextWrapper>
         <Content>{content}</Content>
       </TextWrapper>

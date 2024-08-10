@@ -18,6 +18,7 @@ import {
 const ContentBlock = ({
   icon,
   title,
+  subtitle,
   content,
   section,
   button,
@@ -46,6 +47,7 @@ const ContentBlock = ({
           <Col lg={11} md={11} sm={11} xs={24}>
             <ContentWrapper>
               <h6>{title}</h6>
+              <h6>{subtitle}</h6>
               <Content>{content}</Content>
               {direction === "right" ? (
                 <ButtonWrapper>

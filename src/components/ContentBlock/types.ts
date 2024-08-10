@@ -2,6 +2,7 @@
 export interface ContentBlockProps {
   icon: string;
   title: string;
+  subtitle?:string;
   content: string;
   section?: {
     title: string;

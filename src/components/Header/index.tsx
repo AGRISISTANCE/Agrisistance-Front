@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Row, Col, Drawer } from "antd";
+import { withTranslation, TFunction } from "react-i18next";
 import Container from "../../common/Container";
 import { SvgIcon } from "../../common/SvgIcon";
 import { Button } from "../../common/Button";
@@ -15,7 +16,7 @@ import {
   Span,
 } from "./styles";
 
-const Header = () => {
+const Header = ({ t }: { t: TFunction }) => {
   const [visible, setVisibility] = useState(false);
 
   const toggleButton = () => {
@@ -33,20 +34,23 @@ const Header = () => {
     return (
       <>
         <CustomNavLinkSmall onClick={() => scrollTo("about")}>
-          <Span>About</Span>
+          <Span>{t("Home")}</Span>
+        </CustomNavLinkSmall>
+        <CustomNavLinkSmall onClick={() => scrollTo("about")}>
+          <Span>{t("About")}</Span>
         </CustomNavLinkSmall>
         <CustomNavLinkSmall onClick={() => scrollTo("mission")}>
-          <Span>Mission</Span>
+          <Span>{t("Features")}</Span>
         </CustomNavLinkSmall>
         <CustomNavLinkSmall onClick={() => scrollTo("product")}>
-          <Span>Product</Span>
+          <Span>{t("Contact US")}</Span>
         </CustomNavLinkSmall>
         <CustomNavLinkSmall
           style={{ width: "180px" }}
           onClick={() => scrollTo("contact")}
         >
           <Span>
-            <Button>Contact</Button>
+            <Button>{t("Get Started")}</Button>
           </Span>
         </CustomNavLinkSmall>
       </>
@@ -58,7 +62,7 @@ const Header = () => {
       <Container>
         <Row justify="space-between">
           <LogoContainer to="/" aria-label="homepage">
-            <SvgIcon src="logo.svg" width="101px" height="64px" />
+            <SvgIcon src="logo.svg" width="200px" height="80px" />
           </LogoContainer>
           <NotHidden>
             <MenuItem />
@@ -69,7 +73,7 @@ const Header = () => {
         </Row>
         <Drawer closable={false} open={visible} onClose={toggleButton}>
           <Col style={{ marginBottom: "2.5rem" }}>
-            <Label onClick={toggleButton}>
+            <Label onClick={toggleButton}>e
               <Col span={12}>
                 <Menu>Menu</Menu>
               </Col>
@@ -85,4 +89,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default withTranslation()(Header);

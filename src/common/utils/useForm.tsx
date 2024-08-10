@@ -3,12 +3,14 @@ import { notification } from "antd";
 
 interface IValues {
   name: string;
+  surname: string;
   email: string;
   message: string;
 }
 
 const initialValues: IValues = {
   name: "",
+  surname:  "",
   email: "",
   message: "",
 };
