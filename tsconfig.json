@@ -28,7 +28,11 @@
     "noImplicitThis": true,
     "strictNullChecks": false,
     "downlevelIteration": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "paths": {
+      "@assets/*": ["./src/assets/*"],
+      "views/*": ["views/*"]
+    },
   },
   "include": [
     "./src"

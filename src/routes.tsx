@@ -1,11 +1,18 @@
 import { Icon } from '@chakra-ui/react';
 import {
-  MdBarChart,
   MdPerson,
   MdHome,
   MdLock,
-  MdOutlineShoppingCart,
+  MdOutlineYard,
+  MdOutlineCalendarMonth,
+  MdGroups
 } from 'react-icons/md';
+
+import {
+  PiVirtualReality
+} from 'react-icons/pi';
+
+
 
 // Admin Imports
 import MainDashboard from 'views/admin/default';
@@ -20,6 +27,7 @@ import SignInCentered from 'views/auth/signIn';
 // Landing Page Import
 import LandingPage from 'views/Landing/landingPage'; // <== Import the Landing Page Component
 
+
 const routes = [
   {
     name: 'Landing Page',  // <== Add a name for the landing page route
@@ -29,40 +37,54 @@ const routes = [
     component: <LandingPage />,  // <== Use the Landing Page component
   },
   {
-    name: 'Main Dashboard',
+    name: 'Home',
     layout: '/admin',
     path: '/default',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <MainDashboard />,
   },
   {
-    name: 'NFT Marketplace',
+    name: 'Profile',
     layout: '/admin',
-    path: '/nft-marketplace',
+    path: '/profile',
     icon: (
       <Icon
-        as={MdOutlineShoppingCart}
+        as={MdPerson}
         width="20px"
         height="20px"
         color="inherit"
       />
     ),
-    component: <NFTMarketplace />,
+    component: <Profile />,
     secondary: true,
   },
   {
-    name: 'Data Tables',
+    name: 'Your land',
     layout: '/admin',
-    icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={MdOutlineYard} width="20px" height="20px" color="inherit" />,
     path: '/data-tables',
     component: <DataTables />,
   },
   {
-    name: 'Profile',
+    name: 'Calendar',
     layout: '/admin',
-    path: '/profile',
-    icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
-    component: <Profile />,
+    path: '/nft-marketplace',
+    icon: <Icon as={MdOutlineCalendarMonth} width="20px" height="20px" color="inherit" />,
+    component: <NFTMarketplace />,
+  },
+  {
+    name: 'Your network',
+    layout: '/admin',
+    path: '/nft-marketplace',
+    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
+    component: <NFTMarketplace />,
+  },
+  {
+    name: 'Virtual land',
+    layout: '/admin',
+    path: '/nft-marketplace',
+    icon: <Icon as={PiVirtualReality} width="20px" height="20px" color="inherit" />,
+    component: <NFTMarketplace />,
   },
   {
     name: 'Sign In',
@@ -79,5 +101,6 @@ const routes = [
     component: <RTL />,
   },
 ];
+
 
 export default routes;
