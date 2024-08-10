@@ -1,4 +1,5 @@
 import { createIcon } from '@chakra-ui/icons';
+import agrisistancelogo from '../../assets/img/layout/logowtext2_green.png'
 
 export const AdobexdLogo = createIcon({
 	displayName: 'AdobexdLogo',
@@ -42,7 +43,7 @@ export const AndroidLogo = createIcon({
 		<g width='16' height='18' fill='none' xmlns='http://www.w3.org/2000/svg'>
 			<path
 				d='M4.9.051a.571.571 0 0 0-.263.066.518.518 0 0 0-.214.715l.595 1.029C3.584 2.71 2.634 4.16 2.634 5.815v.307a1.525 1.525 0 0 0-1.132-.494C.672 5.628 0 6.27 0 7.064v4.426c0 .793.673 1.437 1.502 1.437.452 0 .857-.192 1.132-.495v.62c0 .836.715 1.52 1.588 1.52h.404v1.969c0 .793.672 1.436 1.501 1.436.829 0 1.502-.643 1.502-1.436v-1.97h.697v1.97c0 .793.673 1.436 1.502 1.436.828 0 1.501-.643 1.501-1.436v-1.97h.403c.874 0 1.588-.683 1.588-1.519v-.62c.276.303.68.495 1.133.495.829 0 1.502-.644 1.502-1.437V7.064c0-.793-.673-1.436-1.502-1.436-.452 0-.857.191-1.133.494v-.307c0-1.655-.952-3.104-2.385-3.953l.596-1.03a.518.518 0 0 0-.214-.715.571.571 0 0 0-.748.205L9.945 1.4a5.906 5.906 0 0 0-1.968-.333c-.692 0-1.357.117-1.967.332L5.386.322a.556.556 0 0 0-.487-.27Z'
-				fill='#fffcurrentColor'
+				fill='currentColor'
 			/>
 			<path
 				d='M1.501 6.002c-.618 0-1.11.47-1.11 1.062v4.426c0 .592.492 1.063 1.11 1.063.618 0 1.11-.471 1.11-1.063V7.064c0-.591-.492-1.062-1.11-1.062Zm12.952 0c-.619 0-1.11.47-1.11 1.062v4.426c0 .592.491 1.063 1.11 1.063.618 0 1.11-.471 1.11-1.063V7.064c0-.591-.492-1.062-1.11-1.062Zm-8.327 5.05c-.618 0-1.11.471-1.11 1.063v4.426c0 .591.492 1.062 1.11 1.062.618 0 1.11-.47 1.11-1.062v-4.426c0-.592-.492-1.063-1.11-1.063Zm3.7 0c-.618 0-1.11.471-1.11 1.063v4.426c0 .591.492 1.062 1.11 1.062.619 0 1.111-.47 1.111-1.062v-4.426c0-.592-.492-1.063-1.11-1.063Z'
@@ -448,6 +449,13 @@ export const SpotifyLogo = createIcon({
 	)
 });
 
+export const AgrisistanceLogo = () => {
+	return (
+		<img src={agrisistancelogo} alt="Logo"  />
+	);
+  };
+
+/*
 export const HorizonLogo = createIcon({
 	displayName: 'horizonLogo',
 	viewBox: '0 0 179 20',
@@ -460,6 +468,7 @@ export const HorizonLogo = createIcon({
 		</g>
 	)
 });
+*/
 
 export const SupportIcon = createIcon({
 	// Doesn't display the full icon without w and h being specified
