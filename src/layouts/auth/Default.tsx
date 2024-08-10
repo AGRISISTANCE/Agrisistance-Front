@@ -1,7 +1,7 @@
 // Chakra imports
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import Footer from 'components/footer/FooterAuth';
+import Footer from 'components/footerAdmin/FooterAuth';
 import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
 // Custom components
 import { NavLink } from 'react-router-dom';

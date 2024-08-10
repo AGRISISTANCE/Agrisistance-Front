@@ -13,9 +13,9 @@ import {
   Empty,
   FooterContainer,
   Language,
-  Label,
-  LanguageSwitch,
-  LanguageSwitchContainer,
+  // Label,
+  // LanguageSwitch,
+  // LanguageSwitchContainer,
 } from "./styles";
 
 interface SocialLinkProps {
@@ -73,8 +73,8 @@ const Footer = () => {
               <Empty />
               <Language>Address</Language>
               <Para>Rancho Santa Margarita</Para>
-              <Para>2131 Elk Street</Para>
-              <Para>California</Para>
+              <Para>Djelfa city</Para>
+              <Para>Algeria</Para>
             </Col>
             <Col lg={8} md={8} sm={12} xs={12}>
               <Title>Company</Title>
@@ -84,25 +84,11 @@ const Footer = () => {
               <Large to="/">Careers & Culture</Large>
             </Col>
             <Col lg={6} md={6} sm={12} xs={12}>
-              <Label htmlFor="select-lang">Language</Label>
-              <LanguageSwitchContainer>
-                <LanguageSwitch onClick={() => handleChange("en")}>
-                  <SvgIcon
-                    src="united-states.svg"
-                    aria-label="homepage"
-                    width="30px"
-                    height="30px"
-                  />
-                </LanguageSwitch>
-                <LanguageSwitch onClick={() => handleChange("es")}>
-                  <SvgIcon
-                    src="spain.svg"
-                    aria-label="homepage"
-                    width="30px"
-                    height="30px"
-                  />
-                </LanguageSwitch>
-              </LanguageSwitchContainer>
+              <Title>Company</Title>
+              <Large to="/">About</Large>
+              <Large to="/">Blog</Large>
+              <Large to="/">Press</Large>
+              <Large to="/">Careers & Culture</Large>
             </Col>
           </Row>
         </Container>
@@ -141,18 +127,6 @@ const Footer = () => {
                 href="https://medium.com/@lashakakabadze/"
                 src="medium.svg"
               />
-              <a
-                href="https://ko-fi.com/Y8Y7H8BNJ"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  height="36"
-                  style={{ border: 0, height: 36 }}
-                  src="https://storage.ko-fi.com/cdn/kofi3.png?v=3"
-                  alt="Buy Me a Coffee at ko-fi.com"
-                />
-              </a>
             </FooterContainer>
           </Row>
         </Container>
