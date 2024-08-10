@@ -1,4 +1,3 @@
-import { TFunction } from "react-i18next";
 export interface ContainerProps {
   border?: boolean;
   children: React.ReactNode;
@@ -20,7 +19,6 @@ export interface SvgIconProps {
 export interface InputProps {
   name: string;
   placeholder: string;
-  t: TFunction;
   type?: string;
   value?: string;
   onChange: (
@@ -29,6 +27,7 @@ export interface InputProps {
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => void;
 }
+
 export interface validateProps {
   name: string;
   message: string;
