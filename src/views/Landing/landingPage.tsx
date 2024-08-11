@@ -58,7 +58,7 @@ class landingPage extends Component {
                                         <h4>From <span className="green">UNCERTAINTY</span> to <span className="green">OPPORTUNITY</span></h4>
                                         <Content>Beautifully designed templates using React.js, ant design and styled-components! Save weeks of time and build your landing page in minutes.</Content>
                                         <ButtonWrapper>
-                                        <NavLink to="/login">
+                                        <NavLink to="/auth/login">
                                             <Button>
                                                 Get Started
                                             </Button>

@@ -18,9 +18,19 @@ import {
 // Admin Imports
 import MainDashboard from 'views/admin/default';
 import NFTMarketplace from 'views/admin/marketplace';
-import Profile from 'views/admin/profile';
+import Profileold from 'views/admin/profileold';
 import DataTables from 'views/admin/dataTables';
 import RTL from 'views/admin/rtl';
+
+
+//
+import Home from 'views/admin/home'
+import Profile from 'views/admin/profile'
+import Yourland from 'views/admin/yourland'
+import Calendar from 'views/admin/calendar'
+import Yournetwork from 'views/admin/yournetwork'
+import Virtualland from 'views/admin/virtualland'
+
 
 // Auth Imports
 import SignInCentered from 'views/auth/signUp';
@@ -41,14 +51,14 @@ const routes = [
   {
     name: 'Sign Up',
     layout: '/auth',
-    path: '/sign-up',
+    path: '/signup',
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     component: <SignInCentered />,
   },
   {
     name: 'Log In',
     layout: '/auth',
-    path: '/log-in',
+    path: '/login',
     icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
     component: <LogInCentered />,
   },
@@ -57,7 +67,7 @@ const routes = [
     layout: '/dashboard',
     path: '/home',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: <MainDashboard />,
+    component: <Home />,
   },
   {
     name: 'Profile',
@@ -72,28 +82,28 @@ const routes = [
     layout: '/dashboard',
     icon: <Icon as={MdOutlineYard} width="20px" height="20px" color="inherit" />,
     path: '/yourland',
-    component: <DataTables />,
+    component: <Yourland />,
   },
   {
     name: 'Calendar',
     layout: '/dasboard',
     path: '/calendar',
     icon: <Icon as={MdOutlineCalendarMonth} width="20px" height="20px" color="inherit" />,
-    component: <NFTMarketplace />,
+    component: <Calendar />,
   },
   {
     name: 'Your Network',
     layout: '/dashboard',
     path: '/network',
     icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
-    component: <NFTMarketplace />,
+    component: <Yournetwork />,
   },
   {
     name: 'Virtual Land',
     layout: '/dashboard',
     path: '/virtualland',
     icon: <Icon as={PiVirtualReality} width="20px" height="20px" color="inherit" />,
-    component: <RTL />,
+    component: <Virtualland />,
   }
 ];
 

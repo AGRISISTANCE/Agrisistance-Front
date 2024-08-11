@@ -14,7 +14,7 @@ import Upload from 'views/admin/profileold/components/Upload';
 import banner from 'assets/img/auth/banner.png';
 import avatar from 'assets/img/avatars/avatar4.png';
 
-export default function Profile() {
+export default function Overview() {
 	return (
 		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
 			{/* Main Fields */}
