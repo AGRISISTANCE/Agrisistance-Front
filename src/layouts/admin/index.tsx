@@ -54,7 +54,7 @@ export default function Dashboard(props: { [x: string]: any }) {
   };
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((route: RoutesType, key: any) => {
-      if (route.layout === '/admin') {
+      if (route.layout === '/dashboard') {
         return (
           <Route path={`${route.path}`} element={route.component} key={key} />
         );
@@ -114,7 +114,7 @@ export default function Dashboard(props: { [x: string]: any }) {
                 {getRoutes(routes)}
                 <Route
                   path="/"
-                  element={<Navigate to="/admin/default" replace />}
+                  element={<Navigate to="/dashboard/home" replace />}
                 />
               </Routes>
             </Box>

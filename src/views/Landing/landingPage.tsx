@@ -1,3 +1,4 @@
+import React from 'react';
 import { Component } from "react";
 import { Button } from "../../common/Button";
 import { SvgIcon } from "../../common/SvgIcon";
@@ -5,8 +6,7 @@ import { lazy } from "react";
 import { Fade, FadeProps } from 'react-awesome-reveal';
 import { Col } from 'antd';
 import { ReactNode } from 'react';
-
-
+import { NavLink } from 'react-router-dom';
 
 import {
     ContentSection,
@@ -33,6 +33,8 @@ const handleClick = () => {
     }
   };
 class landingPage extends Component {
+    
+   
     render() {
         return (
             <>
@@ -56,12 +58,12 @@ class landingPage extends Component {
                                         <h4>From <span className="green">UNCERTAINTY</span> to <span className="green">OPPORTUNITY</span></h4>
                                         <Content>Beautifully designed templates using React.js, ant design and styled-components! Save weeks of time and build your landing page in minutes.</Content>
                                         <ButtonWrapper>
-                                            <Button
-                                            onClick={() => "window.location.href='/auth'"}
-                                            >
+                                        <NavLink to="/login">
+                                            <Button>
                                                 Get Started
                                             </Button>
-                                            <Button color="#2C4026"onClick={handleClick}>Learn More</Button>
+                                        </NavLink>
+                                        <Button color="#2C4026">Learn More</Button>
                                         </ButtonWrapper>
                                     </ContentWrapper>
                                 </Col>

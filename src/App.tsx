@@ -11,7 +11,6 @@ import { useState } from 'react';
 
 // Import Landing Page
 import LandingPage from './views/Landing/landingPage';
-import Header from 'components/Header';
 
 export default function Main() {
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
@@ -27,22 +26,28 @@ export default function Main() {
 
         {/* Admin Layout */}
         <Route
-          path="admin/*"
+          path="dashboard/*"
           element={
             <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
           }
         />
 
         {/* RTL Layout */}
+        
+        {/* 
         <Route
           path="rtl/*"
           element={
             <RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />
           }
         />
+        */}
+
 
         {/* Fallback to Admin Dashboard */}
-        <Route path="*" element={<Navigate to="/admin" replace />} />
+
+        {/*<Route path="*" element={<Navigate to="/admin" replace />} />*/}
+        
       </Routes>
     </ChakraProvider>
   );
