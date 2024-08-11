@@ -1,25 +1,3 @@
-/* eslint-disable */
-/*!
-  _   _  ___  ____  ___ ________  _   _   _   _ ___   
- | | | |/ _ \|  _ \|_ _|__  / _ \| \ | | | | | |_ _| 
- | |_| | | | | |_) || |  / / | | |  \| | | | | || | 
- |  _  | |_| |  _ < | | / /| |_| | |\  | | |_| || |
- |_| |_|\___/|_| \_\___/____\___/|_| \_|  \___/|___|
-                                                                                                                                                                                                                                                                                                                                       
-=========================================================
-* Horizon UI - v1.1.0
-=========================================================
-
-* Product Page: https://www.horizon-ui.com/
-* Copyright 2022 Horizon UI (https://www.horizon-ui.com/)
-
-* Designed and Coded by Simmmple
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -48,7 +26,7 @@ import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 
-function SignIn() {
+function LogIn() {
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
@@ -83,7 +61,7 @@ function SignIn() {
         flexDirection='column'>
         <Box me='auto'>
           <Heading color={textColor} fontSize='36px' mb='10px'>
-            Sign In
+            Log In
           </Heading>
           <Text
             mb='36px'
@@ -118,7 +96,7 @@ function SignIn() {
             _active={googleActive}
             _focus={googleActive}>
             <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
-            Sign in with Google
+            Log in with Google
           </Button>
           <Flex align='center' mb='25px'>
             <HSeparator />
@@ -208,7 +186,7 @@ function SignIn() {
               w='100%'
               h='50'
               mb='24px'>
-              Sign In
+              Log In
             </Button>
           </FormControl>
           <Flex
@@ -236,4 +214,4 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default LogIn;

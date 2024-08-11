@@ -16,6 +16,9 @@ import {
   Span,
 } from "./styles";
 
+import { NavLink } from 'react-router-dom';
+
+
 const Header = ({ t }: { t: TFunction }) => {
   const [visible, setVisibility] = useState(false);
 
@@ -50,7 +53,9 @@ const Header = ({ t }: { t: TFunction }) => {
           onClick={() => scrollTo("contact")}
         >
           <Span>
+          <NavLink to="/dashboard/home">
             <Button>{t("Get Started")}</Button>
+          </NavLink>
           </Span>
         </CustomNavLinkSmall>
       </>

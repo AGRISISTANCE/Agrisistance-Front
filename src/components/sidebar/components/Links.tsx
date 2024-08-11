@@ -31,7 +31,7 @@ export function SidebarLinks(props: {
 				route: RoutesType,
 				index: number
 			) => {
-				if (route.layout === '/admin' || route.layout === '/auth' || route.layout === '/rtl') {
+				if (route.layout === '/dashboard' || route.layout === '/auth' || route.layout === '/rtl') {
 					return (
 						<NavLink key={index} to={route.layout + route.path}>
 							{route.icon ? (
