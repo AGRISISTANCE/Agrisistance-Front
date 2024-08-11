@@ -166,12 +166,6 @@ If you want to build the application for production:
 
 To ensure everything is working correctly, you can run the tests:
 
-1. **Run the test suite**:
-
-    ```bash
-    npm test
-    ```
-
 ### Additional Configuration
 
 - **Environment Variables**: Some configurations might require environment variables. Create a `.env` file in the root of the project and add your variables there. Refer to `.env.example` for the required variables and their format.
