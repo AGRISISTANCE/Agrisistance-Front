@@ -150,39 +150,12 @@ Before you begin, ensure you have the following installed:
 
 2. **Access the application**: Open your web browser and navigate to `http://localhost:3000` (default port is 3000).
 
-### Building for Production
 
-If you want to build the application for production:
-
-1. **Build the project**: Run the following command to create an optimized build:
-
-    ```bash
-    npm run build
-    ```
-
-2. **Deploy the build**: The build files will be located in the `build/` directory. You can deploy these files to your preferred hosting service.
-
-### Running Tests
-
-To ensure everything is working correctly, you can run the tests:
-
-1. **Run the test suite**:
-
-    ```bash
-    npm test
-    ```
-
-### Additional Configuration
-
-- **Environment Variables**: Some configurations might require environment variables. Create a `.env` file in the root of the project and add your variables there. Refer to `.env.example` for the required variables and their format.
 
 ### Troubleshooting
 
 - **Common Issues**: If you encounter any issues during setup, ensure that all dependencies are installed correctly and check the console for error messages. You can also refer to the [GitHub Issues](#github-issues) page for known issues and solutions.
 
-### Documentation
-
-- **Project Documentation**: For detailed documentation, refer to the [Documentation](#-agrisistance) directory in the repository.
 
 By following these steps, you should have AGRISISTANCE up and running on your local machine. If you need further assistance, please refer to the [Contact](#contact) section for support.
 
@@ -214,7 +187,7 @@ This project is licensed under the Apache 2.0 License. See the [LICENSE](License
 
 ---
 
-This repository includes front-end code, as well as the AI models used in AGRISISTANCE.
+This repository includes front-end code for AGRISISTANCE.
 
 ![User Interface](public/img/icons/Home.png)
 ![Feature Illustration](public/img/icons/your%20land.png)
