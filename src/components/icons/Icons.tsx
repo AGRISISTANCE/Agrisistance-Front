@@ -451,7 +451,9 @@ export const SpotifyLogo = createIcon({
 
 export const AgrisistanceLogo = () => {
 	return (
-		<img src={agrisistancelogo} alt="Logo"  />
+		<img src={agrisistancelogo} alt="Logo"style={{
+			width:'170px'
+		}}  />
 	);
   };
 
