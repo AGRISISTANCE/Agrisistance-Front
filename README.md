@@ -1,26 +1,28 @@
 # 🌱 AGRISISTANCE
 
-![AGRISISTANCE Logo](path_to_logo_image)
+![AGRISISTANCE Logo](public/img/icons/logo192.png)
 
 A2SV-Agrisistance is an AI-driven web app designed to help African farmers optimize land use and boost crop productivity. By leveraging advanced machine learning algorithms and data analytics, A2SV-Agrisistance provides farmers with actionable insights and personalized recommendations tailored to their specific needs.
 
 ## Table of Contents
 
-- [Python Build Status](#python-build-status)
-- [Dependencies](#dependencies)
-- [GitHub Issues](#github-issues)
-- [Contributions Welcome](#contributions-welcome)
-- [Features](#features)
-  - [Optimizing Land Use](#optimizing-land-use)
-  - [Boosting Crop Productivity](#boosting-crop-productivity)
-  - [Business Planning](#business-planning)
-  - [Resource Management](#resource-management)
-  - [Networking and Industrial Connections](#networking-and-industrial-connections)
-- [Getting Started](#getting-started)
-- [Our Perspective](#our-perspective)
-- [Comparison with Competitors](#comparison-with-competitors)
-- [Contact](#contact)
-- [License](#license)
+- [🌱 AGRISISTANCE](#-agrisistance)
+  - [Table of Contents](#table-of-contents)
+  - [Python Build Status](#python-build-status)
+  - [Dependencies](#dependencies)
+  - [GitHub Issues](#github-issues)
+  - [Contributions Welcome](#contributions-welcome)
+  - [Features](#features)
+    - [Optimizing Land Use](#optimizing-land-use)
+    - [Boosting Crop Productivity](#boosting-crop-productivity)
+    - [Business Planning](#business-planning)
+    - [Resource Management](#resource-management)
+    - [Networking and Industrial Connections](#networking-and-industrial-connections)
+  - [Getting Started](#getting-started)
+  - [Our Perspective](#our-perspective)
+  - [Comparison with Competitors](#comparison-with-competitors)
+  - [Contact](#contact)
+  - [License](#license)
 
 ## Python Build Status
 
@@ -35,7 +37,7 @@ A2SV-Agrisistance is an AI-driven web app designed to help African farmers optim
 
 ## GitHub Issues
 
-![GitHub Issues](path_to_issues_badge)
+![GitHub Issues](#github-issues)
 
 ## Contributions Welcome
 
@@ -70,7 +72,9 @@ A2SV-Agrisistance is an AI-driven web app designed to help African farmers optim
 
 ## Getting Started
 
-_Instructions on how to install and set up the project will go here._
+- First clone the repository by typing `git clone https://github.com/AGRISISTANCE/Agrisistance-Front.git`
+- start the npm server by typing `npm start`
+- navigate into `localhost:3000/` the default port is 3000.
 
 ## Our Perspective
 
@@ -96,12 +100,12 @@ For any inquiries or feedback, please contact us at:
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](Lisence.txt) file for details.
 
 ---
 
 This repository includes both front-end and back-end code as well as the AI models used in AGRISISTANCE.
 
-![AGRISISTANCE Overview](path_to_overview_image_1)
-![Feature Illustration](path_to_feature_image_2)
-![User Interface](path_to_ui_image_3)
+![User Interface](public/img/icons/Home.png)
+![AGRISISTANCE Overview](public/img/icons/your%20land(1).png)
+![Feature Illustration](public/img/icons/your%20land.png)

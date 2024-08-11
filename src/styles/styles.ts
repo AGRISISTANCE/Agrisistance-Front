@@ -108,4 +108,11 @@ export const Styles = createGlobalStyle`
     h4{
         font-size: 40px;
     }
+.africa {
+        width: 100%;
+        height: 100px;
+        background: url('../../../public/img/icons/bg.png') no-repeat center center fixed;
+        background-size: cover;
+        background-color: #fff;
+    }
 `;

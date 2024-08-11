@@ -17,6 +17,7 @@ import {
 } from "./styles";
 import Header from "components/Header";
 import Footer from "components/Footer";
+import { redirect } from "react-router-dom";
 interface CustomFadeProps extends FadeProps {
     children: ReactNode;
 }
@@ -25,7 +26,12 @@ const Contact = lazy(() => import("../../components/ContactForm"));
 const Container = lazy(() => import("../../common/Container"));
 const ScrollToTop = lazy(() => import("../../common/ScrollToTop"));
 // const ContentBlock = lazy(() => import("../../components/ContentBlock"));
-
+const handleClick = () => {
+    const element = document.getElementById('what');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 class landingPage extends Component {
     render() {
         return (
@@ -51,11 +57,11 @@ class landingPage extends Component {
                                         <Content>Beautifully designed templates using React.js, ant design and styled-components! Save weeks of time and build your landing page in minutes.</Content>
                                         <ButtonWrapper>
                                             <Button
-                                            // onClick={() => scrollTo("#about")}
+                                            onClick={() => "window.location.href='/auth'"}
                                             >
                                                 Get Started
                                             </Button>
-                                            <Button color="#2C4026">Learn More</Button>
+                                            <Button color="#2C4026"onClick={handleClick}>Learn More</Button>
                                         </ButtonWrapper>
                                     </ContentWrapper>
                                 </Col>
@@ -68,7 +74,7 @@ class landingPage extends Component {
                                 justify="space-between"
                                 align="middle"
                                 direction="right"
-                                id="intro"
+                                id="what"
                             >
                                 <Col lg={11} md={11} sm={12} xs={24}>
                                     <SvgIcon src="SecondContent.svg" width="100%" height="100%" />
@@ -88,7 +94,7 @@ class landingPage extends Component {
                                 justify="space-between"
                                 align="middle"
                                 direction="left"
-                                id="intro"
+                                id="easy"
                             >
                                 <Col lg={11} md={11} sm={12} xs={24}>
                                     <SvgIcon src="SecondContent.svg" width="100%" height="100%" />
@@ -108,7 +114,7 @@ class landingPage extends Component {
                                 justify="space-between"
                                 align="middle"
                                 direction="right "
-                                id="intro"
+                                id="firstkind"
                             >
                                 <Col lg={11} md={11} sm={12} xs={24}>
                                     <SvgIcon src="SecondContent.svg" width="100%" height="100%" />
@@ -122,14 +128,13 @@ class landingPage extends Component {
                             </StyledRow>
                         </Fade>
                     </ContentSection>
-
                     <ContentSection>
                         <Fade direction="right" triggerOnce={true} {...(this.props as CustomFadeProps)}>
                             <StyledRow
                                 justify="space-between"
                                 align="middle"
                                 direction="left"
-                                id="intro"
+                                id="track"
                             >
                                 <Col lg={11} md={11} sm={12} xs={24}>
                                     <SvgIcon src="SecondContent.svg" width="100%" height="100%" />
