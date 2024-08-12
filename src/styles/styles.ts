@@ -115,4 +115,17 @@ export const Styles = createGlobalStyle`
         background-size: cover;
         background-color: #fff;
     }
+    .btn-save{
+        width:80%;
+        background: #2ACC32;
+        height: 55px;
+        border-radius: 40px;
+        color: #fff;
+        font-size: 20px;
+        transition: 0.3s ease;
+    }
+    .btn-save:hover{
+        background: #2C4026;
+
+    }
 `;
