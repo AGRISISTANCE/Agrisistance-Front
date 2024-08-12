@@ -17,6 +17,7 @@ export default function Home() {
 					<Land name="Land1" coordinates={['41.40338', '2.17403']} select={false} />
 				</Flex>
 			</Flex>
+			<Text color='#218225' fontWeight='bold' fontSize='30px' ml='20px'>Other</Text>
 			<Flex wrap='wrap' gap='40px' padding='40px'>
 				<Land isNew={true} />
 				<Land name="Land1" coordinates={['41.40338', '2.17403']} select={true} />
