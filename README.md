@@ -29,11 +29,6 @@
     - [Cloning the Repository](#cloning-the-repository)
     - [Installing Dependencies](#installing-dependencies)
     - [Running the Application](#running-the-application)
-    - [Building for Production](#building-for-production)
-    - [Running Tests](#running-tests)
-    - [Additional Configuration](#additional-configuration)
-    - [Troubleshooting](#troubleshooting)
-    - [Documentation](#documentation)
   - [Our Perspective](#our-perspective)
   - [Comparison with Competitors](#comparison-with-competitors)
   - [Contact](#contact)
@@ -166,17 +161,17 @@ By following these steps, you should have AGRISISTANCE up and running on your lo
 
 ## Comparison with Competitors
 
-| Feature                               | AGRISISTANCE | Intellias | OneSoil |
+| Feature                               | AGRISISTANCE | Cropin | OneSoil |
 | ------------------------------------- | ------------ | --------- | ------- |
 | AI-driven insights                    | ✅            | ✅         | ✅       |
 | Personalized recommendations          | ✅            | ✅         | ✅       |
 | Networking and industrial connections | ✅            | ❌         | ❌       |
 | Resource management tools             | ✅            | ❌         | ❌       |
-| Virtual farm system (future)          | ✅            | ❌         | ❌       |
+| Virtual farm system                   | ✅            | ❌         | ❌       |
 
 ## Contact
 
-For inquiries or feedback, reach out to us at:
+For inquiries, reach out to us at:
 
 - 📧 Email: [amel.feddag@ensia.edu.dz](mailto:amel.feddag@ensia.edu.dz)
 - 🌐 WhatsApp: +213 555 05 04 96
