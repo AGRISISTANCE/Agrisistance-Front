@@ -1,6 +1,11 @@
-import { Flex, Text, Box, Progress, CircularProgress, CircularProgressLabel, FormHelperText } from '@chakra-ui/react';
+import {
+	Flex, Text, Box, Progress, CircularProgress, CircularProgressLabel, FormHelperText, Slider, SliderTrack, SliderFilledTrack, SliderThumb, SliderMark,
+	Tooltip,
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import cropsData from './img/crops';
+import land from '../../../assets/img/land/land';
+import { Button } from '../../../common/Button/index'
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -24,7 +29,7 @@ interface SuggestionItem {
 	link: string;
 }
 const Suggestions: SuggestionItem[] = [
-	{text: 'Reduce the pest invasion by raising pestesides levels, we recommend', link:'/dewadaw'}
+	{ text: 'Reduce the pest invasion by raising pestesides levels, we recommend', link: '/dewadaw' }
 ]
 
 interface Crops {
@@ -47,10 +52,16 @@ const soil = {
 	humidity: 65,
 	ph: 30,
 };
-
+const crop = {
+	water_sufficient: 80,
+	sunlight: 60,
+	pestisides_level: 44,
+	pest_invation: 77
+}
 const Yourland: React.FC = () => {
 	const [activeSection, setActiveSection] = useState<string>('Predict Revenue');
-
+	const [sliderValue, setSliderValue] = React.useState(50);
+	const [showTooltip, setShowTooltip] = React.useState(false);
 	const renderContent = () => {
 		switch (activeSection) {
 			case 'Predict Revenue':
@@ -132,8 +143,42 @@ const Yourland: React.FC = () => {
 								<Text fontWeight='bold'>ph</Text>
 							</Flex>
 						</Flex>
-						<Flex>
-							
+						<Flex direction='column' align='center' gap='20px' padding='40px'>
+							<Text textAlign='center' fontWeight='bold' fontSize='3xl'>Set Manually: Oxygen Level</Text>
+							<Slider
+								id='slider'
+								defaultValue={50}
+								min={0}
+								max={100}
+								colorScheme='green'
+								onChange={(v) => setSliderValue(v)}
+								onMouseEnter={() => setShowTooltip(true)}
+								onMouseLeave={() => setShowTooltip(false)}
+								width='400px'
+							>
+								<SliderMark value={25} mt='3' ml='-2.5' fontSize='sm'>
+									25
+								</SliderMark>
+								<SliderMark value={50} mt='3' ml='-2.5' fontSize='sm'>
+									50
+								</SliderMark>
+								<SliderMark value={75} mt='3' ml='-2.5' fontSize='sm'>
+									75
+								</SliderMark>
+								<SliderTrack bg='green.200'>
+									<SliderFilledTrack />
+								</SliderTrack>
+								<Tooltip
+									hasArrow
+									bg='green.400'
+									color='white'
+									placement='top'
+									isOpen={showTooltip}
+									label={`${sliderValue}%`}
+								>
+									<SliderThumb />
+								</Tooltip>
+							</Slider>
 						</Flex>
 						<Flex>
 							<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
@@ -148,7 +193,7 @@ const Yourland: React.FC = () => {
 								</Flex>
 								{Suggestions.length === 0 ? null : (
 									<ul style={{
-										padding:'20px'
+										padding: '20px'
 									}}>
 										{Suggestions.map((item, index) => (
 											<li key={index}>
@@ -167,22 +212,110 @@ const Yourland: React.FC = () => {
 			case 'Crop maintenance':
 				return (
 					<Box>
-						<Text mb={2}>Crop data:</Text>
-						{/* Render Crop data here */}
+						<Flex justify='space-around'>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.water_sufficient}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>Water sufficient</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.sunlight} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.sunlight}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>Sunlight</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.pestisides_level} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.pestisides_level}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>pestesides levels</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.pest_invation} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.pest_invation}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>pest invasion</Text>
+							</Flex>
+						</Flex>
+						<Flex>
+							<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
+								<Flex gap='40px'>
+									<Text fontWeight='semibold'>Suggested improvements</Text>
+									{Suggestions.length === 0 ? (
+										<Text color='#2ACC32' textAlign='end'>No new suggestions</Text>) :
+										(
+											<Text color='#FC0D0D'>{Suggestions.length} new suggestions</Text>
+										)}
+
+								</Flex>
+								{Suggestions.length === 0 ? null : (
+									<ul style={{
+										padding: '20px'
+									}}>
+										{Suggestions.map((item, index) => (
+											<li key={index}>
+												<Flex gap='10px'>
+													<Text>{item.text}</Text>
+													<a href={item.link}><Text color={'#00A6CB'}>Brand</Text></a>
+												</Flex>
+											</li>))}
+									</ul>
+								)
+								}
+							</Flex>
+						</Flex>
 					</Box>
 				);
 			case 'Land statistics':
 				return (
 					<Box>
-						<Text mb={2}>Land statistics here:</Text>
-						{/* Add relevant statistics */}
+						<Flex justify='space-around'>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.water_sufficient}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>Water sufficient</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.sunlight} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.sunlight}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>Sunlight</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.pestisides_level} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.pestisides_level}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>pestesides levels</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.pest_invation} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.pest_invation}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>pest invasion</Text>
+							</Flex>
+						</Flex>
+						<Flex height='3px' width='100%' bgColor='grey' margin='40px 0px'></Flex>
+						<Flex direction='column' align='center' gap='40px'>
+							<Text fontWeight='semibold' fontSize='4xl'>Your current land</Text>
+							<img src={land.land1} alt="" width='70%' />
+						</Flex>
 					</Box>
 				);
 			case 'Finance management':
 				return (
 					<Box>
-						<Text mb={2}>Finance management details:</Text>
-						{/* Add finance management content */}
+						<Flex padding='40px'>
+							<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
+								<button className='btn-view'>View your business plan</button>
+								<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>Your budget</Text>
+								<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
+									<Text>10 000 ETB</Text>
+								</Flex>
+								<Button>Modify</Button>
+							</Flex>
+						</Flex>
 					</Box>
 				);
 			default:
