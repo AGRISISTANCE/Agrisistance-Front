@@ -33,7 +33,7 @@ import Virtualland from 'views/admin/virtualland'
 
 
 // Auth Imports
-import SignInCentered from 'views/auth/signUp';
+import SignUpCentered from 'views/auth/signUp';
 import LogInCentered from 'views/auth/logIn'
 
 // Landing Page Import
@@ -53,7 +53,7 @@ const routes = [
     layout: '/auth',
     path: '/signup',
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
-    component: <SignInCentered />,
+    component: <SignUpCentered />,
   },
   {
     name: 'Log In',

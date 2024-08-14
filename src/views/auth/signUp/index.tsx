@@ -1,6 +1,9 @@
 
 import React from "react";
 import { NavLink } from "react-router-dom";
+
+import { africanCountries } from "./africanCountries";
+
 // Chakra imports
 import {
   Box,
@@ -16,6 +19,14 @@ import {
   InputRightElement,
   Text,
   useColorModeValue,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
 } from "@chakra-ui/react";
 // Custom components
 import { HSeparator } from "components/separator/Separator";
@@ -23,7 +34,7 @@ import DefaultAuth from "layouts/auth/Default";
 // Assets
 import illustration from "assets/img/auth/auth.png";
 import { FcGoogle } from "react-icons/fc";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { MdOutlineRemoveRedEye, MdArrowDropDown } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 
 function SignUp() {
@@ -69,7 +80,7 @@ function SignUp() {
             color={textColorSecondary}
             fontWeight='400'
             fontSize='md'>
-            Enter your email and password to sign in!
+            Enter All the fields below to sign Up!
           </Text>
         </Box>
         <Flex
@@ -96,7 +107,7 @@ function SignUp() {
             _active={googleActive}
             _focus={googleActive}>
             <Icon as={FcGoogle} w='20px' h='20px' me='10px' />
-            Sign in with Google
+            Sign up with Google
           </Button>
           <Flex align='center' mb='25px'>
             <HSeparator />
@@ -106,6 +117,48 @@ function SignUp() {
             <HSeparator />
           </Flex>
           <FormControl>
+          <FormLabel
+              display='flex'
+              ms='4px'
+              fontSize='sm'
+              fontWeight='500'
+              color={textColor}
+              mb='8px'>
+              First Name<Text color={brandStars}>*</Text>
+            </FormLabel>
+            <Input
+              isRequired={true}
+              variant='auth'
+              fontSize='sm'
+              ms={{ base: "0px", md: "0px" }}
+              type='text'
+              placeholder='FEDDAG'
+              mb='24px'
+              fontWeight='500'
+              size='lg'
+            />
+            <FormLabel
+              display='flex'
+              ms='4px'
+              fontSize='sm'
+              fontWeight='500'
+              color={textColor}
+              mb='8px'>
+              Last name<Text color={brandStars}>*</Text>
+            </FormLabel>
+            <Input
+              isRequired={true}
+              variant='auth'
+              fontSize='sm'
+              ms={{ base: "0px", md: "0px" }}
+              type='email'
+              placeholder='Amel'
+              mb='24px'
+              fontWeight='500'
+              size='lg'
+            />
+        
+            
             <FormLabel
               display='flex'
               ms='4px'
@@ -121,11 +174,35 @@ function SignUp() {
               fontSize='sm'
               ms={{ base: "0px", md: "0px" }}
               type='email'
-              placeholder='mail@simmmple.com'
+              placeholder='amel.feddag@ensia.edu.dz '
               mb='24px'
               fontWeight='500'
               size='lg'
             />
+
+            <FormLabel
+              display='flex'
+              ms='4px'
+              fontSize='sm'
+              fontWeight='500'
+              color={textColor}
+              mb='8px'>
+              Country<Text color={brandStars}>*</Text>
+            </FormLabel>
+
+            <Box mb={4}>
+              <Menu>
+                <MenuButton as={Button} rightIcon={<MdArrowDropDown />}>
+                  Select your Country
+                </MenuButton>
+                <MenuList maxHeight="200px" overflowY="auto">
+                  {africanCountries.map((country, index) => (
+                    <MenuItem key={index}>{country}</MenuItem>
+                  ))}
+                </MenuList>
+              </Menu>
+            </Box>
+
             <FormLabel
               ms='4px'
               fontSize='sm'
@@ -153,6 +230,7 @@ function SignUp() {
                 />
               </InputRightElement>
             </InputGroup>
+            {/*
             <Flex justifyContent='space-between' align='center' mb='24px'>
               <FormControl display='flex' alignItems='center'>
                 <Checkbox
@@ -169,6 +247,7 @@ function SignUp() {
                   Keep me logged in
                 </FormLabel>
               </FormControl>
+              
               <NavLink to='/auth/forgot-password'>
                 <Text
                   color={textColorBrand}
@@ -178,7 +257,9 @@ function SignUp() {
                   Forgot password?
                 </Text>
               </NavLink>
+              
             </Flex>
+            */}
             <Button
               fontSize='sm'
               variant='brand'
@@ -186,7 +267,7 @@ function SignUp() {
               w='100%'
               h='50'
               mb='24px'>
-              Sign In
+              Sign Up
             </Button>
           </FormControl>
           <Flex
@@ -195,15 +276,15 @@ function SignUp() {
             alignItems='start'
             maxW='100%'
             mt='0px'>
-            <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
-              Not registered yet?
-              <NavLink to='/auth/sign-up'>
+            <Text color={textColorDetails} fontWeight='400' fontSize='14px' mb={4}>
+              Already have an account?
+              <NavLink to='/auth/login'>
                 <Text
                   color={textColorBrand}
                   as='span'
                   ms='5px'
                   fontWeight='500'>
-                  Create an Account
+                  Log in
                 </Text>
               </NavLink>
             </Text>

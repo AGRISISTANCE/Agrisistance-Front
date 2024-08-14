@@ -69,7 +69,7 @@ function LogIn() {
             color={textColorSecondary}
             fontWeight='400'
             fontSize='md'>
-            Enter your email and password to sign in!
+            Enter your email and password to log in!
           </Text>
         </Box>
         <Flex
@@ -121,7 +121,7 @@ function LogIn() {
               fontSize='sm'
               ms={{ base: "0px", md: "0px" }}
               type='email'
-              placeholder='mail@simmmple.com'
+              placeholder='amel.feddag@ensia.edu.dz'
               mb='24px'
               fontWeight='500'
               size='lg'
@@ -195,9 +195,9 @@ function LogIn() {
             alignItems='start'
             maxW='100%'
             mt='0px'>
-            <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
+            <Text color={textColorDetails} fontWeight='400' fontSize='14px' mb={4}>
               Not registered yet?
-              <NavLink to='/auth/sign-up'>
+              <NavLink to='/auth/signup'>
                 <Text
                   color={textColorBrand}
                   as='span'
