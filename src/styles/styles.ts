@@ -128,4 +128,15 @@ export const Styles = createGlobalStyle`
         background: #2C4026;
 
     }
+    .btn-view{
+        // width:80%;
+        padding: 0px 20px;
+        background: #2ACC32;
+        height: 55px;
+        border-radius: 40px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+        transition: 0.3s ease;
+    }
 `;
