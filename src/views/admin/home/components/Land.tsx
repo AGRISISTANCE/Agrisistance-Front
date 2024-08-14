@@ -50,6 +50,21 @@ export default function Land(props: LandProps) {
           </Flex>
         )}
         {select && !isNew && (
+          <Flex direction='column' gap='10px'>
+          <button
+            style={{
+              color: '#fff',
+              background: '#2ACC32',
+              borderRadius: '20px',
+              height: '40px',
+              padding: '0 25px',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '18px'
+            }}
+          >
+            select
+          </button>
           <button
             style={{
               color: '#fff',
@@ -62,8 +77,9 @@ export default function Land(props: LandProps) {
               fontSize: '18px'
             }}
           >
-            Select
+            delete
           </button>
+          </Flex>
         )}
         {isNew && (
           <Flex>
