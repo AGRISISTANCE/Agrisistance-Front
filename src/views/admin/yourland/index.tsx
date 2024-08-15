@@ -316,7 +316,7 @@ const Yourland: React.FC = () => {
 								</Flex>
 								<Button>Modify</Button>
 							</Flex>
-							<Flex padding='20px'>
+							<Flex padding='2	0px'>
 								<TotalSpent />
 							</Flex>
 						</Flex>
@@ -328,7 +328,7 @@ const Yourland: React.FC = () => {
 	};
 
 	return (
-		<Flex direction="column" p={4} mt='80px'>
+		<Flex direction="column" p={4}>
 			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{city}, {country}</Text>
 			<Flex gap='40px' mb={4}>
 				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (

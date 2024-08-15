@@ -1,26 +1,31 @@
-import React from 'react';
-import { Flex } from '@chakra-ui/react';
-
-// Assume land object is imported from somewhere or defined elsewhere
-// This should be replaced with the actual way you get the image URLs
-import land from '../../../../assets/img/land/land'
+import React, { useState } from 'react';
+import { Flex, Button, Box } from '@chakra-ui/react';
+import land from '../../../../assets/img/land/land';
+import AddNewLand from './addNewLand';
 
 interface LandProps {
   name?: string;
   coordinates?: [string, string];
-  select?: boolean; // Optional boolean prop
-  isNew?: boolean; // Example for the renamed prop
+  select?: boolean;
+  isNew?: boolean;
 }
 
 export default function Land(props: LandProps) {
   const { name, coordinates, select, isNew } = props;
 
-  // Handle cases where coordinates might be undefined
   const coordinateX = coordinates ? coordinates[0] : '';
   const coordinateY = coordinates ? coordinates[1] : '';
 
-  // Ensure the image URL is dynamically assigned
   const backgroundImage = name && land.land1 ? `url('${land.land1}')` : '#C4C4C4';
+  const [showAddNewLand, setShowAddNewLand] = useState(false);
+
+  const handleButtonClick = () => {
+    setShowAddNewLand(true);
+  };
+
+  const handleClose = () => {
+    setShowAddNewLand(false);
+  };
 
   return (
     <Flex
@@ -33,61 +38,41 @@ export default function Land(props: LandProps) {
       <Flex
         height='180px'
         width='100%'
-        background={`${backgroundImage}`}
+        background={backgroundImage}
         backgroundSize='cover'
         backgroundPosition='center'
         borderRadius='12px 12px 0 0'
-      ></Flex>
+      />
       <Flex direction='row' padding='20px' justifyContent='space-between' alignItems='center'>
         {!isNew && (
           <Flex direction='column' gap='10px'>
-            <h3 style={{
-              fontSize: '25px'
-            }}>{name}</h3>
-            <p style={{
-              fontSize: '17px'
-            }}>{coordinateX}, {coordinateY}</p>
+            <h3 style={{ fontSize: '25px' }}>{name}</h3>
+            <p style={{ fontSize: '17px' }}>{coordinateX}, {coordinateY}</p>
           </Flex>
         )}
         {select && !isNew && (
           <Flex direction='column' gap='10px'>
-          <button
-            style={{
-              color: '#fff',
-              background: '#2ACC32',
-              borderRadius: '20px',
-              height: '40px',
-              padding: '0 25px',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '18px'
-            }}
-          >
-            select
-          </button>
-          <button
-            style={{
-              color: '#fff',
-              background: '#2C4026',
-              borderRadius: '20px',
-              height: '40px',
-              padding: '0 25px',
-              border: 'none',
-              cursor: 'pointer',
-              fontSize: '18px'
-            }}
-          >
-            delete
-          </button>
+            <Button colorScheme='green' borderRadius='20px' height='40px' fontSize='18px'>
+              Select
+            </Button>
+            <Button colorScheme='gray' borderRadius='20px' height='40px' fontSize='18px'>
+              Delete
+            </Button>
           </Flex>
         )}
         {isNew && (
-          <Flex>
-            <a href="#">
-              <p style={{
-                fontSize: '25px'
-              }}>+ Add new land</p>
-            </a>
+          <Flex direction='column'>
+            <Button onClick={handleButtonClick} fontSize='25px'>
+              + Add New Land
+            </Button>
+            {showAddNewLand && (
+              <Box className="modal-overlay" position='fixed' top='0' left='0' width='100%' height='100%' background='rgba(0,0,0,0.5)' zIndex='999'>
+                <AddNewLand />
+                <Button onClick={handleClose} position='absolute' top='10px' right='10px'>
+                  Close
+                </Button>
+              </Box>
+            )}
           </Flex>
         )}
       </Flex>

@@ -1,7 +1,8 @@
 // Chakra imports
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
+// responsible dor the dark mode
+// import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
 // Custom components
 import { NavLink } from 'react-router-dom';
 // Assets
@@ -61,7 +62,7 @@ function AuthIllustration(props: { children: JSX.Element | string; illustrationB
 					/>
 				</Box>
 			</Flex>
-			<FixedPlugin />
+			{/* <FixedPlugin /> */}
 		</Flex>
 	);
 }
