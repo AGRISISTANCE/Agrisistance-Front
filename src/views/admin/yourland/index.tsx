@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import cropsData from './img/crops';
 import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
+import TotalSpent from '../default/components/TotalSpent';
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -314,6 +315,9 @@ const Yourland: React.FC = () => {
 									<Text>10 000 ETB</Text>
 								</Flex>
 								<Button>Modify</Button>
+							</Flex>
+							<Flex padding='20px'>
+								<TotalSpent />
 							</Flex>
 						</Flex>
 					</Box>
