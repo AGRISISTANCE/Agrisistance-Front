@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { AxiosError } from "axios";
 import { NavLink } from "react-router-dom";
 import { africanCountries } from "./africanCountries";
 
@@ -21,32 +19,20 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  useToast,
   Icon,
 } from "@chakra-ui/react";
-import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye, MdArrowDropDown } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import DefaultAuth from "layouts/auth/Default";
 import illustration from "assets/img/auth/auth.png";
+import { apiRequest } from "../../../services/api";
+
+
 
 function SignUp() {
   // Chakra color mode
-  const textColor = useColorModeValue("navy.700", "white");
-  const textColorSecondary = "gray.400";
   const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const textColorBrand = useColorModeValue("brand.500", "white");
-  const brandStars = useColorModeValue("brand.500", "brand.400");
-  const googleBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
-  const googleText = useColorModeValue("navy.700", "white");
-  const googleHover = useColorModeValue(
-    { bg: "gray.200" },
-    { bg: "whiteAlpha.300" }
-  );
-  const googleActive = useColorModeValue(
-    { bg: "secondaryGray.300" },
-    { bg: "whiteAlpha.200" }
-  );
   const [show, setShow] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -57,11 +43,9 @@ function SignUp() {
   const [messageColor, setMessageColor] = useState("");
   const handleClick = () => setShow(!show);
 
-  const toast = useToast();
-
   const handleSignUp = async () => {
     try {
-      const response = await axios.post("http://localhost:8081/api/auth/register", {
+      const response = await apiRequest("/auth/register", "POST", {
         firstName,
         lastName,
         country,
@@ -70,22 +54,22 @@ function SignUp() {
         password,
       });
   
-      if (response.data.message) {
-        setMessage(response.data.message);
+      // Check if the response contains the message
+      if (response.message) {
+        setMessage(response.message);
+        setMessageColor("green");
+      } else {
+        setMessage("Registration successful!");
         setMessageColor("green");
       }
-    } catch (error: unknown) {
-      if (error instanceof AxiosError && error.response) {
-        // This ensures that TypeScript knows the structure of the error object
-        setMessage(error.response.data.error);
-        setMessageColor("red");
-      } else {
-        // Handle any other types of errors, if necessary
-        setMessage("An unexpected error occurred.");
-        setMessageColor("red");
-      }
+    } catch (error: any) {
+      // Handle the error based on the structure
+      setMessage(error.message || "An unexpected error occurred.");
+      setMessageColor("red");
     }
   };
+
+  
 
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
