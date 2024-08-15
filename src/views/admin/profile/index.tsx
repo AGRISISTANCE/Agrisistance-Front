@@ -57,7 +57,7 @@ export default class Login extends Component<Props, State> {
 				<Flex
 					direction='column'
 					align='center'
-					mt='44'
+					// mt='44'
 					width={{ base: '100%', xl: '600px' }}
 					background='#fff'
 					padding='40px'

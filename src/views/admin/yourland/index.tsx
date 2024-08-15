@@ -43,26 +43,48 @@ const city = 'Tissemsilt';
 const country = 'Algeria';
 
 // Define the revenue array with its type
-
-// Define soil data
-const soil = {
-	oxygen: 20,
-	azote: 15,
-	potassium: 10,
-	phosphorus: 8,
-	humidity: 65,
-	ph: 30,
-};
 const crop = {
 	water_sufficient: 80,
 	sunlight: 60,
 	pestisides_level: 44,
 	pest_invation: 77
 }
+type SoilType = {
+	oxygen: number;
+	azote: number;
+	potassium: number;
+	phosphorus: number;
+	humidity: number;
+	ph: number;
+  };
 const Yourland: React.FC = () => {
+	const [soil, setSoil] = useState<SoilType>({
+		oxygen: 20,
+		azote: 15,
+		potassium: 10,
+		phosphorus: 8,
+		humidity: 65,
+		ph: 30,
+	});
+
+	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
+	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
+	const [showTooltip, setShowTooltip] = useState<boolean>(false);
+
+	const handleSliderChange = (value: number) => {
+		setSliderValue(value);
+		setSoil((prevSoil) => ({
+			...prevSoil,
+			[selectedSoil]: value,
+		}));
+	};
+
+	const handleCircularProgressClick = (soilType: keyof SoilType) => {
+		setSelectedSoil(soilType);
+		setSliderValue(soil[soilType]);
+	};
+
 	const [activeSection, setActiveSection] = useState<string>('Predict Revenue');
-	const [sliderValue, setSliderValue] = React.useState(50);
-	const [showTooltip, setShowTooltip] = React.useState(false);
 	const renderContent = () => {
 		switch (activeSection) {
 			case 'Predict Revenue':
@@ -107,52 +129,37 @@ const Yourland: React.FC = () => {
 				return (
 					<Box>
 						<Flex justify='space-around'>
-							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={soil.oxygen} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{soil.oxygen}%</CircularProgressLabel>
-								</CircularProgress>
-								<Text fontWeight='bold'>oxygen</Text>
-							</Flex>
-							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={soil.azote} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{soil.azote}%</CircularProgressLabel>
-								</CircularProgress>
-								<Text fontWeight='bold'>azote</Text>
-							</Flex>
-							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={soil.potassium} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{soil.potassium}%</CircularProgressLabel>
-								</CircularProgress>
-								<Text fontWeight='bold'>potassium</Text>
-							</Flex>
-							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={soil.phosphorus} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{soil.phosphorus}%</CircularProgressLabel>
-								</CircularProgress>
-								<Text fontWeight='bold'>phosphorus</Text>
-							</Flex>
-							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={soil.humidity} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{soil.humidity}%</CircularProgressLabel>
-								</CircularProgress>
-								<Text fontWeight='bold'>humidity</Text>
-							</Flex>
-							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={soil.ph} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{soil.ph}%</CircularProgressLabel>
-								</CircularProgress>
-								<Text fontWeight='bold'>ph</Text>
-							</Flex>
+							{Object.keys(soil).map((key) => (
+								<Flex
+									key={key}
+									direction='column'
+									align='center'
+									gap='15px'
+									onClick={() => handleCircularProgressClick(key as keyof SoilType)}
+								>
+									<CircularProgress
+										color='#218225'
+										value={soil[key as keyof SoilType]}
+										size='90px'
+										trackColor='#BCCCBF'
+									>
+										<CircularProgressLabel fontWeight='semibold'>{soil[key as keyof SoilType]}%</CircularProgressLabel>
+									</CircularProgress>
+									<Text fontWeight='bold'>{key}</Text>
+								</Flex>
+							))}
 						</Flex>
 						<Flex direction='column' align='center' gap='20px' padding='40px'>
-							<Text textAlign='center' fontWeight='bold' fontSize='3xl'>Set Manually: Oxygen Level</Text>
+							<Text textAlign='center' fontWeight='bold' fontSize='3xl'>
+								Set Manually: {selectedSoil.charAt(0).toUpperCase() + selectedSoil.slice(1)} Level
+							</Text>
 							<Slider
 								id='slider'
-								defaultValue={50}
+								defaultValue={soil[selectedSoil]}
 								min={0}
 								max={100}
 								colorScheme='green'
-								onChange={(v) => setSliderValue(v)}
+								onChange={handleSliderChange}
 								onMouseEnter={() => setShowTooltip(true)}
 								onMouseLeave={() => setShowTooltip(false)}
 								width='400px'
@@ -186,26 +193,23 @@ const Yourland: React.FC = () => {
 								<Flex gap='40px'>
 									<Text fontWeight='semibold'>Suggested improvements</Text>
 									{Suggestions.length === 0 ? (
-										<Text color='#2ACC32' textAlign='end'>No new suggestions</Text>) :
-										(
-											<Text color='#FC0D0D'>{Suggestions.length} new suggestions</Text>
-										)}
-
+										<Text color='#2ACC32' textAlign='end'>No new suggestions</Text>
+									) : (
+										<Text color='#FC0D0D'>{Suggestions.length} new suggestions</Text>
+									)}
 								</Flex>
 								{Suggestions.length === 0 ? null : (
-									<ul style={{
-										padding: '20px'
-									}}>
+									<ul style={{ padding: '20px' }}>
 										{Suggestions.map((item, index) => (
 											<li key={index}>
 												<Flex gap='10px'>
 													<Text>{item.text}</Text>
 													<a href={item.link}><Text color={'#00A6CB'}>Brand</Text></a>
 												</Flex>
-											</li>))}
+											</li>
+										))}
 									</ul>
-								)
-								}
+								)}
 							</Flex>
 						</Flex>
 					</Box>
@@ -316,7 +320,7 @@ const Yourland: React.FC = () => {
 								</Flex>
 								<Button>Modify</Button>
 							</Flex>
-							<Flex padding='20px'>
+							<Flex padding='2	0px'>
 								<TotalSpent />
 							</Flex>
 						</Flex>
@@ -328,7 +332,7 @@ const Yourland: React.FC = () => {
 	};
 
 	return (
-		<Flex direction="column" p={4} mt='80px'>
+		<Flex direction="column" p={4}>
 			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{city}, {country}</Text>
 			<Flex gap='40px' mb={4}>
 				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (

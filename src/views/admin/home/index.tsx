@@ -9,7 +9,7 @@ export default function Home() {
 	const brandColor = useColorModeValue('brand.500', 'white');
 	const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
 	return (
-		<Flex direction='column' mt='100px'>
+		<Flex direction='column'>
 			<Flex align='center' justify='center' width='100%' height='100%' justifyContent='space-around'>
 				<Profile avatar={avatars.avatar1} days='20' name='James belfort' suggestions='1' />
 				<Flex direction='column' gap='10px'>
