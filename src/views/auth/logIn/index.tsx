@@ -3,7 +3,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
-
+import { apiRequest } from "../../../services/api";
 
 // Chakra imports
 import {
@@ -51,26 +51,16 @@ function LogIn() {
 
   const handleClick = () => setShow(!show);
 
+
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:8081/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-  
-      const data = await response.json();
-  
-      if (response.ok) {
-        setMessage("Login successful! Redirecting...");
-        navigate("/dashboard/home"); // Redirect to dashboard on successful login
-      } else {
-        setMessage(data.error || "Login failed. Please try again.");
-      }
-    } catch (error) {
-      setMessage("An error occurred. Please try again.");
+      // Use centralized API call
+      const data = await apiRequest("/auth/login", "POST", { email, password });
+
+      setMessage("Login successful! Redirecting...");
+      navigate("/dashboard/home"); // Redirect to dashboard on successful login
+    } catch (error: any) {
+      setMessage(error.message || "Login failed. Please try again.");
     }
   };
 
@@ -239,7 +229,7 @@ function LogIn() {
           mt='0px'>
           <Text color={textColorDetails} fontWeight='400' fontSize='14px' mb={4}>
             Not registered yet?
-            <NavLink to='/auth/sign-up'>
+            <NavLink to='/auth/signup'>
               <Text color={textColorBrand} as='span' ms='5px' fontWeight='500'>
                 Sign Up
               </Text>
