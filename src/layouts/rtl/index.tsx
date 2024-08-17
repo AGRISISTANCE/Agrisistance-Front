@@ -1,8 +1,6 @@
 // Chakra imports
 import { Portal, Box, useDisclosure } from '@chakra-ui/react';
-import Footer from 'components/footerAdmin/FooterAdmin';
 // Layout components
-import Navbar from 'components/navbar/NavbarRTL';
 import Sidebar from 'components/sidebar/Sidebar';
 import { RtlProvider } from 'components/rtlProvider/RtlProvider';
 import { SidebarContext } from 'contexts/SidebarContext';
@@ -89,19 +87,6 @@ export default function Dashboard(props: { [x: string]: any }) {
           transitionProperty="top, bottom, width"
           transitionTimingFunction="linear, linear, ease"
         >
-          <Portal>
-            <Box>
-              <Navbar
-                onOpen={onOpen}
-                logoText={'Horizon UI Dashboard'}
-                brandText={getActiveRoute(routes)}
-                secondary={getActiveNavbar(routes)}
-                message={getActiveNavbarText(routes)}
-                fixed={fixed}
-                {...rest}
-              />
-            </Box>
-          </Portal>
 
           {getRoute() ? (
             <Box
@@ -121,7 +106,6 @@ export default function Dashboard(props: { [x: string]: any }) {
             </Box>
           ) : null}
           <Box>
-            <Footer />
           </Box>
         </Box>
       </SidebarContext.Provider>

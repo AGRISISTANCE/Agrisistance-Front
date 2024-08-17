@@ -1,8 +1,8 @@
 // Chakra imports
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import Footer from 'components/footerAdmin/FooterAuth';
-import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
+// responsible dor the dark mode
+// import FixedPlugin from 'components/fixedPlugin/FixedPlugin';
 // Custom components
 import { NavLink } from 'react-router-dom';
 // Assets
@@ -61,9 +61,8 @@ function AuthIllustration(props: { children: JSX.Element | string; illustrationB
 						borderBottomLeftRadius={{ lg: '120px', xl: '200px' }}
 					/>
 				</Box>
-				<Footer />
 			</Flex>
-			<FixedPlugin />
+			{/* <FixedPlugin /> */}
 		</Flex>
 	);
 }

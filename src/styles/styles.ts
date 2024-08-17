@@ -115,4 +115,50 @@ export const Styles = createGlobalStyle`
         background-size: cover;
         background-color: #fff;
     }
+    .btn-save{
+        width:80%;
+        background: #2ACC32;
+        height: 55px;
+        border-radius: 40px;
+        color: #fff;
+        font-size: 20px;
+        transition: 0.3s ease;
+    }
+    .btn-save:hover{
+        background: #2C4026;
+
+    }
+    .btn-view{
+        // width:80%;
+        padding: 0px 20px;
+        background: #2ACC32;
+        height: 55px;
+        border-radius: 40px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+        transition: 0.3s ease;
+    }
+    .app-container {
+        position: relative;
+        transition: filter 0.3s ease;
+    }
+
+    .blurred {
+        filter: blur(5px);
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
 `;

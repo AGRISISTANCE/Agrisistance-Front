@@ -1,114 +1,358 @@
-// Chakra imports
-import { Avatar, Box, Flex, FormLabel, Icon, Select, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
-// Assets
-import Usa from 'assets/img/dashboards/usa.png';
-// Custom components
-import MiniCalendar from 'components/calendar/MiniCalendar';
-import MiniStatistics from 'components/card/MiniStatistics';
-import IconBox from 'components/icons/IconBox';
-import { MdAddTask, MdAttachMoney, MdBarChart, MdFileCopy } from 'react-icons/md';
-import CheckTable from 'views/admin/rtl/components/CheckTable';
-import ComplexTable from 'views/admin/default/components/ComplexTable';
-import DailyTraffic from 'views/admin/default/components/DailyTraffic';
-import PieCard from 'views/admin/default/components/PieCard';
-import Tasks from 'views/admin/default/components/Tasks';
-import TotalSpent from 'views/admin/default/components/TotalSpent';
-import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
-import tableDataCheck from 'views/admin/default/variables/tableDataCheck';
-import tableDataComplex from 'views/admin/default/variables/tableDataComplex';
+import {
+	Flex, Text, Box, Progress, CircularProgress, CircularProgressLabel, FormHelperText, Slider, SliderTrack, SliderFilledTrack, SliderThumb, SliderMark,
+	Tooltip,
+} from '@chakra-ui/react';
+import React, { useState } from 'react';
+import cropsData from './img/crops';
+import land from '../../../assets/img/land/land';
+import { Button } from '../../../common/Button/index'
+import TotalSpent from '../default/components/TotalSpent';
+interface RevenueItem {
+	CropName: string;
+	area: number;
+	description: string;
+	weight: string;
+	price: number;
+	img: string;
+	progress: number;
+}
 
-export default function Yourland() {
-	// Chakra Color Mode
-	const brandColor = useColorModeValue('brand.500', 'white');
-	const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');
-	return (
-		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-			<SimpleGrid columns={{ base: 1, md: 2, lg: 3, '2xl': 6 }} gap='20px' mb='20px'>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={MdBarChart} color={brandColor} />}
-						/>
-					}
-					name='Earnings'
-					value='$350.4'
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={MdAttachMoney} color={brandColor} />}
-						/>
-					}
-					name='Spend this month'
-					value='$642.39'
-				/>
-				<MiniStatistics growth='+23%' name='Sales' value='$574.34' />
-				<MiniStatistics
-					endContent={
-						<Flex me='-16px' mt='10px'>
-							<FormLabel htmlFor='balance'>
-								<Avatar src={Usa} />
-							</FormLabel>
-							<Select id='balance' variant='mini' mt='5px' me='0px' defaultValue='usd'>
-								<option value='usd'>USD</option>
-								<option value='eur'>EUR</option>
-								<option value='gba'>GBA</option>
-							</Select>
+const revenue: RevenueItem[] = [
+	// Example data
+	{ CropName: 'beans', area: 90, description: 'text that describes the crop', weight: '2000', price: 3000, img: 'beans', progress: 80 },
+	{ CropName: 'rice', area: 30, description: 'text that describes the crop', weight: '200', price: 3100, img: 'rice', progress: 50 },
+	{ CropName: 'groundnut', area: 40, description: 'text that describes the crop', weight: '2100', price: 3100, img: 'groundnut', progress: 50 },
+	{ CropName: 'cashew', area: 10, description: 'text that describes the crop', weight: '10', price: 3100, img: 'cashew', progress: 50 },
+];
+
+interface SuggestionItem {
+	text: string;
+	link: string;
+}
+const Suggestions: SuggestionItem[] = [
+	{ text: 'Reduce the pest invasion by raising pestesides levels, we recommend', link: '/dewadaw' }
+]
+
+interface Crops {
+	[key: string]: string;
+}
+
+const crops: Crops = cropsData;
+
+const city = 'Tissemsilt';
+const country = 'Algeria';
+
+// Define the revenue array with its type
+const crop = {
+	water_sufficient: 80,
+	sunlight: 60,
+	pestisides_level: 44,
+	pest_invation: 77
+}
+type SoilType = {
+	oxygen: number;
+	azote: number;
+	potassium: number;
+	phosphorus: number;
+	humidity: number;
+	ph: number;
+  };
+const Yourland: React.FC = () => {
+	const [soil, setSoil] = useState<SoilType>({
+		oxygen: 20,
+		azote: 15,
+		potassium: 10,
+		phosphorus: 8,
+		humidity: 65,
+		ph: 30,
+	});
+
+	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
+	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
+	const [showTooltip, setShowTooltip] = useState<boolean>(false);
+
+	const handleSliderChange = (value: number) => {
+		setSliderValue(value);
+		setSoil((prevSoil) => ({
+			...prevSoil,
+			[selectedSoil]: value,
+		}));
+	};
+
+	const handleCircularProgressClick = (soilType: keyof SoilType) => {
+		setSelectedSoil(soilType);
+		setSliderValue(soil[soilType]);
+	};
+
+	const [activeSection, setActiveSection] = useState<string>('Predict Revenue');
+	const renderContent = () => {
+		switch (activeSection) {
+			case 'Predict Revenue':
+				return (
+					<Box>
+						{revenue.length === 0 ? (
+							<Flex direction='column' gap='40px'>
+								<Text background='#fff' padding='20px' borderRadius='20px'>
+									This Section provides you with the best crop recommendations according to your land parameters!
+								</Text>
+								<img src={cropsData.empty || '/default-empty-image.png'} alt="No data available" />
+							</Flex>
+						) : (
+							<ul>
+								{revenue.map((item, index) => (
+									<li key={index}>
+										<Flex direction='column' mb={4} background={'#fff'} padding={'20px'} borderRadius='20px'>
+											<Flex align='center'>
+												<img src={crops[item.img] || '/default-crop-image.png'} alt={item.CropName} style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
+												<Flex direction='column'>
+													<Text fontWeight='bold'>{item.CropName}</Text>
+													<Text color='grey' fontSize={'lg'}>{item.area} m<sup>2</sup></Text>
+												</Flex>
+												<Flex gap='20px' ml='auto'>
+													<Text border='2px solid #218225' borderRadius='20px' padding='5px 10px'>{item.weight} $+</Text>
+													<Text border='2px solid #218225' borderRadius='20px' padding='5px 10px'>{item.price} kg+</Text>
+												</Flex>
+											</Flex>
+											<Text mt={1} color='grey' fontSize={'lg'}>{item.description}</Text>
+											<Flex align='center' justify='space-between'>
+												<Progress value={item.progress} size='xs' colorScheme='green' width='100%' mt={2} />
+												<Text color='grey'>{item.progress}%</Text>
+											</Flex>
+										</Flex>
+									</li>
+								))}
+							</ul>
+						)}
+					</Box>
+				);
+			case 'Soil maintenance':
+				return (
+					<Box>
+						<Flex justify='space-around'>
+							{Object.keys(soil).map((key) => (
+								<Flex
+									key={key}
+									direction='column'
+									align='center'
+									gap='15px'
+									onClick={() => handleCircularProgressClick(key as keyof SoilType)}
+								>
+									<CircularProgress
+										color='#218225'
+										value={soil[key as keyof SoilType]}
+										size='90px'
+										trackColor='#BCCCBF'
+									>
+										<CircularProgressLabel fontWeight='semibold'>{soil[key as keyof SoilType]}%</CircularProgressLabel>
+									</CircularProgress>
+									<Text fontWeight='bold'>{key}</Text>
+								</Flex>
+							))}
 						</Flex>
-					}
-					name='Your balance'
-					value='$1,000'
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg='linear-gradient(90deg, #4481EB 0%, #04BEFE 100%)'
-							icon={<Icon w='28px' h='28px' as={MdAddTask} color='white' />}
-						/>
-					}
-					name='New Tasks'
-					value='154'
-				/>
-				<MiniStatistics
-					startContent={
-						<IconBox
-							w='56px'
-							h='56px'
-							bg={boxBg}
-							icon={<Icon w='32px' h='32px' as={MdFileCopy} color={brandColor} />}
-						/>
-					}
-					name='Total Projects'
-					value='2935'
-				/>
-			</SimpleGrid>
+						<Flex direction='column' align='center' gap='20px' padding='40px'>
+							<Text textAlign='center' fontWeight='bold' fontSize='3xl'>
+								Set Manually: {selectedSoil.charAt(0).toUpperCase() + selectedSoil.slice(1)} Level
+							</Text>
+							<Slider
+								id='slider'
+								defaultValue={soil[selectedSoil]}
+								min={0}
+								max={100}
+								colorScheme='green'
+								onChange={handleSliderChange}
+								onMouseEnter={() => setShowTooltip(true)}
+								onMouseLeave={() => setShowTooltip(false)}
+								width='400px'
+							>
+								<SliderMark value={25} mt='3' ml='-2.5' fontSize='sm'>
+									25
+								</SliderMark>
+								<SliderMark value={50} mt='3' ml='-2.5' fontSize='sm'>
+									50
+								</SliderMark>
+								<SliderMark value={75} mt='3' ml='-2.5' fontSize='sm'>
+									75
+								</SliderMark>
+								<SliderTrack bg='green.200'>
+									<SliderFilledTrack />
+								</SliderTrack>
+								<Tooltip
+									hasArrow
+									bg='green.400'
+									color='white'
+									placement='top'
+									isOpen={showTooltip}
+									label={`${sliderValue}%`}
+								>
+									<SliderThumb />
+								</Tooltip>
+							</Slider>
+						</Flex>
+						<Flex>
+							<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
+								<Flex gap='40px'>
+									<Text fontWeight='semibold'>Suggested improvements</Text>
+									{Suggestions.length === 0 ? (
+										<Text color='#2ACC32' textAlign='end'>No new suggestions</Text>
+									) : (
+										<Text color='#FC0D0D'>{Suggestions.length} new suggestions</Text>
+									)}
+								</Flex>
+								{Suggestions.length === 0 ? null : (
+									<ul style={{ padding: '20px' }}>
+										{Suggestions.map((item, index) => (
+											<li key={index}>
+												<Flex gap='10px'>
+													<Text>{item.text}</Text>
+													<a href={item.link}><Text color={'#00A6CB'}>Brand</Text></a>
+												</Flex>
+											</li>
+										))}
+									</ul>
+								)}
+							</Flex>
+						</Flex>
+					</Box>
+				);
+			case 'Crop maintenance':
+				return (
+					<Box>
+						<Flex justify='space-around'>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.water_sufficient}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>Water sufficient</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.sunlight} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.sunlight}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>Sunlight</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.pestisides_level} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.pestisides_level}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>pestesides levels</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.pest_invation} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.pest_invation}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>pest invasion</Text>
+							</Flex>
+						</Flex>
+						<Flex>
+							<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
+								<Flex gap='40px'>
+									<Text fontWeight='semibold'>Suggested improvements</Text>
+									{Suggestions.length === 0 ? (
+										<Text color='#2ACC32' textAlign='end'>No new suggestions</Text>) :
+										(
+											<Text color='#FC0D0D'>{Suggestions.length} new suggestions</Text>
+										)}
 
-			<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>
-				<TotalSpent />
-				<WeeklyRevenue />
-			</SimpleGrid>
-			<SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
-				<CheckTable tableData={tableDataCheck} />
-				<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
-					<DailyTraffic />
-					<PieCard />
-				</SimpleGrid>
-			</SimpleGrid>
-			<SimpleGrid columns={{ base: 1, md: 1, xl: 2 }} gap='20px' mb='20px'>
-				<ComplexTable tableData={tableDataComplex} />
-				<SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px'>
-					<Tasks />
-					<MiniCalendar h='100%' minW='100%' selectRange={false} />
-				</SimpleGrid>
-			</SimpleGrid>
-		</Box>
+								</Flex>
+								{Suggestions.length === 0 ? null : (
+									<ul style={{
+										padding: '20px'
+									}}>
+										{Suggestions.map((item, index) => (
+											<li key={index}>
+												<Flex gap='10px'>
+													<Text>{item.text}</Text>
+													<a href={item.link}><Text color={'#00A6CB'}>Brand</Text></a>
+												</Flex>
+											</li>))}
+									</ul>
+								)
+								}
+							</Flex>
+						</Flex>
+					</Box>
+				);
+			case 'Land statistics':
+				return (
+					<Box>
+						<Flex justify='space-around'>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.water_sufficient}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>Water sufficient</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.sunlight} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.sunlight}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>Sunlight</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.pestisides_level} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.pestisides_level}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>pestesides levels</Text>
+							</Flex>
+							<Flex direction='column' align='center' gap='15px'>
+								<CircularProgress color='#218225' value={crop.pest_invation} size='90px' trackColor='#BCCCBF'>
+									<CircularProgressLabel fontWeight='semibold'>{crop.pest_invation}%</CircularProgressLabel>
+								</CircularProgress>
+								<Text fontWeight='bold'>pest invasion</Text>
+							</Flex>
+						</Flex>
+						<Flex height='3px' width='100%' bgColor='grey' margin='40px 0px'></Flex>
+						<Flex direction='column' align='center' gap='40px'>
+							<Text fontWeight='semibold' fontSize='4xl'>Your current land</Text>
+							<img src={land.land1} alt="" width='70%' />
+						</Flex>
+					</Box>
+				);
+			case 'Finance management':
+				return (
+					<Box>
+						<Flex padding='40px'>
+							<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
+								<button className='btn-view'>View your business plan</button>
+								<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>Your budget</Text>
+								<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
+									<Text>10 000 ETB</Text>
+								</Flex>
+								<Button>Modify</Button>
+							</Flex>
+							<Flex padding='2	0px'>
+								<TotalSpent />
+							</Flex>
+						</Flex>
+					</Box>
+				);
+			default:
+				return <Text>Select a section</Text>;
+		}
+	};
+
+	return (
+		<Flex direction="column" p={4}>
+			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{city}, {country}</Text>
+			<Flex gap='40px' mb={4}>
+				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (
+					<Text
+						key={section}
+						onClick={() => setActiveSection(section)}
+						cursor="pointer"
+						color={activeSection === section ? 'black' : 'gray.500'}
+						textDecoration={activeSection === section ? 'underline' : 'none'}
+						mb={2}
+					>
+						{section}
+					</Text>
+				))}
+			</Flex>
+			<Box>
+				{renderContent()}
+			</Box>
+		</Flex>
 	);
 }
+
+export default Yourland;

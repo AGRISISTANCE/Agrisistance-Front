@@ -1,87 +1,187 @@
+import React, { Component } from 'react';
+import { EditOutlined } from '@ant-design/icons';
+import avatars from '../../../assets/img/avatars/avatars'
+import { Flex } from '@chakra-ui/react';
+type Props = {};
 
-// Chakra imports
-import { Box, Grid } from '@chakra-ui/react';
+type State = {
+	name: string;
+	surname: string;
+	email: string;
+	phone: string;
+	isEditing: {
+		name: boolean;
+		surname: boolean;
+		email: boolean;
+		phone: boolean;
+	};
+};
 
-// Custom components
-import Banner from 'views/admin/profileold/components/Banner';
-import General from 'views/admin/profileold/components/General';
-import Notifications from 'views/admin/profileold/components/Notifications';
-import Projects from 'views/admin/profileold/components/Projects';
-import Storage from 'views/admin/profileold/components/Storage';
-import Upload from 'views/admin/profileold/components/Upload';
+export default class Login extends Component<Props, State> {
+	state: State = {
+		name: 'John',
+		surname: 'Doe',
+		email: 'john.doe@example.com',
+		phone: '123-456-7890',
+		isEditing: {
+			name: false,
+			surname: false,
+			email: false,
+			phone: false,
+		},
+	};
 
-// Assets
-import banner from 'assets/img/auth/banner.png';
-import avatar from 'assets/img/avatars/avatar4.png';
+	handleEdit = (field: keyof State['isEditing']) => {
+		this.setState((prevState) => ({
+			isEditing: {
+				...prevState.isEditing,
+				[field]: !prevState.isEditing[field],
+			},
+		}));
+	};
 
-export default function Profile() {
-	return (
-		<Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-			{/* Main Fields */}
-			<Grid
-				templateColumns={{
-					base: '1fr',
-					lg: '1.34fr 1fr 1.62fr'
-				}}
-				templateRows={{
-					base: 'repeat(3, 1fr)',
-					lg: '1fr'
-				}}
-				gap={{ base: '20px', xl: '20px' }}>
-				<Banner
-					gridArea='1 / 1 / 2 / 2'
-					banner={banner}
-					avatar={avatar}
-					name='Adela Parkson'
-					job='Product Designer'
-					posts='17'
-					followers='9.7k'
-					following='274'
-				/>
-				<Storage gridArea={{ base: '2 / 1 / 3 / 2', lg: '1 / 2 / 2 / 3' }} used={25.6} total={50} />
-				<Upload
-					gridArea={{
-						base: '3 / 1 / 4 / 2',
-						lg: '1 / 3 / 2 / 4'
-					}}
-					minH={{ base: 'auto', lg: '420px', '2xl': '365px' }}
-					pe='20px'
-					pb={{ base: '100px', lg: '20px' }}
-				/>
-			</Grid>
-			<Grid
-				mb='20px'
-				templateColumns={{
-					base: '1fr',
-					lg: 'repeat(2, 1fr)',
-					'2xl': '1.34fr 1.62fr 1fr'
-				}}
-				templateRows={{
-					base: '1fr',
-					lg: 'repeat(2, 1fr)',
-					'2xl': '1fr'
-				}}
-				gap={{ base: '20px', xl: '20px' }}>
-				<Projects
-					banner={banner}
-					avatar={avatar}
-					name='Adela Parkson'
-					job='Product Designer'
-					posts='17'
-					followers='9.7k'
-					following='274'
-				/>
-				<General gridArea={{ base: '2 / 1 / 3 / 2', lg: '1 / 2 / 2 / 3' }} minH='365px' pe='20px' />
-				<Notifications
-					used={25.6}
-					total={50}
-					gridArea={{
-						base: '3 / 1 / 4 / 2',
-						lg: '2 / 1 / 3 / 3',
-						'2xl': '1 / 3 / 2 / 4'
-					}}
-				/>
-			</Grid>
-		</Box>
-	);
+	handleChange = (field: keyof State, value: string) => {
+		this.setState({ [field]: value } as unknown as Pick<State, keyof State>);
+	};
+
+	render() {
+		const { name, surname, email, phone, isEditing } = this.state;
+
+		return (
+			<Flex
+				width='100%'
+				display='flex'
+				justify='center'
+				align='center'
+			>
+				<Flex
+					direction='column'
+					align='center'
+					// mt='44'
+					width={{ base: '100%', xl: '600px' }}
+					background='#fff'
+					padding='40px'
+					gap={{ base: '20px', xl: '40px' }}
+				>
+					<img src={avatars.avatar1} style={{
+						borderRadius: '50%',
+						width: '100px',
+					}} />
+					<form style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '20px', justifyContent: 'center', alignItems: 'center' }}>
+						<div style={{
+							display: 'flex',
+							width: '80%',
+							gap: '20px',
+							border: `1px solid ${!this.state.isEditing.name ? '#78747A' : '#2ACC32'} `,
+							borderRadius: '8px',
+							padding: '0 10px 0 4px'
+						}}>
+							<input
+								style={{
+									border: 'none',
+									outline: 'none',
+									boxShadow: 'none',
+									WebkitBoxShadow: 'none',
+									MozBoxShadow: 'none',
+								}}
+								type="text"
+								value={name}
+								placeholder={name}
+								readOnly={!isEditing.name}
+								onChange={(e) => this.handleChange('name', e.target.value)}
+							/>
+							<EditOutlined
+								onClick={() => this.handleEdit('name')}
+								style={{ color: isEditing.name ? 'green' : 'inherit' }}
+							/>
+						</div>
+						<div style={{
+							display: 'flex',
+							width: '80%',
+							gap: '20px',
+							border: `1px solid ${!this.state.isEditing.surname ? '#78747A' : '#2ACC32'} `,
+							borderRadius: '8px',
+							padding: '0 10px 0 4px'
+						}}>
+							<input
+								style={{
+									border: 'none',
+									outline: 'none',
+									boxShadow: 'none',
+									WebkitBoxShadow: 'none',
+									MozBoxShadow: 'none',
+								}}
+								type="text"
+								value={surname}
+								placeholder={surname}
+								readOnly={!isEditing.surname}
+								onChange={(e) => this.handleChange('surname', e.target.value)}
+							/>
+							<EditOutlined
+								onClick={() => this.handleEdit('surname')}
+								style={{ color: isEditing.surname ? 'green' : 'inherit' }}
+							/>
+						</div>
+						<div style={{
+							display: 'flex',
+							width: '80%',
+							gap: '20px',
+							border: `1px solid ${!this.state.isEditing.email ? '#78747A' : '#2ACC32'} `,
+							borderRadius: '8px',
+							padding: '0 10px 0 4px'
+						}}>
+							<input
+								style={{
+									border: 'none',
+									outline: 'none',
+									boxShadow: 'none',
+									WebkitBoxShadow: 'none',
+									MozBoxShadow: 'none',
+								}}
+								type="text"
+								value={email}
+								placeholder={email}
+								readOnly={!isEditing.email}
+								onChange={(e) => this.handleChange('email', e.target.value)}
+							/>
+							<EditOutlined
+								onClick={() => this.handleEdit('email')}
+								style={{ color: isEditing.email ? 'green' : 'inherit' }}
+							/>
+						</div>
+						<div style={{
+							display: 'flex',
+							width: '80%',
+							gap: '20px',
+							border: `1px solid ${!this.state.isEditing.phone ? '#78747A' : '#2ACC32'} `,
+							borderRadius: '8px',
+							padding: '0 10px 0 4px'
+						}}>
+							<input
+								style={{
+									border: 'none',
+									outline: 'none',
+									boxShadow: 'none',
+									WebkitBoxShadow: 'none',
+									MozBoxShadow: 'none',
+								}}
+								type="text"
+								value={phone}
+								placeholder={phone}
+								readOnly={!isEditing.phone}
+								onChange={(e) => this.handleChange('phone', e.target.value)}
+							/>
+							<EditOutlined
+								onClick={() => this.handleEdit('phone')}
+								style={{ color: isEditing.phone ? 'green' : 'inherit' }}
+							/>
+						</div>
+						<button className='btn-save'>
+							save changes
+						</button>
+					</form>
+				</Flex>
+			</Flex>
+		);
+	}
 }

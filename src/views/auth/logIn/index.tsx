@@ -1,6 +1,10 @@
 
 import React from "react";
 import { NavLink } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
+import { apiRequest } from "../../../services/api";
+
 // Chakra imports
 import {
   Box,
@@ -27,24 +31,39 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 
 function LogIn() {
-  // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
-  const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const textColorBrand = useColorModeValue("brand.500", "white");
+  const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const brandStars = useColorModeValue("brand.500", "brand.400");
   const googleBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
   const googleText = useColorModeValue("navy.700", "white");
-  const googleHover = useColorModeValue(
-    { bg: "gray.200" },
-    { bg: "whiteAlpha.300" }
-  );
-  const googleActive = useColorModeValue(
-    { bg: "secondaryGray.300" },
-    { bg: "whiteAlpha.200" }
-  );
+  const googleHover = useColorModeValue({ bg: "gray.200" }, { bg: "whiteAlpha.300" });
+  const googleActive = useColorModeValue({ bg: "secondaryGray.300" }, { bg: "whiteAlpha.200" });
+
   const [show, setShow] = React.useState(false);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [message, setMessage] = React.useState("");
+
+  const navigate = useNavigate();
+
+
   const handleClick = () => setShow(!show);
+
+
+  const handleLogin = async () => {
+    try {
+      // Use centralized API call
+      const data = await apiRequest("/auth/login", "POST", { email, password });
+
+      setMessage("Login successful! Redirecting...");
+      navigate("/dashboard/home"); // Redirect to dashboard on successful login
+    } catch (error: any) {
+      setMessage(error.message || "Login failed. Please try again.");
+    }
+  };
+
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
       <Flex
@@ -69,7 +88,7 @@ function LogIn() {
             color={textColorSecondary}
             fontWeight='400'
             fontSize='md'>
-            Enter your email and password to sign in!
+            Enter your email and password to log in!
           </Text>
         </Box>
         <Flex
@@ -121,10 +140,12 @@ function LogIn() {
               fontSize='sm'
               ms={{ base: "0px", md: "0px" }}
               type='email'
-              placeholder='mail@simmmple.com'
+              placeholder='amel.feddag@ensia.edu.dz'
               mb='24px'
               fontWeight='500'
               size='lg'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <FormLabel
               ms='4px'
@@ -143,10 +164,12 @@ function LogIn() {
                 size='lg'
                 type={show ? "text" : "password"}
                 variant='auth'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <InputRightElement display='flex' alignItems='center' mt='4px'>
                 <Icon
-                  color={textColorSecondary}
+                  color='gray.400'
                   _hover={{ cursor: "pointer" }}
                   as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
                   onClick={handleClick}
@@ -185,29 +208,33 @@ function LogIn() {
               fontWeight='500'
               w='100%'
               h='50'
-              mb='24px'>
+              mb='24px'
+              onClick={handleLogin}
+              disabled={!email || !password}
+            >
               Log In
             </Button>
+            {message && (
+              <Text color={message.includes("success") ? "green.500" : "red.500"} mb="24px">
+                {message}
+              </Text>
+            )}
           </FormControl>
-          <Flex
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='start'
-            maxW='100%'
-            mt='0px'>
-            <Text color={textColorDetails} fontWeight='400' fontSize='14px'>
-              Not registered yet?
-              <NavLink to='/auth/sign-up'>
-                <Text
-                  color={textColorBrand}
-                  as='span'
-                  ms='5px'
-                  fontWeight='500'>
-                  Create an Account
-                </Text>
-              </NavLink>
-            </Text>
-          </Flex>
+        </Flex>
+        <Flex
+          flexDirection='column'
+          justifyContent='center'
+          alignItems='start'
+          maxW='100%'
+          mt='0px'>
+          <Text color={textColorDetails} fontWeight='400' fontSize='14px' mb={4}>
+            Not registered yet?
+            <NavLink to='/auth/signup'>
+              <Text color={textColorBrand} as='span' ms='5px' fontWeight='500'>
+                Sign Up
+              </Text>
+            </NavLink>
+          </Text>
         </Flex>
       </Flex>
     </DefaultAuth>
