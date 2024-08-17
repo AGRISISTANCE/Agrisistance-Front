@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import asset from '../../../../assets/img/dashboards/asset';
-import { Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Progress } from '@chakra-ui/react';
 import { FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,9 +17,11 @@ export default function AddNewLand() {
         phLevels: ''
     });
     const [modalContent, setModalContent] = useState<string>('');
-
+    const [showProgress, setShowProgress] = useState<boolean>(false);
+    const [progressMessage, setProgressMessage] = useState<string>('Starting...');
+    
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const navigate = useNavigate(); // Initialize useNavigate hook
+    const navigate = useNavigate();
 
     const handleNext = () => {
         setStep(step + 1);
@@ -31,10 +33,23 @@ export default function AddNewLand() {
     };
 
     const handleFinish = () => {
-        // Handle form data submission here
-        console.log(formData);
-        onClose(); // Close the modal after submission
-        navigate('/dashboard/yourland'); // Redirect to another page
+        // Show the progress bar
+        handleNext();
+        setShowProgress(true);
+
+        // Update progress messages
+        setProgressMessage('Starting...');
+        setTimeout(() => {
+            setProgressMessage('Almost Done... getting prediction...');
+            setTimeout(() => {
+                setProgressMessage('Completed!');
+                setTimeout(() => {
+                    setShowProgress(false);
+                    onClose(); // Close the modal after submission
+                    navigate('/dashboard/yourland'); // Redirect to another page
+                }, 1000); // Duration for the completed message
+            }, 1500); // Duration for the "Almost Done" message
+        }, 1500); // Duration for the "Starting" message
     };
 
     const openModal = (content: string) => {
@@ -237,6 +252,18 @@ export default function AddNewLand() {
                     </Button>
                 </Flex>
             )}
+            {
+                step === 5 && showProgress &&
+                <Flex direction={'column'} align={'center'} width={'100%'} gap={'20px'}>
+                    <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
+                        <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>Generating your business plan...</Text>
+                    </Flex>
+                    <Flex direction={'column'} align={'center'} justify={'center'} width={'300px'}>
+                        <Text mb={'10px'} color={'#fff'} fontSize={'2xl'}>{progressMessage}</Text>
+                        <Progress size='md' isIndeterminate colorScheme='green' width={'100%'} />
+                    </Flex>
+                </Flex>
+            }
 
             {/* Modal Popup */}
             <Modal isOpen={isOpen} onClose={onClose}>
