@@ -17,7 +17,7 @@ import {
 } from "./styles";
 import Header from "components/Header";
 import Footer from "components/Footer";
-import { redirect } from "react-router-dom";
+// import { redirect } from "react-router-dom";
 interface CustomFadeProps extends FadeProps {
     children: ReactNode;
 }
@@ -26,12 +26,12 @@ const Contact = lazy(() => import("../../components/ContactForm"));
 const Container = lazy(() => import("../../common/Container"));
 const ScrollToTop = lazy(() => import("../../common/ScrollToTop"));
 // const ContentBlock = lazy(() => import("../../components/ContentBlock"));
-const handleClick = () => {
-    const element = document.getElementById('what');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+// const handleClick = () => {
+//     const element = document.getElementById('what');
+//     if (element) {
+//       element.scrollIntoView({ behavior: 'smooth' });
+//     }
+//   };
 class landingPage extends Component {
     
    

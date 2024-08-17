@@ -7,6 +7,7 @@ import cropsData from './img/crops';
 import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
 import TotalSpent from '../default/components/TotalSpent';
+import { Console } from 'console';
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -56,7 +57,7 @@ type SoilType = {
 	phosphorus: number;
 	humidity: number;
 	ph: number;
-  };
+};
 const Yourland: React.FC = () => {
 	const [soil, setSoil] = useState<SoilType>({
 		oxygen: 20,
@@ -84,6 +85,10 @@ const Yourland: React.FC = () => {
 		setSliderValue(soil[soilType]);
 	};
 
+	const Applychanges = (soil: SoilType) =>{
+		console.log(soil);
+		// TODO: make a post request
+	}
 	const [activeSection, setActiveSection] = useState<string>('Predict Revenue');
 	const renderContent = () => {
 		switch (activeSection) {
@@ -136,6 +141,10 @@ const Yourland: React.FC = () => {
 									align='center'
 									gap='15px'
 									onClick={() => handleCircularProgressClick(key as keyof SoilType)}
+									shadow={selectedSoil === key ? '0 0 10px rgba(0, 0, 0, 0.2)' : undefined}
+									backgroundColor={selectedSoil === key ? '#eaefef' : '#f4f6fa'}
+									padding={'15px'}
+									borderRadius={'20px'}
 								>
 									<CircularProgress
 										color='#218225'
@@ -187,6 +196,7 @@ const Yourland: React.FC = () => {
 									<SliderThumb />
 								</Tooltip>
 							</Slider>
+							<Button onClick={()=>{Applychanges(soil)}}>Apply changes</Button>
 						</Flex>
 						<Flex>
 							<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
@@ -305,6 +315,14 @@ const Yourland: React.FC = () => {
 						<Flex direction='column' align='center' gap='40px'>
 							<Text fontWeight='semibold' fontSize='4xl'>Your current land</Text>
 							<img src={land.land1} alt="" width='70%' />
+							<button style={{
+								background: '#32a6f9',
+								color: '#fff',
+								padding:'10px',
+								borderRadius:'25px',
+								fontSize: '20px',
+								fontWeight:'bold'
+								}}>Modify Land Coordinates</button>
 						</Flex>
 					</Box>
 				);

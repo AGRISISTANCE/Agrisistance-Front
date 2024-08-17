@@ -1,5 +1,5 @@
 // Chakra imports
-import { Portal, Box, useDisclosure } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 // Layout components
 import Sidebar from 'components/sidebar/Sidebar';
 import { SidebarContext } from 'contexts/SidebarContext';
@@ -11,45 +11,45 @@ import routes from 'routes';
 export default function Dashboard(props: { [x: string]: any }) {
   const { ...rest } = props;
   // states and functions
-  const [fixed] = useState(false);
+  // const [fixed] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
   // functions for changing the states from components
   const getRoute = () => {
     return window.location.pathname !== '/admin/full-screen-maps';
   };
-  const getActiveRoute = (routes: RoutesType[]): string => {
-    let activeRoute = 'Default Brand Text';
-    for (let i = 0; i < routes.length; i++) {
-      if (
-        window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-      ) {
-        return routes[i].name;
-      }
-    }
-    return activeRoute;
-  };
-  const getActiveNavbar = (routes: RoutesType[]): boolean => {
-    let activeNavbar = false;
-    for (let i = 0; i < routes.length; i++) {
-      if (
-        window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-      ) {
-        return routes[i].secondary;
-      }
-    }
-    return activeNavbar;
-  };
-  const getActiveNavbarText = (routes: RoutesType[]): string | boolean => {
-    let activeNavbar = false;
-    for (let i = 0; i < routes.length; i++) {
-      if (
-        window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-      ) {
-        return routes[i].name;
-      }
-    }
-    return activeNavbar;
-  };
+  // const getActiveRoute = (routes: RoutesType[]): string => {
+  //   let activeRoute = 'Default Brand Text';
+  //   for (let i = 0; i < routes.length; i++) {
+  //     if (
+  //       window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+  //     ) {
+  //       return routes[i].name;
+  //     }
+  //   }
+  //   return activeRoute;
+  // };
+  // const getActiveNavbar = (routes: RoutesType[]): boolean => {
+  //   let activeNavbar = false;
+  //   for (let i = 0; i < routes.length; i++) {
+  //     if (
+  //       window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+  //     ) {
+  //       return routes[i].secondary;
+  //     }
+  //   }
+  //   return activeNavbar;
+  // };
+  // const getActiveNavbarText = (routes: RoutesType[]): string | boolean => {
+  //   let activeNavbar = false;
+  //   for (let i = 0; i < routes.length; i++) {
+  //     if (
+  //       window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
+  //     ) {
+  //       return routes[i].name;
+  //     }
+  //   }
+  //   return activeNavbar;
+  // };
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((route: RoutesType, key: any) => {
       if (route.layout === '/dashboard') {
@@ -62,7 +62,7 @@ export default function Dashboard(props: { [x: string]: any }) {
     });
   };
   document.documentElement.dir = 'ltr';
-  const { onOpen } = useDisclosure();
+  // const { onOpen } = useDisclosure();
   return (
     <Box>
       <SidebarContext.Provider

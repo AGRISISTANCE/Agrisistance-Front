@@ -14,8 +14,6 @@ import {
   FooterContainer,
   Language,
   // Label,
-  // LanguageSwitch,
-  // LanguageSwitchContainer,
 } from "./styles";
 
 interface SocialLinkProps {
@@ -24,9 +22,6 @@ interface SocialLinkProps {
 }
 
 const Footer = () => {
-  const handleChange = (language: string) => {
-    // Language switch logic here (if needed)
-  };
 
   const SocialLink = ({ href, src }: SocialLinkProps) => {
     return (

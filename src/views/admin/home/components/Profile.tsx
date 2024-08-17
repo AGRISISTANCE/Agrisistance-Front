@@ -1,5 +1,5 @@
 // Chakra imports
-import { Avatar, Box, Flex, flexbox, Text, useColorModeValue } from '@chakra-ui/react';
+import { Avatar,Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import Card from 'components/card/Card';
 
 export default function Profile(props: {
@@ -11,7 +11,7 @@ export default function Profile(props: {
     const { avatar, name, days, suggestions, ...rest } = props;
     // Chakra Color Mode
     const textColorPrimary = useColorModeValue('secondaryGray.900', 'white');
-    const textColorSecondary = 'gray.400';
+    // const textColorSecondary = 'gray.400';
     const borderColor = useColorModeValue('white !important', '#111C44 !important');
     return (
         <Card mb={{ base: '0px', lg: '20px' }} alignItems='center' {...rest} width='552px' height='fit-content' padding='20px'>
@@ -32,7 +32,7 @@ export default function Profile(props: {
                         - {days} days until for harvest
                     </Text>
                     <Text color='#FC0D0D'>
-                        {suggestions == '0' ? 'no new suggestions' : `${suggestions} new suggestion`}
+                        {suggestions === '0' ? 'no new suggestions' : `${suggestions} new suggestion`}
                     </Text>
                 </Flex>
             </Flex>
