@@ -11,7 +11,7 @@ import screen1 from './png/screen1.png';
 import screen2 from './png/screen2.png';
 import screen3 from './png/screen3.png';
 import screen4 from './png/screen4.png';
-import Preloader from './Preloader';
+import Preloader from './Preloade';
 
 
 
@@ -24,6 +24,7 @@ import {
 } from "./styles";
 import Header from "components/Header";
 import Footer from "components/Footer";
+import Preload from './Preloade';
 // import { redirect } from "react-router-dom";
 interface CustomFadeProps extends FadeProps {
     children: ReactNode;
@@ -39,26 +40,34 @@ const ScrollToTop = lazy(() => import("../../common/ScrollToTop"));
 //       element.scrollIntoView({ behavior: 'smooth' });
 //     }
 //   };
-class landingPage extends Component {
-    state = {
-        showPreloader: true,
-      };
-    
-      handleAnimationComplete = () => {
-        this.setState({ showPreloader: false });
-      };
-    
-    
-    render() {
-        const { showPreloader } = this.state;
-        return (
-            <>
-            {showPreloader ? (
-            <Preloader onAnimationComplete={this.handleAnimationComplete} />
-                ) : (
-                    <>
-                    
-                <Header />
+
+
+interface LandingPageState {
+  isPreloadComplete: boolean;
+}
+
+class LandingPage extends Component<{}, LandingPageState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      isPreloadComplete: false,
+    };
+  }
+
+  handleAnimationComplete = () => {
+    this.setState({ isPreloadComplete: true });
+  };
+
+  render() {
+    const { isPreloadComplete } = this.state;
+
+    return (
+      <>
+        {!isPreloadComplete && <Preload onAnimationComplete={this.handleAnimationComplete} />}
+        {isPreloadComplete && (
+          <div>
+            {/* Your landing page content goes here */}
+            <Header />
                 <Container>
                     <ScrollToTop />
                     <ContentSection>
@@ -172,12 +181,11 @@ class landingPage extends Component {
                     <Contact title="Contact Form" content="Agrisitance is here to answer your inquiries, fill out the form and let us know your thoughts!" id="contact" />
                 </Container>
                 <Footer />
-            </>)}
-            </>
-        )
-    }
+          </div>
+        )}
+      </>
+    );
+  }
 }
-export default landingPage
 
-
-
+export default LandingPage;
