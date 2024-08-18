@@ -24,20 +24,20 @@ import {
 
 
 //
-import Home from 'views/admin/home'
-import Profile from 'views/admin/profile'
-import Yourland from 'views/admin/yourland'
-import Calendar from 'views/admin/calendar'
-import Yournetwork from 'views/admin/yournetwork'
-import Virtualland from 'views/admin/virtualland'
+import Home from './views/admin/home'
+import Profile from './views/admin/profile'
+import Yourland from './views/admin/yourland'
+import Calendar from './views/admin/calendar'
+import Yournetwork from './views/admin/yournetwork'
+import Virtualland from './views/admin/virtualland'
 
 
 // Auth Imports
-import SignUpCentered from 'views/auth/signUp';
-import LogInCentered from 'views/auth/logIn'
+import SignUpCentered from './views/auth/signUp';
+import LogInCentered from './views/auth/logIn'
 
 // Landing Page Import
-import LandingPage from 'views/Landing/landingPage'; // <== Import the Landing Page Component
+import LandingPage from './views/Landing/landingPage'; // <== Import the Landing Page Component
 
 
 const routes = [

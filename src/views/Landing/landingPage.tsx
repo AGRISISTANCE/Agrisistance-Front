@@ -22,8 +22,8 @@ import {
     StyledRow,
     ButtonWrapper,
 } from "./styles";
-import Header from "components/Header";
-import Footer from "components/Footer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import Preload from './Preloade';
 // import { redirect } from "react-router-dom";
 interface CustomFadeProps extends FadeProps {
