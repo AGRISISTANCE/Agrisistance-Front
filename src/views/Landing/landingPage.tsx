@@ -11,6 +11,7 @@ import screen1 from './png/screen1.png';
 import screen2 from './png/screen2.png';
 import screen3 from './png/screen3.png';
 import screen4 from './png/screen4.png';
+import Preloader from './Preloader';
 
 
 
@@ -39,11 +40,24 @@ const ScrollToTop = lazy(() => import("../../common/ScrollToTop"));
 //     }
 //   };
 class landingPage extends Component {
+    state = {
+        showPreloader: true,
+      };
     
-   
+      handleAnimationComplete = () => {
+        this.setState({ showPreloader: false });
+      };
+    
+    
     render() {
+        const { showPreloader } = this.state;
         return (
             <>
+            {showPreloader ? (
+            <Preloader onAnimationComplete={this.handleAnimationComplete} />
+                ) : (
+                    <>
+                    
                 <Header />
                 <Container>
                     <ScrollToTop />
@@ -62,7 +76,7 @@ class landingPage extends Component {
                                     <ContentWrapper>
                                         <h6>The future of agriculture is here!</h6>
                                         <h4>From <span className="green">UNCERTAINTY</span> to <span className="green">OPPORTUNITY</span></h4>
-                                        <Content>Beautifully designed templates using React.js, ant design and styled-components! Save weeks of time and build your landing page in minutes.</Content>
+                                        <Content>Get the most out of your lands! We offre continuous help and assistance to boost your farming journey.</Content>
                                         <ButtonWrapper>
                                         <NavLink to="/auth/login">
                                             <Button>
@@ -158,6 +172,7 @@ class landingPage extends Component {
                     <Contact title="Contact Form" content="Agrisitance is here to answer your inquiries, fill out the form and let us know your thoughts!" id="contact" />
                 </Container>
                 <Footer />
+            </>)}
             </>
         )
     }
