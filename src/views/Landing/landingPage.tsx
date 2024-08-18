@@ -7,6 +7,12 @@ import { Fade, FadeProps } from 'react-awesome-reveal';
 import { Col } from 'antd';
 import { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
+import screen1 from './png/screen1.png';
+import screen2 from './png/screen2.png';
+import screen3 from './png/screen3.png';
+import screen4 from './png/screen4.png';
+
+
 
 import {
     ContentSection,
@@ -60,7 +66,7 @@ class landingPage extends Component {
                                         <ButtonWrapper>
                                         <NavLink to="/auth/login">
                                             <Button>
-                                                Get Started
+                                            &nbsp; &nbsp; &nbsp; &nbsp;  Get Started &nbsp; &nbsp;  &nbsp; &nbsp; 
                                             </Button>
                                         </NavLink>
                                         <Button color="#2C4026">Learn More</Button>
@@ -78,8 +84,8 @@ class landingPage extends Component {
                                 direction="right"
                                 id="what"
                             >
-                                <Col lg={11} md={11} sm={12} xs={24}>
-                                    <SvgIcon src="SecondContent.svg" width="100%" height="100%" />
+                                <Col lg={12} md={12} sm={12} xs={24}>
+                                    <img src={screen1} alt='screen1' style={{ filter: 'drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5))'}}/>
                                 </Col>
                                 <Col lg={11} md={11} sm={11} xs={24}>
                                     <ContentWrapper>
@@ -99,7 +105,7 @@ class landingPage extends Component {
                                 id="easy"
                             >
                                 <Col lg={11} md={11} sm={12} xs={24}>
-                                    <SvgIcon src="SecondContent.svg" width="100%" height="100%" />
+                                    <img src={screen2} alt='screen2' style={{ filter: 'drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5))'}}/>
                                 </Col>
                                 <Col lg={11} md={11} sm={11} xs={24}>
                                     <ContentWrapper>
@@ -119,7 +125,7 @@ class landingPage extends Component {
                                 id="firstkind"
                             >
                                 <Col lg={11} md={11} sm={12} xs={24}>
-                                    <SvgIcon src="SecondContent.svg" width="100%" height="100%" />
+                                <img src={screen3} alt='screen3' style={{ filter: 'drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5))'}}/>
                                 </Col>
                                 <Col lg={11} md={11} sm={11} xs={24}>
                                     <ContentWrapper>
@@ -139,8 +145,7 @@ class landingPage extends Component {
                                 id="track"
                             >
                                 <Col lg={11} md={11} sm={12} xs={24}>
-                                    <SvgIcon src="SecondContent.svg" width="100%" height="100%" />
-                                </Col>
+                                    <img src={screen4} alt='screen4' style={{ filter: 'drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5))'}}/>                                </Col>
                                 <Col lg={11} md={11} sm={11} xs={24}>
                                     <ContentWrapper>
                                         <h6>Track your <span className="green">Progress!</span></h6>

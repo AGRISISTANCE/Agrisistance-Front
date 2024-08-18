@@ -8,6 +8,10 @@ import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
 import TotalSpent from '../default/components/TotalSpent';
 import { Console } from 'console';
+import ConfirmationPopup from 'common/Popup/ConfirmationPopup';
+import { useNavigate } from 'react-router-dom';
+
+
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -59,6 +63,8 @@ type SoilType = {
 	ph: number;
 };
 const Yourland: React.FC = () => {
+
+
 	const [soil, setSoil] = useState<SoilType>({
 		oxygen: 20,
 		azote: 15,
@@ -72,6 +78,39 @@ const Yourland: React.FC = () => {
 	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
 	const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
+ 	//! Related to the popup
+	 const [showPopup, setShowPopup] = useState(false);
+	 const [isConfirmPhase, setIsConfirmPhase] = useState(false);
+	 const handleSubmit = () => {
+		if (!isConfirmPhase) {
+		  setIsConfirmPhase(true); // Switch to confirmation phase
+		} else {
+		  setShowPopup(false);
+		  // Handle confirmation, e.g., redirect
+		  console.log("Confirmed! Navigating to new page.");
+		}
+	  };
+	  const handleCancel = () => {
+		setShowPopup(false);
+		setIsConfirmPhase(false);
+	  };
+	
+	  const openPopupWithInputs = () => {
+		setIsConfirmPhase(false);
+		setShowPopup(true);
+	  };
+	
+	  const openConfirmationOnly = () => {
+		setIsConfirmPhase(true); // Start directly at confirmation
+		setShowPopup(true);
+	  };
+
+	  //! pop up state
+	  const [LandCoordinates, setLandCoordinates] = useState('');
+	  const [LandSize, setLandSize] = useState('');
+	  const [budget, setBudget] = useState('');
+	
+	//
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
 		setSoil((prevSoil) => ({
@@ -133,6 +172,17 @@ const Yourland: React.FC = () => {
 			case 'Soil maintenance':
 				return (
 					<Box>
+						{showPopup && (
+							<ConfirmationPopup
+							title="Modify Data"
+							message="Direct confirmation with no inputs."
+							inputs={[]} // No inputs
+							onConfirm={handleSubmit}
+							onCancel={handleCancel}
+							isConfirmPhase={isConfirmPhase}
+							showPopup={showPopup}
+						/>
+						)}
 						<Flex justify='space-around'>
 							{Object.keys(soil).map((key) => (
 								<Flex
@@ -196,7 +246,9 @@ const Yourland: React.FC = () => {
 									<SliderThumb />
 								</Tooltip>
 							</Slider>
-							<Button onClick={()=>{Applychanges(soil)}}>Apply changes</Button>
+							
+							
+							<Button onClick={openConfirmationOnly}> Apply changes</Button>
 						</Flex>
 						<Flex>
 							<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
@@ -285,6 +337,20 @@ const Yourland: React.FC = () => {
 			case 'Land statistics':
 				return (
 					<Box>
+						{showPopup && (
+							<ConfirmationPopup
+								title="Modify Data"
+								message="Please provide the necessary information."
+								inputs={[
+									{ label: 'New Land coordinate', value: LandCoordinates, onChange: setLandCoordinates },
+									{ label: 'New Land Size in hectar', value: LandSize, onChange: setLandSize },
+									]}
+								onConfirm={handleSubmit}
+								onCancel={handleCancel}
+								isConfirmPhase={isConfirmPhase}
+								showPopup={showPopup}
+							/>
+						)}
 						<Flex justify='space-around'>
 							<Flex direction='column' align='center' gap='15px'>
 								<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
@@ -315,20 +381,37 @@ const Yourland: React.FC = () => {
 						<Flex direction='column' align='center' gap='40px'>
 							<Text fontWeight='semibold' fontSize='4xl'>Your current land</Text>
 							<img src={land.land1} alt="" width='70%' />
-							<button style={{
-								background: '#32a6f9',
-								color: '#fff',
-								padding:'10px',
-								borderRadius:'25px',
-								fontSize: '20px',
-								fontWeight:'bold'
-								}}>Modify Land Coordinates</button>
+							<button 
+								onClick={openPopupWithInputs} 
+								style={{
+									background: '#32a6f9',
+									color: '#fff',
+									padding: '10px',
+									borderRadius: '25px',
+									fontSize: '20px',
+									fontWeight: 'bold'
+								}} 
+								>
+								Modify Land Coordinates
+								</button>
 						</Flex>
 					</Box>
 				);
 			case 'Finance management':
 				return (
-					<Box>
+					<Box>{showPopup && (
+						<ConfirmationPopup
+							title="Modify Data"
+							message="Please provide the necessary information."
+							inputs={[
+							{ label: 'Budget in dollars', value: budget, onChange: setBudget }
+							]}
+							onConfirm={handleSubmit}
+							onCancel={handleCancel}
+							isConfirmPhase={isConfirmPhase}
+							showPopup={showPopup}
+						/>
+					)}
 						<Flex padding='40px'>
 							<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
 								<button className='btn-view'>View your business plan</button>
@@ -336,7 +419,7 @@ const Yourland: React.FC = () => {
 								<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
 									<Text>10 000 ETB</Text>
 								</Flex>
-								<Button>Modify</Button>
+								<Button onClick={openPopupWithInputs}>Modify</Button>
 							</Flex>
 							<Flex padding='2	0px'>
 								<TotalSpent />
