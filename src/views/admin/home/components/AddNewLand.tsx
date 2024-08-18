@@ -40,7 +40,7 @@ export default function AddNewLand() {
         // Update progress messages
         setProgressMessage('Starting...');
         setTimeout(() => {
-            setProgressMessage('Almost Done... getting prediction...');
+            setProgressMessage('Getting prediction...');
             setTimeout(() => {
                 setProgressMessage('Completed!');
                 setTimeout(() => {

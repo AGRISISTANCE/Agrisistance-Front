@@ -8,6 +8,7 @@ import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
 import TotalSpent from '../default/components/TotalSpent';
 import { Console } from 'console';
+import BusinessPlanModal from './components/BusinessPlanModal';
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -85,7 +86,7 @@ const Yourland: React.FC = () => {
 		setSliderValue(soil[soilType]);
 	};
 
-	const Applychanges = (soil: SoilType) =>{
+	const Applychanges = (soil: SoilType) => {
 		console.log(soil);
 		// TODO: make a post request
 	}
@@ -196,7 +197,7 @@ const Yourland: React.FC = () => {
 									<SliderThumb />
 								</Tooltip>
 							</Slider>
-							<Button onClick={()=>{Applychanges(soil)}}>Apply changes</Button>
+							<Button onClick={() => { Applychanges(soil) }}>Apply changes</Button>
 						</Flex>
 						<Flex>
 							<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
@@ -229,28 +230,19 @@ const Yourland: React.FC = () => {
 					<Box>
 						<Flex justify='space-around'>
 							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{crop.water_sufficient}%</CircularProgressLabel>
-								</CircularProgress>
+								<img src={cropsData.vector} alt="" />
+								<Text fontWeight='semibold'>{crop.water_sufficient}%</Text>
 								<Text fontWeight='bold'>Water sufficient</Text>
 							</Flex>
 							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={crop.sunlight} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{crop.sunlight}%</CircularProgressLabel>
-								</CircularProgress>
+								<img src={cropsData.sun} alt="" />
+								<Text fontWeight={'semibold'}>{crop.sunlight}%</Text>
 								<Text fontWeight='bold'>Sunlight</Text>
 							</Flex>
 							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={crop.pestisides_level} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{crop.pestisides_level}%</CircularProgressLabel>
-								</CircularProgress>
+								<img src={cropsData.union} alt="" />
+								<Text fontWeight='semibold'>{crop.pestisides_level}%</Text>
 								<Text fontWeight='bold'>pestesides levels</Text>
-							</Flex>
-							<Flex direction='column' align='center' gap='15px'>
-								<CircularProgress color='#218225' value={crop.pest_invation} size='90px' trackColor='#BCCCBF'>
-									<CircularProgressLabel fontWeight='semibold'>{crop.pest_invation}%</CircularProgressLabel>
-								</CircularProgress>
-								<Text fontWeight='bold'>pest invasion</Text>
 							</Flex>
 						</Flex>
 						<Flex>
@@ -312,17 +304,32 @@ const Yourland: React.FC = () => {
 							</Flex>
 						</Flex>
 						<Flex height='3px' width='100%' bgColor='grey' margin='40px 0px'></Flex>
-						<Flex direction='column' align='center' gap='40px'>
-							<Text fontWeight='semibold' fontSize='4xl'>Your current land</Text>
-							<img src={land.land1} alt="" width='70%' />
-							<button style={{
-								background: '#32a6f9',
-								color: '#fff',
-								padding:'10px',
-								borderRadius:'25px',
-								fontSize: '20px',
-								fontWeight:'bold'
+						<Flex direction='row' align='center' gap='40px'>
+							<Flex direction={'column'} width={'60%'} align={'center'} gap={'30px'}>
+
+								<Text fontWeight='semibold' fontSize='4xl'>Your current land</Text>
+								<img src={land.land1} alt="" width='70%' />
+							</Flex>
+							<Flex direction={'column'} width={'40%'} gap={'20px'}>
+								<input type="text" style={{
+									background:'#d8e1dc',
+									borderRadius:'15px',
+									border:'none'
+								}}/>
+								<input type="text" style={{
+									background:'#d8e1dc',
+									borderRadius:'15px',
+									border:'none'
+								}}/>
+								<button style={{
+									background: '#2acc32',
+									color: '#fff',
+									padding: '10px',
+									borderRadius: '25px',
+									fontSize: '20px',
+									fontWeight: 'bold'
 								}}>Modify Land Coordinates</button>
+							</Flex>
 						</Flex>
 					</Box>
 				);
@@ -331,14 +338,16 @@ const Yourland: React.FC = () => {
 					<Box>
 						<Flex padding='40px'>
 							<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
-								<button className='btn-view'>View your business plan</button>
-								<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>Your budget</Text>
+								<BusinessPlanModal /> {/* Integrate the modal here */}
+								<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>
+									Your budget
+								</Text>
 								<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
 									<Text>10 000 ETB</Text>
 								</Flex>
 								<Button>Modify</Button>
 							</Flex>
-							<Flex padding='2	0px'>
+							<Flex padding='20px'>
 								<TotalSpent />
 							</Flex>
 						</Flex>
