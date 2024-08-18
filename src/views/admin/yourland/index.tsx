@@ -394,7 +394,7 @@ const Yourland: React.FC = () => {
 									borderRadius: '25px',
 									fontSize: '20px',
 									fontWeight: 'bold'}} 
-								  onClick={openPopupWithInputs} }}>Modify Land Coordinates</button>
+								    onClick={openPopupWithInputs}> Modify Land Coordinates </button>
 							</Flex>
 						</Flex>
 					</Box>
@@ -459,5 +459,4 @@ const Yourland: React.FC = () => {
 		</Flex>
 	);
 }
-
 export default Yourland;

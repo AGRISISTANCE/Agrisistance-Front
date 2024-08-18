@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Lottie from 'react-lottie';
-import animationData from './logoReveal.json';
+import animationData from './LogoReveal.json';
 
 const Preload: React.FC<{ onAnimationComplete: () => void }> = ({ onAnimationComplete }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
