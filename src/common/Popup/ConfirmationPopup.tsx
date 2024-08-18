@@ -92,7 +92,7 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
               marginRight: '10px'
             }}
           >
-            Save Changes
+            {isConfirmPhase ? "Confirm" : "Save Changes"}
           </button>
 
           <button

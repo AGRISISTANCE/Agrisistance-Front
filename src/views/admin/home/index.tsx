@@ -14,12 +14,12 @@ interface LandData {
 
 // Initialize lands with example data
 const initialLands: LandData[] = [
-  // {
-  //   name: "Land2",
-  //   coordinates: ['41.4032', '3.17403'],
-  //   select: true,
-  //   selected: false
-  // }
+   {
+     name: "Land1",
+     coordinates: ['41.4032', '3.17403'],
+     select: true,
+   selected: false
+   }
 ];
 
 export default function Home() {
@@ -47,17 +47,21 @@ export default function Home() {
         <Profile avatar={avatars.avatar1} days="20" name="James Belfort" suggestions="1" />
         <Flex direction="column" gap="10px" align="center">
           <Text color="#218225" textAlign="center" fontWeight="bold" fontSize="30px">
-            Selected Lands
+            Selected Land
           </Text>
-          {selectedLandIndex >= 0 ? (
+         {/*  {selectedLandIndex >= 0 ? (
             <Land {...lands[selectedLandIndex]} select={false}/>
           ) : (
             <Land/>
           )}
+            */}
+            {lands.map((land, key) => (
+          <Land key={key} {...land} />
+          ))}
         </Flex>
       </Flex>
       <Text color="#218225" fontWeight="bold" fontSize="30px" ml="20px">
-        Other
+        Other Lands:
       </Text>
       <Flex wrap="wrap" gap="40px" padding="40px">
         <Land isNew onAddLand={handleAddLand} />

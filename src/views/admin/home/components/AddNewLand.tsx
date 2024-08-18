@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import asset from '../../../../assets/img/dashboards/asset';
 import { Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Progress } from '@chakra-ui/react';
 import { FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-export default function AddNewLand() {
-    const [step, setStep] = useState<number>(1);
+interface AddNewLandProps {
+    initialStep?: number;
+}
+
+export default function AddNewLand({ initialStep = 1 }: AddNewLandProps) {
+    const [step, setStep] = useState<number>(initialStep);
     const [formData, setFormData] = useState({
         coordinates: '',
         area: '',
@@ -26,6 +30,12 @@ export default function AddNewLand() {
     const handleNext = () => {
         setStep(step + 1);
     };
+
+    useEffect(() => {
+        if (initialStep === 5) {
+            setShowProgress(true);
+        }
+    }, [initialStep]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -102,9 +112,9 @@ export default function AddNewLand() {
             {step === 2 && (
                 <Flex direction={'column'} align={'center'} width={'100%'} gap={'20px'}>
                     <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
-                        <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>What is the area of your land?</Text>
+                        <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>What is land size?</Text>
                     </Flex>
-                    <Text color={'white'} fontWeight={'semibold'} fontSize={'3xl'}>Land area</Text>
+                    <Text color={'white'} fontWeight={'semibold'} fontSize={'3xl'}>Land size (in hectar)</Text>
                     <Input
                         type="text"
                         name="area"
@@ -119,7 +129,7 @@ export default function AddNewLand() {
                         }}
                     />
                     <Text color={'white'} fontWeight={'semibold'} fontSize={'2xl'} onClick={() => openModal('Provide the land area in square meters or hectares. Ensure to use the correct unit as per your requirement.')} style={{ cursor: 'pointer' }}>
-                        How to determine land area
+                        &nbsp;
                     </Text>
                     <Button
                         bg={'#2acc32'}
@@ -141,9 +151,9 @@ export default function AddNewLand() {
             {step === 3 && (
                 <Flex direction={'column'} align={'center'} width={'100%'} gap={'20px'}>
                     <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
-                        <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>How much Budget do you have?</Text>
+                        <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>What is your budget?</Text>
                     </Flex>
-                    <Text color={'white'} fontWeight={'semibold'} fontSize={'3xl'}>Your Budget</Text>
+                    <Text color={'white'} fontWeight={'semibold'} fontSize={'3xl'}>Your Budget (in dollars)</Text>
                     <Input
                         type="text"
                         name="budget"
@@ -157,7 +167,7 @@ export default function AddNewLand() {
                         }}
                     />
                     <Text color={'white'} fontWeight={'semibold'} fontSize={'2xl'} onClick={() => openModal('Specify your budget in the local currency or dollars. Make sure to enter a realistic figure.')} style={{ cursor: 'pointer' }}>
-                        How to set your budget
+                        How to convert currency to dollar
                     </Text>
                     <Button
                         bg={'#2acc32'}

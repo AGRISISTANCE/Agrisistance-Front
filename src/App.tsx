@@ -30,22 +30,6 @@ export default function Main() {
             <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
           }
         />
-        {/* RTL Layout */}
-
-        {/* 
-        <Route
-          path="rtl/*"
-          element={
-            <RTLLayout theme={currentTheme} setTheme={setCurrentTheme} />
-          }
-        />
-        */}
-
-
-        {/* Fallback to Admin Dashboard */}
-
-        {/*<Route path="*" element={<Navigate to="/admin" replace />} />*/}
-
       </Routes>
     </ChakraProvider>
   );

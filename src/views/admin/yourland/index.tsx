@@ -25,10 +25,10 @@ interface RevenueItem {
 
 const revenue: RevenueItem[] = [
 	// Example data
-	{ CropName: 'beans', area: 90, description: 'text that describes the crop', weight: '2000', price: 3000, img: 'beans', progress: 80 },
-	{ CropName: 'rice', area: 30, description: 'text that describes the crop', weight: '200', price: 3100, img: 'rice', progress: 50 },
-	{ CropName: 'groundnut', area: 40, description: 'text that describes the crop', weight: '2100', price: 3100, img: 'groundnut', progress: 50 },
-	{ CropName: 'cashew', area: 10, description: 'text that describes the crop', weight: '10', price: 3100, img: 'cashew', progress: 50 },
+	{ CropName: 'beans', area: 90, description: 'Beans are protein-rich legumes, easy to grow and essential in many diets. They also boost soil health by fixing nitrogen.', weight: '2000', price: 3000, img: 'beans', progress: 80 },
+	{ CropName: 'rice', area: 30, description: ' Rice is a staple grain grown in flooded fields, essential for energy due to its high carbohydrate content. It is widely used in global cuisines', weight: '200', price: 3100, img: 'rice', progress: 50 },
+	{ CropName: 'groundnut', area: 40, description: 'Groundnut, also known as peanut, is a protein-rich legume grown in warm climates. It is valued for its edible seeds and oil', weight: '2100', price: 3100, img: 'groundnut', progress: 50 },
+	{ CropName: 'cashew', area: 10, description: ' Cashew is a tropical nut known for its rich, buttery flavor. It grows on cashew trees and is commonly used in snacks and cooking.', weight: '10', price: 3100, img: 'cashew', progress: 50 },
 ];
 
 interface SuggestionItem {
@@ -348,25 +348,26 @@ const Yourland: React.FC = () => {
 								<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
 									<CircularProgressLabel fontWeight='semibold'>{crop.water_sufficient}%</CircularProgressLabel>
 								</CircularProgress>
-								<Text fontWeight='bold'>Water sufficient</Text>
+								<Text fontWeight='bold'>Land use</Text>
 							</Flex>
 							<Flex direction='column' align='center' gap='15px'>
 								<CircularProgress color='#218225' value={crop.sunlight} size='90px' trackColor='#BCCCBF'>
 									<CircularProgressLabel fontWeight='semibold'>{crop.sunlight}%</CircularProgressLabel>
 								</CircularProgress>
-								<Text fontWeight='bold'>Sunlight</Text>
+								<Text fontWeight='bold'>Human coverage</Text>
 							</Flex>
 							<Flex direction='column' align='center' gap='15px'>
 								<CircularProgress color='#218225' value={crop.pestisides_level} size='90px' trackColor='#BCCCBF'>
 									<CircularProgressLabel fontWeight='semibold'>{crop.pestisides_level}%</CircularProgressLabel>
 								</CircularProgress>
-								<Text fontWeight='bold'>pestesides levels</Text>
+								<Text fontWeight='bold'>Water avaliability</Text>
 							</Flex>
+							
 							<Flex direction='column' align='center' gap='15px'>
 								<CircularProgress color='#218225' value={crop.pest_invation} size='90px' trackColor='#BCCCBF'>
 									<CircularProgressLabel fontWeight='semibold'>{crop.pest_invation}%</CircularProgressLabel>
 								</CircularProgress>
-								<Text fontWeight='bold'>pest invasion</Text>
+								<Text fontWeight='bold'>Distribution optimality</Text>
 							</Flex>
 						</Flex>
 						<Flex height='3px' width='100%' bgColor='grey' margin='40px 0px'></Flex>
@@ -377,16 +378,22 @@ const Yourland: React.FC = () => {
 								<img src={land.land1} alt="" width='70%' />
 							</Flex>
 							<Flex direction={'column'} width={'40%'} gap={'20px'}>
+							    <Text fontWeight='normal' fontSize='xl'>Your current coordinates:</Text>
 								<input type="text" style={{
 									background:'#d8e1dc',
 									borderRadius:'15px',
 									border:'none'
-								}}/>
+								}}
+								value="41.4032, 3.17403" 
+								readOnly/>
+								<Text fontWeight='normal' fontSize='xl'>Your current size:</Text>
 								<input type="text" style={{
 									background:'#d8e1dc',
 									borderRadius:'15px',
-									border:'none'
-								}}/>
+									border:'none',	
+								}}
+								value="100 Ha" 
+								readOnly />
 								<button style={{
 									background: '#2acc32',
 									color: '#fff',
@@ -394,7 +401,7 @@ const Yourland: React.FC = () => {
 									borderRadius: '25px',
 									fontSize: '20px',
 									fontWeight: 'bold'}} 
-								    onClick={openPopupWithInputs}> Modify Land Coordinates </button>
+								    onClick={openPopupWithInputs}> Modify Land Information </button>
 							</Flex>
 						</Flex>
 					</Box>
