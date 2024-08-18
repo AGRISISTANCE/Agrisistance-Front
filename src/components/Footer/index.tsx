@@ -1,132 +1,84 @@
-import { Row, Col } from "antd";
-import { SvgIcon } from "../../common/SvgIcon";
-import Container from "../../common/Container";
+import React from "react";
+import { NavLink } from "react-router-dom";
+
 import {
-  FooterSection,
-  Title,
-  NavLink,
-  Extra,
-  LogoContainer,
-  Para,
-  Large,
-  Chat,
-  Empty,
   FooterContainer,
-  Language,
-  // Label,
+  Title,
+  HighlightedText,
+  Paragraph,
+  Spatexts,
+  ContactInfo,
+  ContactItem,
+  ContactIcon,
+  BottomSection,
+  Buttoncontainer,
+  ButtonsText,
+  LeftSide,
+  RightSide,
+  Button,
+  Buttons,
+  FooterNote,
 } from "./styles";
+import phone from "../icons/phone.png";
+import gmail from "../icons/gmail.png";
+import whatsapp from "../icons/whatsapp.png";
+import { useNavigate } from "react-router-dom";
 
-interface SocialLinkProps {
-  href: string;
-  src: string;
-}
-
-const Footer = () => {
-
-  const SocialLink = ({ href, src }: SocialLinkProps) => {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        key={src}
-        aria-label={src}
-      >
-        <SvgIcon src={src} width="25px" height="25px" />
-      </a>
-    );
+const Footer: React.FC = () => {
+  const handleScrollUp = (): void => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <>
-      <FooterSection>
-        <Container>
-          <Row justify="space-between">
-            <Col lg={10} md={10} sm={12} xs={12}>
-              <Language>Contact</Language>
-              <Large to="/">Tell us everything</Large>
-              <Para>
-                Do you have any question? Feel free to reach out.
-              </Para>
-              <a href="mailto:l.qqbadze@gmail.com">
-                <Chat>Let's Chat</Chat>
-              </a>
-            </Col>
-            <Col lg={8} md={8} sm={12} xs={12}>
-              <Title>Policy</Title>
-              <Large to="/">Application Security</Large>
-              <Large to="/">Software Principles</Large>
-            </Col>
-            <Col lg={6} md={6} sm={12} xs={12}>
-              <Empty />
-              <Large to="/">Support Center</Large>
-              <Large to="/">Customer Support</Large>
-            </Col>
-          </Row>
-          <Row justify="space-between">
-            <Col lg={10} md={10} sm={12} xs={12}>
-              <Empty />
-              <Language>Address</Language>
-              <Para>Rancho Santa Margarita</Para>
-              <Para>Djelfa city</Para>
-              <Para>Algeria</Para>
-            </Col>
-            <Col lg={8} md={8} sm={12} xs={12}>
-              <Title>Company</Title>
-              <Large to="/">About</Large>
-              <Large to="/">Blog</Large>
-              <Large to="/">Press</Large>
-              <Large to="/">Careers & Culture</Large>
-            </Col>
-            <Col lg={6} md={6} sm={12} xs={12}>
-              <Title>Company</Title>
-              <Large to="/">About</Large>
-              <Large to="/">Blog</Large>
-              <Large to="/">Press</Large>
-              <Large to="/">Careers & Culture</Large>
-            </Col>
-          </Row>
-        </Container>
-      </FooterSection>
-      <Extra>
-        <Container border={true}>
-          <Row
-            justify="space-between"
-            align="middle"
-            style={{ paddingTop: "3rem" }}
-          >
-            <NavLink to="/">
-              <LogoContainer>
-                <SvgIcon
-                  src="logo.svg"
-                  aria-label="homepage"
-                  width="101px"
-                  height="64px"
-                />
-              </LogoContainer>
-            </NavLink>
-            <FooterContainer>
-              <SocialLink
-                href="https://github.com/Adrinlol/create-react-app-adrinlol"
-                src="github.svg"
-              />
-              <SocialLink
-                href="https://twitter.com/Adrinlolx"
-                src="twitter.svg"
-              />
-              <SocialLink
-                href="https://www.linkedin.com/in/lasha-kakabadze/"
-                src="linkedin.svg"
-              />
-              <SocialLink
-                href="https://medium.com/@lashakakabadze/"
-                src="medium.svg"
-              />
-            </FooterContainer>
-          </Row>
-        </Container>
-      </Extra>
-    </>
+    <FooterContainer>
+      <Title>
+        Efficient, Reliable <HighlightedText>and</HighlightedText> Free!
+      </Title>
+      <Paragraph>
+        We thank you for choosing AGRISTANCE and hope to see you achieve your
+        goals and turn speculations into reality!
+      </Paragraph>
+
+      <BottomSection>
+        <LeftSide>
+          <ContactInfo>
+            <ContactItem>
+              <ContactIcon src={phone} alt="Phone Icon" />
+              <Spatexts>+213 555 05 04 96</Spatexts>
+            </ContactItem>
+            <ContactItem>
+              <ContactIcon src={whatsapp} alt="WhatsApp Icon" />
+              <Spatexts>https://testtest.com</Spatexts>
+            </ContactItem>
+            <ContactItem>
+              <ContactIcon src={gmail} alt="Email Icon" />
+              <Spatexts>agrisistance@gmail.com</Spatexts>
+            </ContactItem>
+          </ContactInfo>
+        </LeftSide>
+        <RightSide>
+          <Buttoncontainer>
+            <ButtonsText>For a Greener Africa, a Better Africa...</ButtonsText>
+            <Buttons>
+              <NavLink to="/auth/login">
+                <Button variant="green">Get Started</Button>
+              </NavLink>
+              <Button variant="dark" onClick={handleScrollUp}>
+                Home
+              </Button>
+
+              <NavLink to="/contact-us">
+                <Button variant="dark">Contact Us</Button>
+              </NavLink>
+            </Buttons>
+          </Buttoncontainer>
+        </RightSide>
+      </BottomSection>
+
+      <FooterNote>
+        ©2024 Agristance Organization. All rights Reserved
+      </FooterNote>
+    </FooterContainer>
   );
 };
 
