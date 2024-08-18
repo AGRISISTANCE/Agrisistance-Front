@@ -16,11 +16,11 @@ import {
 
 
 // Admin Imports
-import MainDashboard from 'views/admin/default';
-import NFTMarketplace from 'views/admin/marketplace';
-import Profileold from 'views/admin/profileold';
-import DataTables from 'views/admin/dataTables';
-import RTL from 'views/admin/rtl';
+// import MainDashboard from 'views/admin/default';
+// import NFTMarketplace from 'views/admin/marketplace';
+// import Profileold from 'views/admin/profileold';
+// import DataTables from 'views/admin/dataTables';
+// import RTL from 'views/admin/rtl';
 
 
 //

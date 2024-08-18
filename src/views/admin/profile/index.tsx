@@ -63,7 +63,7 @@ export default class Login extends Component<Props, State> {
 					padding='40px'
 					gap={{ base: '20px', xl: '40px' }}
 				>
-					<img src={avatars.avatar1} style={{
+					<img src={avatars.avatar1} alt={avatars.avatar1} style={{
 						borderRadius: '50%',
 						width: '100px',
 					}} />

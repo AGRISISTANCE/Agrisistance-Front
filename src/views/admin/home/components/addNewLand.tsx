@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import asset from '../../../../assets/img/dashboards/asset';
-import { Center, Flex, Text } from '@chakra-ui/react';
-import { Button } from 'common/Button';
+import { Flex, Text } from '@chakra-ui/react';
 import { FaArrowRight } from 'react-icons/fa';
-import { url } from 'inspector';
 
 export default function AddNewLand() {
     const [step, setStep] = useState(1);
