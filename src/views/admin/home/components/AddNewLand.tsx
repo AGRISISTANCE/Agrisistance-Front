@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import asset from '../../../../assets/img/dashboards/asset';
 import { Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Progress } from '@chakra-ui/react';
 import { FaArrowRight } from 'react-icons/fa';
@@ -33,6 +33,7 @@ export default function AddNewLand({ initialStep = 1 }: AddNewLandProps) {
 
     useEffect(() => {
         if (initialStep === 5) {
+            setStep(5);
             setShowProgress(true);
         }
     }, [initialStep]);
@@ -213,7 +214,7 @@ export default function AddNewLand({ initialStep = 1 }: AddNewLandProps) {
                                 onChange={handleInputChange}
                                 style={{ borderRadius: '0px', width: '250px', height: '40px', background: '#fff' }}
                             />
-                            <Text style={{ color: '#fff', fontSize: '20px', fontWeight: 'normal' }}>Kg/ha</Text>
+                            <Text style={{ color: '#fff', fontSize: '20px', fontWeight: 'normal' }}>Percentage of nitrogen in the soil</Text>
                         </Flex>
                         <Flex direction={'column'} align={'center'} gap={'10px'}>
                             <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Potassium(K)</label>
@@ -224,10 +225,10 @@ export default function AddNewLand({ initialStep = 1 }: AddNewLandProps) {
                                 onChange={handleInputChange}
                                 style={{ borderRadius: '0px', width: '250px', height: '40px', background: '#fff' }}
                             />
-                            <Text style={{ color: '#fff', fontSize: '20px', fontWeight: 'normal' }}>Kg/ha</Text>
+                            <Text style={{ color: '#fff', fontSize: '20px', fontWeight: 'normal' }}>Percentage of potassium in the soil</Text>
                         </Flex>
                         <Flex direction={'column'} align={'center'} gap={'10px'}>
-                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Phosphorus</label>
+                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Phosphorus(P)</label>
                             <Input
                                 type="text"
                                 name="phosphorus"
@@ -235,10 +236,10 @@ export default function AddNewLand({ initialStep = 1 }: AddNewLandProps) {
                                 onChange={handleInputChange}
                                 style={{ borderRadius: '0px', width: '250px', height: '40px', background: '#fff' }}
                             />
-                            <Text style={{ color: '#fff', fontSize: '20px', fontWeight: 'normal' }}>Kg/ha</Text>
+                            <Text style={{ color: '#fff', fontSize: '20px', fontWeight: 'normal' }}>Percentage of phosphorus in the soil</Text>
                         </Flex>
                         <Flex direction={'column'} align={'center'} gap={'10px'}>
-                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Ph levels</label>
+                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>pH Levels</label>
                             <Input
                                 type="text"
                                 name="phLevels"
@@ -246,36 +247,55 @@ export default function AddNewLand({ initialStep = 1 }: AddNewLandProps) {
                                 onChange={handleInputChange}
                                 style={{ borderRadius: '0px', width: '250px', height: '40px', background: '#fff' }}
                             />
-                            <Text style={{ color: '#fff', fontSize: '20px', fontWeight: 'normal' }}>Ph scale</Text>
+                            <Text style={{ color: '#fff', fontSize: '20px', fontWeight: 'normal' }}>Soil pH level</Text>
                         </Flex>
                     </Flex>
                     <Button
                         bg={'#2acc32'}
                         color={'#fff'}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
                         p={'10px 20px'}
                         fontSize={'20px'}
                         fontWeight={'bold'}
+                        gap={'20px'}
                         borderRadius={'10px'}
-                        onClick={handleFinish}
+                        onClick={handleNext}
                     >
-                        Finish
+                        Next <FaArrowRight />
                     </Button>
                 </Flex>
             )}
-            {
-                step === 5 && showProgress &&
+            {step === 5 && (
                 <Flex direction={'column'} align={'center'} width={'100%'} gap={'20px'}>
                     <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
-                        <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>Generating your business plan...</Text>
+                        <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>Confirmation</Text>
                     </Flex>
-                    <Flex direction={'column'} align={'center'} justify={'center'} width={'300px'}>
-                        <Text mb={'10px'} color={'#fff'} fontSize={'2xl'}>{progressMessage}</Text>
-                        <Progress size='md' isIndeterminate colorScheme='green' width={'100%'} />
-                    </Flex>
+                    <Text color={'white'} fontWeight={'semibold'} fontSize={'2xl'}>You have completed the form.</Text>
+                    <Button
+                        bg={'#2acc32'}
+                        color={'#fff'}
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'center'}
+                        p={'10px 20px'}
+                        fontSize={'20px'}
+                        fontWeight={'bold'}
+                        gap={'20px'}
+                        borderRadius={'10px'}
+                        onClick={handleFinish}
+                    >
+                        Confirm <FaArrowRight />
+                    </Button>
                 </Flex>
-            }
-
-            {/* Modal Popup */}
+            )}
+            {showProgress && (
+                <Flex direction={'column'} align={'center'} justify={'center'} position={'fixed'} top={'50%'} left={'50%'} transform={'translate(-50%, -50%)'} p={'20px'} bg={'#fff'} borderRadius={'10px'} shadow={'md'}>
+                    <Text fontSize={'lg'} fontWeight={'bold'}>{progressMessage}</Text>
+                    <Progress size='xs' isIndeterminate />
+                </Flex>
+            )}
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -284,7 +304,7 @@ export default function AddNewLand({ initialStep = 1 }: AddNewLandProps) {
                         <Text>{modalContent}</Text>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme="green" mr={3} onClick={onClose}>
+                        <Button colorScheme='blue' mr={3} onClick={onClose}>
                             Close
                         </Button>
                     </ModalFooter>

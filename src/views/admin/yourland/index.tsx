@@ -12,6 +12,7 @@ import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from 'common/Popup/ConfirmationPopup';
 import { useNavigate } from 'react-router-dom';
 
+import AddNewLand from '../home/components/AddNewLand';
 
 interface RevenueItem {
 	CropName: string;
@@ -182,6 +183,7 @@ const Yourland: React.FC = () => {
 							onCancel={handleCancel}
 							isConfirmPhase={isConfirmPhase}
 							showPopup={showPopup}
+							AddNewLandComponent={AddNewLand}
 						/>
 						)}
 						<Flex justify='space-around'>
@@ -341,6 +343,7 @@ const Yourland: React.FC = () => {
 								onCancel={handleCancel}
 								isConfirmPhase={isConfirmPhase}
 								showPopup={showPopup}
+								AddNewLandComponent={AddNewLand}
 							/>
 						)}
 						<Flex justify='space-around'>
@@ -419,6 +422,7 @@ const Yourland: React.FC = () => {
 							onCancel={handleCancel}
 							isConfirmPhase={isConfirmPhase}
 							showPopup={showPopup}
+							AddNewLandComponent={AddNewLand}
 						/>
 					)}
 						<Flex padding='40px'>
