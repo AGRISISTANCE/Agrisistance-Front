@@ -5,7 +5,7 @@ import AdminLayout from './layouts/admin';
 import {
   ChakraProvider,
 } from '@chakra-ui/react';
-import initialTheme from './theme/theme'; 
+import initialTheme from './theme/theme';
 import { useState } from 'react';
 
 // Import Landing Page
@@ -30,9 +30,8 @@ export default function Main() {
             <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
           }
         />
-
         {/* RTL Layout */}
-        
+
         {/* 
         <Route
           path="rtl/*"
@@ -46,7 +45,7 @@ export default function Main() {
         {/* Fallback to Admin Dashboard */}
 
         {/*<Route path="*" element={<Navigate to="/admin" replace />} />*/}
-        
+
       </Routes>
     </ChakraProvider>
   );
