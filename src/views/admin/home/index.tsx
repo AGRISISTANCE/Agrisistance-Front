@@ -14,18 +14,12 @@ interface LandData {
 
 // Initialize lands with example data
 const initialLands: LandData[] = [
-  {
-    name: "Land1",
-    coordinates: ['41.40338', '2.17403'],
-    select: true,
-    selected: true
-  },
-  {
-    name: "Land2",
-    coordinates: ['41.4032', '3.17403'],
-    select: true,
-    selected: false
-  }
+  // {
+  //   name: "Land2",
+  //   coordinates: ['41.4032', '3.17403'],
+  //   select: true,
+  //   selected: false
+  // }
 ];
 
 export default function Home() {
@@ -58,7 +52,7 @@ export default function Home() {
           {selectedLandIndex >= 0 ? (
             <Land {...lands[selectedLandIndex]} select={false}/>
           ) : (
-            <Text>No selected land</Text>
+            <Land/>
           )}
         </Flex>
       </Flex>
