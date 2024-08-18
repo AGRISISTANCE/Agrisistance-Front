@@ -78,25 +78,28 @@ const Yourland: React.FC = () => {
 	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
 	const [showTooltip, setShowTooltip] = useState<boolean>(false);
 
- 	//Related to the popup
+ 	//! Related to the popup
 	const navigate = useNavigate();
-
-
 	const [showPopup, setShowPopup] = useState(false);
 
 	const handleCancel = () => {
 		setShowPopup(false);
 	  };
 	
-	const handleConfirm = (data: any) => {
-		// Process confirmation data here
-		console.log(data);
+
+	const handleConfirm = (data?: any) => {
+		if (data) {
+		  console.log("Form Data:", data); // Handle the data
+		}
+		// Additional save logic
 		setShowPopup(false);
-		// Redirect after confirmation, e.g., history.push('/some-path')
-		navigate('/dashboard/home'); // Redirect to a different route
 	  };
 
-
+	  //! pop up state
+	  const [LandCoordinates, setLandCoordinates] = useState('');
+	  const [LandSize, setLandSize] = useState('');
+	
+	//
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
 		setSoil((prevSoil) => ({
@@ -159,12 +162,13 @@ const Yourland: React.FC = () => {
 				return (
 					<Box>
 						{showPopup && (
-							<ConfirmationPopup 
-							title="Do you confirm the new modifications apported to soil maintainance?"
-							message="This modifications will be saved and your data and business plan will be updated accordingly"
-							onSubmit={handleConfirm}
-							onCancel={handleCancel}
-							/>
+							<ConfirmationPopup
+							title="Confirmation"
+							message="Are you sure you want to continue?"
+							onCancel={() => setShowPopup(false)}
+							onConfirm={handleConfirm}
+							showPopup={showPopup}
+						  />
 						)}
 						<Flex justify='space-around'>
 							{Object.keys(soil).map((key) => (
@@ -322,11 +326,16 @@ const Yourland: React.FC = () => {
 				return (
 					<Box>
 						{showPopup && (
-							<ConfirmationPopup 
-							title="Do you confirm the new modifications apported to soil maintainance?"
-							message="This modifications will be saved and your data and business plan will be updated accordingly"
-							onSubmit={handleConfirm}
-							onCancel={handleCancel}
+							<ConfirmationPopup
+								title="Fill Information"
+								message="Please fill in the details before proceeding."
+								inputs={[
+								{ label: 'New Land coordinate', value: LandCoordinates, setValue: setLandCoordinates },
+								{ label: 'New Land Size in hectar', value: LandSize, setValue: setLandSize },
+								]}
+								onCancel={() => setShowPopup(false)}
+								onConfirm={handleConfirm}
+								showPopup={showPopup}
 							/>
 						)}
 						<Flex justify='space-around'>
@@ -359,14 +368,19 @@ const Yourland: React.FC = () => {
 						<Flex direction='column' align='center' gap='40px'>
 							<Text fontWeight='semibold' fontSize='4xl'>Your current land</Text>
 							<img src={land.land1} alt="" width='70%' />
-							<button style={{
-								background: '#32a6f9',
-								color: '#fff',
-								padding:'10px',
-								borderRadius:'25px',
-								fontSize: '20px',
-								fontWeight:'bold'
-								}}>Modify Land Coordinates</button>
+							<button 
+								onClick={() => setShowPopup(true)} 
+								style={{
+									background: '#32a6f9',
+									color: '#fff',
+									padding: '10px',
+									borderRadius: '25px',
+									fontSize: '20px',
+									fontWeight: 'bold'
+								}} 
+								>
+								Modify Land Coordinates
+								</button>
 						</Flex>
 					</Box>
 				);

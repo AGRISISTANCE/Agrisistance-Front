@@ -1,63 +1,83 @@
 import React, { useState } from 'react';
-import './ConfirmationPopup.css'; // Add styles
+import './ConfirmationPopup.css'; // Add styles for blurred background
+
+type PopupVariant = 'inputStage' | 'confirmationStage';
 
 interface ConfirmationPopupProps {
   title: string;
   message: string;
-  inputFields?: Array<{ label: string; name: string }>; // Optional for inputs
-  onSubmit: (data: any) => void; // What happens on confirm
-  onCancel: () => void; // What happens on cancel  
+  inputs?: { label: string; value: string; setValue: (value: string) => void }[]; // Optional inputs
+  onCancel: () => void;
+  onConfirm: (data?: any) => void;  // Modify to accept optional data
+  showPopup: boolean;
 }
 
 const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
   title,
   message,
-  inputFields,
-  onSubmit,
+  inputs,
   onCancel,
+  onConfirm,
+  showPopup,
 }) => {
-  const [inputData, setInputData] = useState<{ [key: string]: string }>({});
+  const [currentStage, setCurrentStage] = useState<PopupVariant>('inputStage');
+  const areInputsFilled = !inputs || inputs.every(input => input.value.trim() !== '');
+
+  const handleSubmit = () => {
+    if (currentStage === 'inputStage') {
+      setCurrentStage('confirmationStage'); // Move to confirmation stage
+    } else {
+      const formData = inputs?.reduce((acc, input) => {
+        acc[input.label] = input.value; // Collect form input values
+        return acc;
+      }, {} as Record<string, string>);
   
-  // Handle input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputData({ ...inputData, [e.target.name]: e.target.value });
+      onConfirm(formData); // Pass the form data
+    }
   };
 
-  // Check if all inputs are filled for button enabling
-  const allInputsFilled = inputFields?.every(input => inputData[input.name]?.trim()) ?? true;
-
   return (
-    <div className="popup-overlay">
-      <div className="popup-container">
-        <h2>{title}</h2>
-        <p>{message}</p>
-        
-        {inputFields?.map((field, idx) => (
-          <div key={idx}>
-            <label>{field.label}</label>
-            <input 
-              type="text" 
-              name={field.name}
-              value={inputData[field.name] || ''} 
-              onChange={handleInputChange}
-            />
+    <>
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <h3>{title}</h3>
+            <p>{message}</p>
+            
+            {currentStage === 'inputStage' && inputs && (
+              <div className="input-container">
+                {inputs.map((input, index) => (
+                  <div key={index}>
+                    <label>{input.label}</label>
+                    <input
+                      type="text"
+                      value={input.value}
+                      onChange={(e) => input.setValue(e.target.value)}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <div className="button-container">
+              <button
+                onClick={handleSubmit}
+                disabled={!areInputsFilled && currentStage === 'inputStage'}
+                style={{
+                  backgroundColor: areInputsFilled ? 'green' : 'gray',
+                  cursor: areInputsFilled ? 'pointer' : 'not-allowed',
+                }}
+              >
+                {currentStage === 'inputStage' ? 'Submit' : 'Save Changes'}
+              </button>
+              <button onClick={onCancel} style={{ backgroundColor: '#2C4026' }}>
+                Cancel
+              </button>
+            </div>
           </div>
-        ))}
-
-        <div className="popup-buttons">
-          <button 
-            className={`submit-btn ${allInputsFilled ? 'enabled' : 'disabled'}`}
-            onClick={() => onSubmit(inputData)} 
-            disabled={!allInputsFilled}
-          >
-            Save Changes
-          </button>
-          <button className="cancel-btn" onClick={onCancel}>
-            Cancel
-          </button>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
