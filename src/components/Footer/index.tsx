@@ -67,9 +67,7 @@ const Footer: React.FC = () => {
                 Home
               </Button>
 
-              <NavLink to="/contact-us">
-                <Button variant="dark">Contact Us</Button>
-              </NavLink>
+              <Button variant="dark">Contact Us</Button>
             </Buttons>
           </Buttoncontainer>
         </RightSide>
