@@ -8,6 +8,10 @@ import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
 import TotalSpent from '../default/components/TotalSpent';
 import { Console } from 'console';
+import ConfirmationPopup from 'common/Popup/ConfirmationPopup';
+import { useNavigate } from 'react-router-dom';
+
+
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -59,6 +63,8 @@ type SoilType = {
 	ph: number;
 };
 const Yourland: React.FC = () => {
+
+
 	const [soil, setSoil] = useState<SoilType>({
 		oxygen: 20,
 		azote: 15,
@@ -71,6 +77,25 @@ const Yourland: React.FC = () => {
 	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
 	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
 	const [showTooltip, setShowTooltip] = useState<boolean>(false);
+
+ 	//Related to the popup
+	const navigate = useNavigate();
+
+
+	const [showPopup, setShowPopup] = useState(false);
+
+	const handleCancel = () => {
+		setShowPopup(false);
+	  };
+	
+	const handleConfirm = (data: any) => {
+		// Process confirmation data here
+		console.log(data);
+		setShowPopup(false);
+		// Redirect after confirmation, e.g., history.push('/some-path')
+		navigate('/dashboard/home'); // Redirect to a different route
+	  };
+
 
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
@@ -133,6 +158,14 @@ const Yourland: React.FC = () => {
 			case 'Soil maintenance':
 				return (
 					<Box>
+						{showPopup && (
+							<ConfirmationPopup 
+							title="Do you confirm the new modifications apported to soil maintainance?"
+							message="This modifications will be saved and your data and business plan will be updated accordingly"
+							onSubmit={handleConfirm}
+							onCancel={handleCancel}
+							/>
+						)}
 						<Flex justify='space-around'>
 							{Object.keys(soil).map((key) => (
 								<Flex
@@ -196,7 +229,10 @@ const Yourland: React.FC = () => {
 									<SliderThumb />
 								</Tooltip>
 							</Slider>
-							<Button onClick={()=>{Applychanges(soil)}}>Apply changes</Button>
+							
+							
+							{/* <Button onClick={()=>{Applychanges(soil)}}>Apply changes</Button> */}
+							<Button onClick={() => setShowPopup(true)}> Apply changes</Button>
 						</Flex>
 						<Flex>
 							<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
@@ -285,6 +321,14 @@ const Yourland: React.FC = () => {
 			case 'Land statistics':
 				return (
 					<Box>
+						{showPopup && (
+							<ConfirmationPopup 
+							title="Do you confirm the new modifications apported to soil maintainance?"
+							message="This modifications will be saved and your data and business plan will be updated accordingly"
+							onSubmit={handleConfirm}
+							onCancel={handleCancel}
+							/>
+						)}
 						<Flex justify='space-around'>
 							<Flex direction='column' align='center' gap='15px'>
 								<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
