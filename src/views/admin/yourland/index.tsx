@@ -7,10 +7,8 @@ import cropsData from './img/crops';
 import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
 import TotalSpent from '../default/components/TotalSpent';
-import { Console } from 'console';
 import BusinessPlanModal from './components/BusinessPlanModal';
-import ConfirmationPopup from 'common/Popup/ConfirmationPopup';
-import { useNavigate } from 'react-router-dom';
+import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 
 import AddNewLand from '../home/components/AddNewLand';
 

@@ -6,7 +6,8 @@ import {
   MdLock,
   MdOutlineYard,
   MdOutlineCalendarMonth,
-  MdGroups
+  MdGroups,
+  MdLogout 
 } from 'react-icons/md';
 
 import {
@@ -28,8 +29,8 @@ import Home from './views/admin/home'
 import Profile from './views/admin/profile'
 import Yourland from './views/admin/yourland'
 import Calendar from './views/admin/calendar'
-import Yournetwork from './views/admin/yournetwork'
 import Virtualland from './views/admin/virtualland'
+import Yournetwork from './views/admin/yournetwork'
 
 
 // Auth Imports
@@ -84,9 +85,9 @@ const routes = [
     path: '/yourland',
     component: <Yourland />,
   },
-  {
+  {/*{
     name: 'Calendar',
-    layout: '/dasboard',
+    layout: '/dashboard',
     path: '/calendar',
     icon: <Icon as={MdOutlineCalendarMonth} width="20px" height="20px" color="inherit" />,
     component: <Calendar />,
@@ -97,7 +98,7 @@ const routes = [
     path: '/network',
     icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
     component: <Yournetwork />,
-  },
+  }*/},
   {
     name: 'Virtual Land',
     layout: '/dashboard',
@@ -109,7 +110,7 @@ const routes = [
     name: 'Disconnect',
     layout: '/auth',
     path: '/landing',
-    icon: <Icon as={PiVirtualReality} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={MdLogout} width="20px" height="20px" color="inherit" />,
     component: <LandingPage />,
   }
 ];

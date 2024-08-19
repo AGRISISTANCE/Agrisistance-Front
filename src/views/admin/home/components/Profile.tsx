@@ -1,6 +1,6 @@
 // Chakra imports
 import { Avatar,Flex, Text, useColorModeValue } from '@chakra-ui/react';
-import Card from 'components/card/Card';
+import Card from '../../../../components/card/Card';
 
 export default function Profile(props: {
     avatar: string;

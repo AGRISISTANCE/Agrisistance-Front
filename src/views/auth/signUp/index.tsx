@@ -24,8 +24,8 @@ import {
 } from "@chakra-ui/react";
 import { MdOutlineRemoveRedEye, MdArrowDropDown } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
-import DefaultAuth from "layouts/auth/Default";
-import illustration from "assets/img/auth/auth.png";
+import DefaultAuth from "../../../layouts/auth/Default";
+import illustration from "../../../assets/img/auth/auth.png";
 import { apiRequest } from "../../../services/api";
 
 
