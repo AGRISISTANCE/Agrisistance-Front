@@ -66,11 +66,10 @@ class LandingPage extends Component<{}, LandingPageState> {
         {!isPreloadComplete && <Preload onAnimationComplete={this.handleAnimationComplete} />}
         {isPreloadComplete && (
           <div>
-            {/* Your landing page content goes here */}
             <Header />
                 <Container>
                     <ScrollToTop />
-                    <ContentSection>
+                    <ContentSection id="intro">
                         <Fade direction="right" triggerOnce={true} {...(this.props as CustomFadeProps)}>
                             <StyledRow
                                 justify="space-between"
@@ -99,7 +98,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                             </StyledRow>
                         </Fade>
                     </ContentSection>
-                    <ContentSection>
+                    <ContentSection id="what">
                         <Fade direction="left" triggerOnce={true} {...(this.props as CustomFadeProps)}>
                             <StyledRow
                                 justify="space-between"
@@ -119,7 +118,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                             </StyledRow>
                         </Fade>
                     </ContentSection>
-                    <ContentSection>
+                    <ContentSection id="easy">
                         <Fade direction="right" triggerOnce={true} {...(this.props as CustomFadeProps)}>
                             <StyledRow
                                 justify="space-between"
@@ -139,7 +138,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                             </StyledRow>
                         </Fade>
                     </ContentSection>
-                    <ContentSection>
+                    <ContentSection id="firstkind">
                         <Fade direction="left" triggerOnce={true} {...(this.props as CustomFadeProps)}>
                             <StyledRow
                                 justify="space-between"
@@ -159,7 +158,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                             </StyledRow>
                         </Fade>
                     </ContentSection>
-                    <ContentSection>
+                    <ContentSection id="track">
                         <Fade direction="right" triggerOnce={true} {...(this.props as CustomFadeProps)}>
                             <StyledRow
                                 justify="space-between"
@@ -178,7 +177,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                             </StyledRow>
                         </Fade>
                     </ContentSection>
-                    <Contact title="Contact Form" content="Agrisitance is here to answer your inquiries, fill out the form and let us know your thoughts!" id="contact" />
+                    <Contact id="contact" title="Contact Form" content="Agrisitance is here to answer your inquiries, fill out the form and let us know your thoughts!" />
                 </Container>
                 <Footer />
           </div>

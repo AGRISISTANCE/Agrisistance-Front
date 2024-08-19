@@ -15,15 +15,6 @@ import {
 } from 'react-icons/pi';
 
 
-
-// Admin Imports
-// import MainDashboard from 'views/admin/default';
-// import NFTMarketplace from 'views/admin/marketplace';
-// import Profileold from 'views/admin/profileold';
-// import DataTables from 'views/admin/dataTables';
-// import RTL from 'views/admin/rtl';
-
-
 //
 import Home from './views/admin/home'
 import Profile from './views/admin/profile'
@@ -85,20 +76,6 @@ const routes = [
     path: '/yourland',
     component: <Yourland />,
   },
-  {/*{
-    name: 'Calendar',
-    layout: '/dashboard',
-    path: '/calendar',
-    icon: <Icon as={MdOutlineCalendarMonth} width="20px" height="20px" color="inherit" />,
-    component: <Calendar />,
-  },
-  {
-    name: 'Your Network',
-    layout: '/dashboard',
-    path: '/network',
-    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
-    component: <Yournetwork />,
-  }*/},
   {
     name: 'Virtual Land',
     layout: '/dashboard',
@@ -117,3 +94,17 @@ const routes = [
 
 
 export default routes;
+{/*{
+    name: 'Calendar',
+    layout: '/dashboard',
+    path: '/calendar',
+    icon: <Icon as={MdOutlineCalendarMonth} width="20px" height="20px" color="inherit" />,
+    component: <Calendar />,
+  },
+  {
+    name: 'Your Network',
+    layout: '/dashboard',
+    path: '/network',
+    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
+    component: <Yournetwork />,
+  }*/}
