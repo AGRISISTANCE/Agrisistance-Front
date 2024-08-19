@@ -12,26 +12,16 @@ export const ContentSection = styled("section")`
 `;
 
 export const AnimationWrapper = styled("div")`
+  position: fixed; /* Fixed position to cover the whole screen */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* Take full width */
-  max-width: 80%; /* Limit maximum width for larger screens */
-  height: auto;
-
-  @media only screen and (max-width: 1024px) {
-    max-width: 90%;
-  }
-
-  @media only screen and (max-width: 575px) {
-    max-width: 100%;
-  }
-
-  /* Ensure Lottie animation scales correctly */
-  & > div {
-    width: 100%;
-    max-width: 600px; /* Adjust the width as needed */
-  }
+  background: #fff; /* Optional: Set a background color */
+  z-index: 9999; /* Ensure it stays on top of other content */
 `;
 
 export const Content = styled("p")`

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Lottie from 'react-lottie';
 import animationData from './LogoReveal.json';
+import { AnimationWrapper } from './styles'; // Import the styled component
 
 const Preload: React.FC<{ onAnimationComplete: () => void }> = ({ onAnimationComplete }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -31,10 +32,10 @@ const Preload: React.FC<{ onAnimationComplete: () => void }> = ({ onAnimationCom
   };
 
   return (
-    <div>
-      <Lottie options={defaultOptions} height={400} width={400} />
+    <AnimationWrapper>
+      <Lottie options={defaultOptions} height={window.innerHeight} width={window.innerWidth} />
       <audio ref={audioRef} src="./sound.mp3" autoPlay />
-    </div>
+    </AnimationWrapper>
   );
 };
 
