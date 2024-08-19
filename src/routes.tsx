@@ -43,8 +43,8 @@ import LandingPage from './views/Landing/landingPage'; // <== Import the Landing
 const routes = [
   {
     name: 'Landing Page',
-    layout: '/',
-    path: '/',
+    layout: '',
+    path: '',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <LandingPage />,
   },
@@ -104,6 +104,13 @@ const routes = [
     path: '/virtualland',
     icon: <Icon as={PiVirtualReality} width="20px" height="20px" color="inherit" />,
     component: <Virtualland />,
+  },
+  {
+    name: 'Disconnect',
+    layout: '/auth',
+    path: '/landing',
+    icon: <Icon as={PiVirtualReality} width="20px" height="20px" color="inherit" />,
+    component: <LandingPage />,
   }
 ];
 

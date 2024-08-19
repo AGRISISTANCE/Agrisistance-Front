@@ -16,33 +16,28 @@ import { IoClose } from 'react-icons/io5';
 const text = [
   {
     title: 'Resource Managemnet',
-    text1: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers',
-    text2: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers'
+    text1: 'Workers: Hire 5-7 workers to cover planting, maintenance, and harvesting tasks.',
+    text2: 'Rainfall: With 700 mm of rainfall, irrigation may only be necessary during dry spells. Ensure that irrigation systems are ready to provide additional water if needed.'
   },
   {
-    title: 'Profit Expectations',
-    text1: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers',
-    text2: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers'
+    title: 'Crop/Soil Maintenance',
+    text1: 'Implement crop rotation and cover cropping to maintain soil fertility, Add organic matter like compost or manure to improve soil structure and nutrient content.',
+    text2: 'Regularly test the soil and adjust fertilizer use to maintain optimal nutrient levels and pH balance.'
   },
   {
-    title: 'Crop/ Soil Maintnance',
-    text1: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers',
-    text2: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers'
+    title: 'Weather Expectation',
+    text1: 'Stay prepared for sudden weather changes; invest in weather monitoring tools for early alerts.',
+    text2: 'Use mulching, shade nets, or windbreaks to protect crops from extreme weather conditions.'
   },
   {
-    title: 'Expected Revenue ',
-    text1: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers',
-    text2: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers'
-  },
-  {
-    title: 'Weather Predictions',
-    text1: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers',
-    text2: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers'
+    title: 'Profit',
+    text1: 'Total spending: $23,046.75. Expected revenue: $61,505.125.',
+    text2: 'Profit: $38,458.375.'
   },
   {
     title: 'Other',
-    text1: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers',
-    text2: 'You will Need about 17 workers, each of them with a salary of 10$ per week, it is recommended to pick experienced workers'
+    text1: 'Consider investing in beneficial insects like ladybugs and bees for natural pest control and pollination.',
+    text2: 'Explore the use of solar panels to reduce irrigation system costs and enhance sustainability.'
   },
 ]
 const BusinessPlanModal: React.FC = () => {
@@ -64,7 +59,7 @@ const BusinessPlanModal: React.FC = () => {
           bgPosition="center"
         >
           <ModalHeader>
-            <Text background={'#218225'} borderRadius={'20px'} padding={3} fontSize="2xl" color="white">Business Plan for Land: LandName  21/08/2024    10:50pm</Text>
+            <Text background={'#218225'} borderRadius={'20px'} padding={3} fontSize="2xl" color="white">Business Plan for Land: MyLand 1 21/08/2024 10:50pm</Text>
           </ModalHeader>
           <ModalBody
             overflowY="scroll"

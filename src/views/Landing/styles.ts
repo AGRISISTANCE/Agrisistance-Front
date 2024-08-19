@@ -1,11 +1,36 @@
 import { Row } from "antd";
+
 import styled from "styled-components";
 
 export const ContentSection = styled("section")`
   position: relative;
-  padding: 10rem 0 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  padding: 0; /* Remove padding for perfect centering */
+`;
+
+export const AnimationWrapper = styled("div")`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Take full width */
+  max-width: 80%; /* Limit maximum width for larger screens */
+  height: auto;
+
   @media only screen and (max-width: 1024px) {
-    padding: 4rem 0 2rem;
+    max-width: 90%;
+  }
+
+  @media only screen and (max-width: 575px) {
+    max-width: 100%;
+  }
+
+  /* Ensure Lottie animation scales correctly */
+  & > div {
+    width: 100%;
+    max-width: 600px; /* Adjust the width as needed */
   }
 `;
 

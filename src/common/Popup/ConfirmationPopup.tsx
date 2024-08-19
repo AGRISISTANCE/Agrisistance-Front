@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Input {
   label: string;
@@ -15,6 +15,7 @@ interface ConfirmationPopupProps {
   onCancel: () => void;
   isConfirmPhase: boolean;
   showPopup: boolean;
+  AddNewLandComponent: React.FC; // Pass the AddNewLand component as a prop
 }
 
 const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
@@ -25,7 +26,18 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
   onCancel,
   isConfirmPhase,
   showPopup,
+  AddNewLandComponent,
 }) => {
+  const [showAddNewLand, setShowAddNewLand] = useState(false);
+
+  // Handle the confirmation action
+  const handleConfirm = () => {
+    onConfirm();
+    if (isConfirmPhase) {
+      setShowAddNewLand(true); // Show AddNewLand when confirming in confirm phase
+    }
+  };
+
   if (!showPopup) return null;
 
   const allInputsFilled = inputs.every(input => input.value);
@@ -58,8 +70,12 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
           alignItems: 'center'
         }}
       >
-        <h2>{isConfirmPhase ? "Do you confirm your new modifications?" : title}</h2>
-        <p>{isConfirmPhase ? "These modifications will be saved and your data and business model will be changed accordingly." : message}</p>
+        <h2 style={{ marginBottom: '10px' }}>
+          {isConfirmPhase ? "Do you confirm your new modifications?" : title}
+        </h2>
+        <p style={{ marginBottom: '20px' }}>
+          {isConfirmPhase ? "These modifications will be saved and your data and business model will be changed accordingly." : message}
+        </p>
 
         {!isConfirmPhase && inputs.length > 0 && inputs.map((input, index) => (
           <div key={index} style={{ width: '100%', marginBottom: '15px' }}>
@@ -80,7 +96,7 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
 
         <div className='w-full flex' style={{ marginTop: '20px' }}>
           <button
-            onClick={onConfirm}
+            onClick={handleConfirm}
             disabled={!isConfirmPhase && !allInputsFilled}
             style={{
               backgroundColor: isConfirmPhase || allInputsFilled ? '#4CAF50' : 'gray',
@@ -89,10 +105,11 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
               borderRadius: '5px',
               color: 'white',
               flex: 1,
-              marginRight: '10px'
+              marginRight: '10px',
+              border: 'none'
             }}
           >
-            Save Changes
+            {isConfirmPhase ? "Confirm" : "Save Changes"}
           </button>
 
           <button
@@ -102,13 +119,16 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
               padding: '10px 20px',
               borderRadius: '5px',
               color: 'white',
-              flex: 1
+              flex: 1,
+              border: 'none'
             }}
           >
             Cancel
           </button>
         </div>
       </div>
+
+      {showAddNewLand && <AddNewLandComponent />} {/* Render AddNewLandComponent conditionally */}
     </div>
   );
 };
