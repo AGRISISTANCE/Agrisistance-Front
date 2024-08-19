@@ -1,6 +1,4 @@
-import { Flex, Box, Table, Checkbox, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
-
+import { Box, Flex, Icon, Progress, Table, Tbody, Td, Text, Th, Thead, Tr, useColorModeValue } from '@chakra-ui/react';
 import {
 	createColumnHelper,
 	flexRender,
@@ -9,28 +7,31 @@ import {
 	SortingState,
 	useReactTable
 } from '@tanstack/react-table';
-
 // Custom components
-import Card from '../../../../components/card/Card';
-import Menu from '../../../../components/menu/MainMenu';
+import Card from 'components/card/Card';
+import Menu from 'components/menu/MainMenu';
+import * as React from 'react';
+// Assets
+import { MdCancel, MdCheckCircle, MdOutlineError } from 'react-icons/md';
+
+
 
 type RowObj = {
-	name: [string, boolean];
-	progress: string;
-	quantity: number;
-	date: string;
-	info: boolean;
+	name: string;
+	status: string;
+	date: string; 
+	progress: number;
 };
- 
+
 const columnHelper = createColumnHelper<RowObj>();
 
 // const columns = columnsDataCheck;
-export default function CheckTable(props: { tableData: any }) {
+export default function ComplexTable(props: { tableData: any }) {
 	const { tableData } = props;
 	const [ sorting, setSorting ] = React.useState<SortingState>([]);
 	const textColor = useColorModeValue('secondaryGray.900', 'white');
 	const borderColor = useColorModeValue('gray.200', 'whiteAlpha.100');
-	let defaultData= tableData;
+	let defaultData = tableData;
 	const columns = [
 		columnHelper.accessor('name', {
 			id: 'name',
@@ -45,45 +46,52 @@ export default function CheckTable(props: { tableData: any }) {
 			),
 			cell: (info: any) => (
 				<Flex align='center'>
-					<Checkbox defaultChecked={info.getValue()[1]} colorScheme='brandScheme' me='10px' />
 					<Text color={textColor} fontSize='sm' fontWeight='700'>
-						{info.getValue()[0]}
+						{info.getValue()}
 					</Text>
 				</Flex>
 			)
 		}),
-		columnHelper.accessor('progress', {
-			id: 'progress',
+		columnHelper.accessor('status', {
+			id: 'status',
 			header: () => (
 				<Text
 					justifyContent='space-between'
 					align='center'
 					fontSize={{ sm: '10px', lg: '12px' }}
 					color='gray.400'>
-					PROGRESS
+					STATUS
 				</Text>
 			),
 			cell: (info) => (
-				<Text color={textColor} fontSize='sm' fontWeight='700'>
-					{info.getValue()}
-				</Text>
-			)
-		}),
-		columnHelper.accessor('quantity', {
-			id: 'quantity',
-			header: () => (
-				<Text
-					justifyContent='space-between'
-					align='center'
-					fontSize={{ sm: '10px', lg: '12px' }}
-					color='gray.400'>
-					QUANTITY
-				</Text>
-			),
-			cell: (info) => (
-				<Text color={textColor} fontSize='sm' fontWeight='700'>
-					{info.getValue()}
-				</Text>
+			<Flex align='center'>
+												<Icon
+													w='24px'
+													h='24px'
+													me='5px'
+													color={
+														info.getValue() === 'Approved' ? (
+															'green.500'
+														) : info.getValue() === 'Disable' ? (
+															'red.500'
+														) : info.getValue() === 'Error' ? (
+															'orange.500'
+														) : null
+													}
+													as={
+														info.getValue() === 'Approved' ? (
+															MdCheckCircle
+														) : info.getValue() === 'Disable' ? (
+															MdCancel
+														) : info.getValue() === 'Error' ? (
+															MdOutlineError
+														) : null
+													}
+												/>
+												<Text color={textColor} fontSize='sm' fontWeight='700'>
+													{info.getValue()}
+												</Text>
+											</Flex> 
 			)
 		}),
 		columnHelper.accessor('date', {
@@ -101,6 +109,23 @@ export default function CheckTable(props: { tableData: any }) {
 				<Text color={textColor} fontSize='sm' fontWeight='700'>
 					{info.getValue()}
 				</Text>
+			)
+		}),
+		columnHelper.accessor('progress', {
+			id: 'progress',
+			header: () => (
+				<Text
+					justifyContent='space-between'
+					align='center'
+					fontSize={{ sm: '10px', lg: '12px' }}
+					color='gray.400'>
+					PROGRESS
+				</Text>
+			),
+			cell: (info) => (
+				<Flex align='center'>
+					<Progress variant='table' colorScheme='brandScheme' h='8px' w='108px' value={info.getValue()} />
+				</Flex>
 			)
 		})
 	];
@@ -120,7 +145,7 @@ export default function CheckTable(props: { tableData: any }) {
 		<Card flexDirection='column' w='100%' px='0px' overflowX={{ sm: 'scroll', lg: 'hidden' }}>
 			<Flex px='25px' mb="8px" justifyContent='space-between' align='center'>
 				<Text color={textColor} fontSize='22px' fontWeight='700' lineHeight='100%'>
-					Check Table
+					Complex Table
 				</Text>
 				<Menu />
 			</Flex>
@@ -177,4 +202,5 @@ export default function CheckTable(props: { tableData: any }) {
 			</Box>
 		</Card>
 	);
-} 
+}
+ 

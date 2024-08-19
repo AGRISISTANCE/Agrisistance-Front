@@ -2,8 +2,8 @@
 import { Flex } from '@chakra-ui/react';
 
 // Custom components
-import { AgrisistanceLogo } from 'components/icons/Icons';
-import { HSeparator } from 'components/separator/Separator';
+import { AgrisistanceLogo } from '../../../components/icons/Icons';
+import { HSeparator } from '../../../components/separator/Separator';
 
 export function SidebarBrand() {
 	//   Chakra color mode

@@ -6,7 +6,8 @@ import {
   MdLock,
   MdOutlineYard,
   MdOutlineCalendarMonth,
-  MdGroups
+  MdGroups,
+  MdLogout 
 } from 'react-icons/md';
 
 import {
@@ -14,30 +15,21 @@ import {
 } from 'react-icons/pi';
 
 
-
-// Admin Imports
-// import MainDashboard from 'views/admin/default';
-// import NFTMarketplace from 'views/admin/marketplace';
-// import Profileold from 'views/admin/profileold';
-// import DataTables from 'views/admin/dataTables';
-// import RTL from 'views/admin/rtl';
-
-
 //
-import Home from 'views/admin/home'
-import Profile from 'views/admin/profile'
-import Yourland from 'views/admin/yourland'
-import Calendar from 'views/admin/calendar'
-import Yournetwork from 'views/admin/yournetwork'
-import Virtualland from 'views/admin/virtualland'
+import Home from './views/admin/home'
+import Profile from './views/admin/profile'
+import Yourland from './views/admin/yourland'
+import Calendar from './views/admin/calendar'
+import Virtualland from './views/admin/virtualland'
+import Yournetwork from './views/admin/yournetwork'
 
 
 // Auth Imports
-import SignUpCentered from 'views/auth/signUp';
-import LogInCentered from 'views/auth/logIn'
+import SignUpCentered from './views/auth/signUp';
+import LogInCentered from './views/auth/logIn'
 
 // Landing Page Import
-import LandingPage from 'views/Landing/landingPage'; // <== Import the Landing Page Component
+import LandingPage from './views/Landing/landingPage'; // <== Import the Landing Page Component
 
 
 const routes = [
@@ -85,20 +77,6 @@ const routes = [
     component: <Yourland />,
   },
   {
-    name: 'Calendar',
-    layout: '/dasboard',
-    path: '/calendar',
-    icon: <Icon as={MdOutlineCalendarMonth} width="20px" height="20px" color="inherit" />,
-    component: <Calendar />,
-  },
-  {
-    name: 'Your Network',
-    layout: '/dashboard',
-    path: '/network',
-    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
-    component: <Yournetwork />,
-  },
-  {
     name: 'Virtual Land',
     layout: '/dashboard',
     path: '/virtualland',
@@ -109,10 +87,24 @@ const routes = [
     name: 'Disconnect',
     layout: '/auth',
     path: '/landing',
-    icon: <Icon as={PiVirtualReality} width="20px" height="20px" color="inherit" />,
+    icon: <Icon as={MdLogout} width="20px" height="20px" color="inherit" />,
     component: <LandingPage />,
   }
 ];
 
 
 export default routes;
+{/*{
+    name: 'Calendar',
+    layout: '/dashboard',
+    path: '/calendar',
+    icon: <Icon as={MdOutlineCalendarMonth} width="20px" height="20px" color="inherit" />,
+    component: <Calendar />,
+  },
+  {
+    name: 'Your Network',
+    layout: '/dashboard',
+    path: '/network',
+    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
+    component: <Yournetwork />,
+  }*/}

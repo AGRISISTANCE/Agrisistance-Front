@@ -1,9 +1,9 @@
 // Chakra imports
 import { Box, Flex, Text, Icon, useColorModeValue, Checkbox } from '@chakra-ui/react';
 // Custom components
-import Card from '../../../../components/card/Card';
-import Menu from '../../../../components/menu/MainMenu';
-import IconBox from '../../../../components/icons/IconBox';
+import Card from 'components/card/Card';
+import Menu from 'components/menu/MainMenu';
+import IconBox from 'components/icons/IconBox';
 
 // Assets
 import { MdCheckBox, MdDragIndicator } from 'react-icons/md';
@@ -31,36 +31,36 @@ export default function Conversion(props: { [x: string]: any }) {
 				</Text>
 				<Menu ms='auto' />
 			</Flex>
-			<Box px='11px' w='100%'>
-				<Flex w='100%' justify='space-between' mb='20px'>
+			<Box px='11px'>
+				<Flex mb='20px'>
 					<Checkbox me='16px' colorScheme='brandScheme' />
 					<Text fontWeight='bold' color={textColor} fontSize='md' textAlign='start'>
 						Landing Page Design
 					</Text>
 					<Icon ms='auto' as={MdDragIndicator} color='secondaryGray.600' w='24px' h='24px' />
 				</Flex>
-				<Flex w='100%' justify='space-between' mb='20px'>
+				<Flex mb='20px'>
 					<Checkbox me='16px' defaultChecked colorScheme='brandScheme' />
 					<Text fontWeight='bold' color={textColor} fontSize='md' textAlign='start'>
 						Dashboard Builder
 					</Text>
 					<Icon ms='auto' as={MdDragIndicator} color='secondaryGray.600' w='24px' h='24px' />
 				</Flex>
-				<Flex w='100%' justify='space-between' mb='20px'>
+				<Flex mb='20px'>
 					<Checkbox defaultChecked me='16px' colorScheme='brandScheme' />
 					<Text fontWeight='bold' color={textColor} fontSize='md' textAlign='start'>
 						Mobile App Design
 					</Text>
 					<Icon ms='auto' as={MdDragIndicator} color='secondaryGray.600' w='24px' h='24px' />
 				</Flex>
-				<Flex w='100%' justify='space-between' mb='20px'>
+				<Flex mb='20px'>
 					<Checkbox me='16px' colorScheme='brandScheme' />
 					<Text fontWeight='bold' color={textColor} fontSize='md' textAlign='start'>
 						Illustrations
 					</Text>
 					<Icon ms='auto' as={MdDragIndicator} color='secondaryGray.600' w='24px' h='24px' />
 				</Flex>
-				<Flex w='100%' justify='space-between' mb='20px'>
+				<Flex mb='20px'>
 					<Checkbox defaultChecked me='16px' colorScheme='brandScheme' />
 					<Text fontWeight='bold' color={textColor} fontSize='md' textAlign='start'>
 						Promotional LP

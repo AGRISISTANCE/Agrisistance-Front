@@ -6,7 +6,7 @@ import "./output.css"
 
 import App from './App';
 import { Suspense } from 'react';
-import { Styles } from 'styles/styles';
+import { Styles } from './styles/styles';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

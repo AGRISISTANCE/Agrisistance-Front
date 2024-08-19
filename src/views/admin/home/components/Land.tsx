@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Flex, Button, Box, Text, useDisclosure } from '@chakra-ui/react';
-import land from 'assets/img/land/land';
+import land from '../../../../assets/img/land/land';
 import AddNewLand from './AddNewLand';
 import { IoIosClose } from 'react-icons/io';
 

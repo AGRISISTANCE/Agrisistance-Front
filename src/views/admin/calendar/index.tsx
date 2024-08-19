@@ -1,23 +1,23 @@
 // Chakra imports
 import { Avatar, Box, Flex, FormLabel, Icon, Select, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 // Assets
-import Usa from 'assets/img/dashboards/usa.png';
+import Usa from '../../../assets/img/dashboards/usa.png';
 // Custom components
-import MiniCalendar from 'components/calendar/MiniCalendar';
-import MiniStatistics from 'components/card/MiniStatistics';
-import IconBox from 'components/icons/IconBox';
+import MiniCalendar from '../../../components/calendar/MiniCalendar';
+import MiniStatistics from '../../../components/card/MiniStatistics';
+import IconBox from '../../../components/icons/IconBox';
 import { MdAddTask, MdAttachMoney, MdBarChart, MdFileCopy } from 'react-icons/md';
-import CheckTable from 'views/admin/rtl/components/CheckTable';
-import ComplexTable from 'views/admin/default/components/ComplexTable';
-import DailyTraffic from 'views/admin/default/components/DailyTraffic';
-import PieCard from 'views/admin/default/components/PieCard';
-import Tasks from 'views/admin/default/components/Tasks';
-import TotalSpent from 'views/admin/default/components/TotalSpent';
-import WeeklyRevenue from 'views/admin/default/components/WeeklyRevenue';
-import tableDataCheck from 'views/admin/default/variables/tableDataCheck';
-import tableDataComplex from 'views/admin/default/variables/tableDataComplex';
+import CheckTable from './components/CheckTable';
+import ComplexTable from '../default/components/ComplexTable';
+import DailyTraffic from '../default/components/DailyTraffic';
+import PieCard from '../default/components/PieCard';
+import Tasks from '../default/components/Tasks';
+import TotalSpent from '../default/components/TotalSpent';
+import WeeklyRevenue from '../default/components/WeeklyRevenue';
+import tableDataCheck from '../default/variables/tableDataCheck';
+import tableDataComplex from '../default/variables/tableDataComplex';
 
-export default function Calendar() {
+export default function Virtualland() {
 	// Chakra Color Mode
 	const brandColor = useColorModeValue('brand.500', 'white');
 	const boxBg = useColorModeValue('secondaryGray.300', 'whiteAlpha.100');

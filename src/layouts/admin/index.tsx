@@ -1,11 +1,11 @@
 // Chakra imports
 import { Box } from '@chakra-ui/react';
 // Layout components
-import Sidebar from 'components/sidebar/Sidebar';
-import { SidebarContext } from 'contexts/SidebarContext';
+import Sidebar from '../../components/sidebar/Sidebar';
+import { SidebarContext } from '../../contexts/SidebarContext';
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import routes from 'routes';
+import routes from '../../routes';
 
 // Custom Chakra theme
 export default function Dashboard(props: { [x: string]: any }) {

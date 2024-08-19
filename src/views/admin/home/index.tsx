@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Flex, Text } from '@chakra-ui/react';
 import Profile from './components/Profile';
-import avatars from 'assets/img/avatars/avatars';
+import avatars from '../../../assets/img/avatars/avatars';
 import Land from './components/Land';
 
 // Define the type for land data

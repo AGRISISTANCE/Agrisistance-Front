@@ -11,7 +11,7 @@ import {
   Text,
   Flex
 } from '@chakra-ui/react';
-import asset from 'assets/img/dashboards/asset';
+import asset from '../../../../assets/img/dashboards/asset';
 import { IoClose } from 'react-icons/io5';
 const text = [
   {

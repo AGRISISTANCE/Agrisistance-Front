@@ -48,11 +48,12 @@ const Footer: React.FC = () => {
             </ContactItem>
             <ContactItem>
               <ContactIcon src={whatsapp} alt="WhatsApp Icon" />
-              <Spatexts>https://testtest.com</Spatexts>
+              <Spatexts>wa.link/vq0cnj</Spatexts>
             </ContactItem>
             <ContactItem>
               <ContactIcon src={gmail} alt="Email Icon" />
-              <Spatexts>agrisistance@gmail.com</Spatexts>
+              <Spatexts>a2sv.agrisistance@gmail.com
+              </Spatexts>
             </ContactItem>
           </ContactInfo>
         </LeftSide>
