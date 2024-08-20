@@ -1,5 +1,5 @@
 import {
-	Flex, Text, Box, Progress, CircularProgress, CircularProgressLabel, FormHelperText, Slider, SliderTrack, SliderFilledTrack, SliderThumb, SliderMark,
+	Flex, Text, Box, Progress, CircularProgress, CircularProgressLabel, Slider, SliderTrack, SliderFilledTrack, SliderThumb, SliderMark,
 	Tooltip,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
@@ -77,39 +77,53 @@ const Yourland: React.FC = () => {
 	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
 	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
 	const [showTooltip, setShowTooltip] = useState<boolean>(false);
-
- 	//! Related to the popup
-	 const [showPopup, setShowPopup] = useState(false);
-	 const [isConfirmPhase, setIsConfirmPhase] = useState(false);
-	 const handleSubmit = () => {
+	const [showProgress, setShowProgress] = useState<boolean>(false);
+	const [progressMessage, setProgressMessage] = useState<string>('Starting...');
+	//! Related to the popup
+	const [showPopup, setShowPopup] = useState(false);
+	const [isConfirmPhase, setIsConfirmPhase] = useState(false);
+	const handleSubmit = () => {
 		if (!isConfirmPhase) {
-		  setIsConfirmPhase(true); // Switch to confirmation phase
+			setIsConfirmPhase(true); // Switch to confirmation phase
 		} else {
-		  setShowPopup(false);
-		  // Handle confirmation, e.g., redirect
-		  console.log("Confirmed! Navigating to new page.");
+			setShowPopup(false);
+			// Handle confirmation, e.g., redirect
+			console.log("Confirmed! Navigating to new page.");
+			if (isConfirmPhase) {
+				setShowProgress(true);
+				setProgressMessage('Starting...');
+				setTimeout(() => {
+					setProgressMessage('Getting prediction...');
+					setTimeout(() => {
+						setProgressMessage('Completed!');
+						setTimeout(() => {
+							setShowProgress(false);
+						}, 1000); // Duration for the completed message
+					}, 1500); // Duration for the "Almost Done" message
+				}, 1500);
+			}
 		}
-	  };
-	  const handleCancel = () => {
+	};
+	const handleCancel = () => {
 		setShowPopup(false);
 		setIsConfirmPhase(false);
-	  };
-	
-	  const openPopupWithInputs = () => {
+	};
+
+	const openPopupWithInputs = () => {
 		setIsConfirmPhase(false);
 		setShowPopup(true);
-	  };
-	
-	  const openConfirmationOnly = () => {
+	};
+
+	const openConfirmationOnly = () => {
 		setIsConfirmPhase(true); // Start directly at confirmation
 		setShowPopup(true);
-	  };
+	};
 
-	  //! pop up state
-	  const [LandCoordinates, setLandCoordinates] = useState('');
-	  const [LandSize, setLandSize] = useState('');
-	  const [budget, setBudget] = useState('');
-	
+	//! pop up state
+	const [LandCoordinates, setLandCoordinates] = useState('');
+	const [LandSize, setLandSize] = useState('');
+	const [budget, setBudget] = useState('');
+
 	//
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
@@ -174,15 +188,14 @@ const Yourland: React.FC = () => {
 					<Box>
 						{showPopup && (
 							<ConfirmationPopup
-							title="Modify Data"
-							message="Direct confirmation with no inputs."
-							inputs={[]} // No inputs
-							onConfirm={handleSubmit}
-							onCancel={handleCancel}
-							isConfirmPhase={isConfirmPhase}
-							showPopup={showPopup}
-							AddNewLandComponent={AddNewLand}
-						/>
+								title="Modify Data"
+								message="Direct confirmation with no inputs."
+								inputs={[]} // No inputs
+								onConfirm={handleSubmit}
+								onCancel={handleCancel}
+								isConfirmPhase={isConfirmPhase}
+								showPopup={showPopup}
+							/>
 						)}
 						<Flex justify='space-around'>
 							{Object.keys(soil).map((key) => (
@@ -248,7 +261,7 @@ const Yourland: React.FC = () => {
 								</Tooltip>
 							</Slider>
 
-              {/*<Button onClick={() => { Applychanges(soil) }}>Apply changes</Button>*/}						
+							{/*<Button onClick={() => { Applychanges(soil) }}>Apply changes</Button>*/}
 							<Button onClick={openConfirmationOnly}> Apply changes</Button>
 						</Flex>
 						<Flex>
@@ -336,12 +349,11 @@ const Yourland: React.FC = () => {
 								inputs={[
 									{ label: 'New Land coordinate', value: LandCoordinates, onChange: setLandCoordinates },
 									{ label: 'New Land Size in hectar', value: LandSize, onChange: setLandSize },
-									]}
+								]}
 								onConfirm={handleSubmit}
 								onCancel={handleCancel}
 								isConfirmPhase={isConfirmPhase}
 								showPopup={showPopup}
-								AddNewLandComponent={AddNewLand}
 							/>
 						)}
 						<Flex justify='space-around'>
@@ -363,7 +375,7 @@ const Yourland: React.FC = () => {
 								</CircularProgress>
 								<Text fontWeight='bold'>Water avaliability</Text>
 							</Flex>
-							
+
 							<Flex direction='column' align='center' gap='15px'>
 								<CircularProgress color='#218225' value={crop.pest_invation} size='90px' trackColor='#BCCCBF'>
 									<CircularProgressLabel fontWeight='semibold'>{crop.pest_invation}%</CircularProgressLabel>
@@ -379,30 +391,31 @@ const Yourland: React.FC = () => {
 								<img src={land.land1} alt="" width='70%' />
 							</Flex>
 							<Flex direction={'column'} width={'40%'} gap={'20px'}>
-							    <Text fontWeight='normal' fontSize='xl'>Your current coordinates:</Text>
+								<Text fontWeight='normal' fontSize='xl'>Your current coordinates:</Text>
 								<input type="text" style={{
-									background:'#d8e1dc',
-									borderRadius:'15px',
-									border:'none'
+									background: '#d8e1dc',
+									borderRadius: '15px',
+									border: 'none'
 								}}
-								value="41.4032, 3.17403" 
-								readOnly/>
+									value="41.4032, 3.17403"
+									readOnly />
 								<Text fontWeight='normal' fontSize='xl'>Your current size:</Text>
 								<input type="text" style={{
-									background:'#d8e1dc',
-									borderRadius:'15px',
-									border:'none',	
+									background: '#d8e1dc',
+									borderRadius: '15px',
+									border: 'none',
 								}}
-								value="100 Ha" 
-								readOnly />
+									value="100 Ha"
+									readOnly />
 								<button style={{
 									background: '#2acc32',
 									color: '#fff',
 									padding: '10px',
 									borderRadius: '25px',
 									fontSize: '20px',
-									fontWeight: 'bold'}} 
-								    onClick={openPopupWithInputs}> Modify Land Information </button>
+									fontWeight: 'bold'
+								}}
+									onClick={openPopupWithInputs}> Modify Land Information </button>
 							</Flex>
 						</Flex>
 					</Box>
@@ -414,13 +427,12 @@ const Yourland: React.FC = () => {
 							title="Modify Data"
 							message="Please provide the necessary information."
 							inputs={[
-							{ label: 'Budget in dollars', value: budget, onChange: setBudget }
+								{ label: 'Budget in dollars', value: budget, onChange: setBudget }
 							]}
 							onConfirm={handleSubmit}
 							onCancel={handleCancel}
 							isConfirmPhase={isConfirmPhase}
 							showPopup={showPopup}
-							AddNewLandComponent={AddNewLand}
 						/>
 					)}
 						<Flex padding='40px'>
@@ -464,6 +476,45 @@ const Yourland: React.FC = () => {
 			</Flex>
 			<Box>
 				{renderContent()}
+			</Box>
+			<Box>
+				{showProgress && (
+					<>
+						{/* Background Blur Overlay */}
+						<div
+							style={{
+								position: 'fixed',
+								top: 0,
+								left: 0,
+								width: '100%',
+								height: '100%',
+								backdropFilter: 'blur(5px)',
+								backgroundColor: 'rgba(0, 0, 0, 0.3)', // Optional: adds a slight tint
+								zIndex: 999, // Make sure it's below the progress component
+							}}
+						></div>
+
+						{/* Progress Component */}
+						<Flex
+							direction={'column'}
+							align={'center'}
+							justify={'center'}
+							position={'fixed'}
+							top={'50%'}
+							left={'50%'}
+							transform={'translate(-50%, -50%)'}
+							p={'20px'}
+							bg={'#fff'}
+							borderRadius={'10px'}
+							shadow={'md'}
+							zIndex={1000} // Ensure it's above the blur overlay
+						>
+							<Text fontSize={'lg'} fontWeight={'bold'}>{progressMessage}</Text>
+							<Progress size='xs' isIndeterminate />
+						</Flex>
+					</>
+				)}
+
 			</Box>
 		</Flex>
 	);

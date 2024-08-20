@@ -1,3 +1,6 @@
+
+
+import { Flex, Text, Progress } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 interface Input {
@@ -15,7 +18,6 @@ interface ConfirmationPopupProps {
   onCancel: () => void;
   isConfirmPhase: boolean;
   showPopup: boolean;
-  AddNewLandComponent: React.FC; // Pass the AddNewLand component as a prop
 }
 
 const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
@@ -26,16 +28,12 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
   onCancel,
   isConfirmPhase,
   showPopup,
-  AddNewLandComponent,
 }) => {
-  const [showAddNewLand, setShowAddNewLand] = useState(false);
 
   // Handle the confirmation action
   const handleConfirm = () => {
     onConfirm();
-    if (isConfirmPhase) {
-      setShowAddNewLand(true); // Show AddNewLand when confirming in confirm phase
-    }
+    
   };
 
   if (!showPopup) return null;
@@ -45,25 +43,25 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
   return (
     <div
       className="popup-container"
-      style={{ 
-        position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        width: '100%', 
-        height: '100%', 
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
-        display: 'flex', 
-        justifyContent: 'center', 
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        display: 'flex',
+        justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1000 
+        zIndex: 1000
       }}
     >
       <div
         className="popup"
         style={{
-          backgroundColor: 'white', 
-          padding: '20px', 
-          borderRadius: '10px', 
+          backgroundColor: 'white',
+          padding: '20px',
+          borderRadius: '10px',
           width: '400px',
           display: 'flex',
           flexDirection: 'column',
@@ -84,10 +82,10 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
               type={input.type || "text"}
               value={input.value}
               onChange={(e) => input.onChange(e.target.value)}
-              style={{ 
-                width: '100%', 
-                padding: '8px', 
-                borderRadius: '4px', 
+              style={{
+                width: '100%',
+                padding: '8px',
+                borderRadius: '4px',
                 border: '1px solid #ddd'
               }}
             />
@@ -127,8 +125,6 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
           </button>
         </div>
       </div>
-
-      {showAddNewLand && <AddNewLandComponent />} {/* Render AddNewLandComponent conditionally */}
     </div>
   );
 };
