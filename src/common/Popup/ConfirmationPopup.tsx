@@ -1,7 +1,4 @@
-
-
-import { Flex, Text, Progress } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface Input {
   label: string;
@@ -23,7 +20,7 @@ interface ConfirmationPopupProps {
 const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
   title,
   message,
-  inputs = [],
+  inputs = [],  // Default value set to an empty array
   onConfirm,
   onCancel,
   isConfirmPhase,
@@ -33,12 +30,25 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
   // Handle the confirmation action
   const handleConfirm = () => {
     onConfirm();
-    
   };
 
-  if (!showPopup) return null;
+  // Validate and parse the coordinates input
+  const parseCoordinates = (coords: string) => {
+    const [lat, lng] = coords.split(',').map(coord => parseFloat(coord.trim()));
+    return { lat: isNaN(lat) ? null : lat, lng: isNaN(lng) ? null : lng };
+  };
 
+  // Check if all inputs are filled and the coordinates are valid
   const allInputsFilled = inputs.every(input => input.value);
+  const areCoordinatesValid = inputs.some(input => {
+    if (input.label === 'New Land coordinate') {
+      const { lat, lng } = parseCoordinates(input.value);
+      return lat !== null && lng !== null;
+    }
+    return true;
+  });
+
+  if (!showPopup) return null;
 
   return (
     <div
@@ -95,10 +105,10 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
         <div className='w-full flex' style={{ marginTop: '20px' }}>
           <button
             onClick={handleConfirm}
-            disabled={!isConfirmPhase && !allInputsFilled}
+            disabled={!isConfirmPhase && (!allInputsFilled || !areCoordinatesValid)}
             style={{
-              backgroundColor: isConfirmPhase || allInputsFilled ? '#4CAF50' : 'gray',
-              cursor: isConfirmPhase || allInputsFilled ? 'pointer' : 'not-allowed',
+              backgroundColor: isConfirmPhase || (allInputsFilled && areCoordinatesValid) ? '#4CAF50' : 'gray',
+              cursor: isConfirmPhase || (allInputsFilled && areCoordinatesValid) ? 'pointer' : 'not-allowed',
               padding: '10px 20px',
               borderRadius: '5px',
               color: 'white',
