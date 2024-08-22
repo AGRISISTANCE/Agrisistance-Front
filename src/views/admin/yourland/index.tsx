@@ -10,8 +10,6 @@ import TotalSpent from '../default/components/TotalSpent';
 import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 
-import AddNewLand from '../home/components/AddNewLand';
-
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -73,7 +71,6 @@ const Yourland: React.FC = () => {
 		humidity: 65,
 		ph: 30,
 	});
-
 	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
 	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
 	const [showTooltip, setShowTooltip] = useState<boolean>(false);
@@ -98,6 +95,7 @@ const Yourland: React.FC = () => {
 						setProgressMessage('Completed!');
 						setTimeout(() => {
 							setShowProgress(false);
+							window.location.reload();
 						}, 1000); // Duration for the completed message
 					}, 1500); // Duration for the "Almost Done" message
 				}, 1500);
