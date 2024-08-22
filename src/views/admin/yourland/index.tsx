@@ -9,7 +9,7 @@ import { Button } from '../../../common/Button/index'
 import TotalSpent from '../default/components/TotalSpent';
 import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
-
+import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -59,6 +59,11 @@ type SoilType = {
 	phosphorus: number;
 	humidity: number;
 	ph: number;
+};
+const SetMapView: React.FC<{ center: [number, number]; zoom: number }> = ({ center, zoom }) => {
+	const map = useMap();
+	map.setView(center, zoom);
+	return null;
 };
 const Yourland: React.FC = () => {
 
@@ -118,11 +123,16 @@ const Yourland: React.FC = () => {
 	};
 
 	//! pop up state
-	const [LandCoordinates, setLandCoordinates] = useState('');
 	const [LandSize, setLandSize] = useState('');
 	const [budget, setBudget] = useState('');
+	const [LandCoordinates, setLandCoordinates] = useState('35.60777780, 1.81111110');
+	const parseCoordinates = (coords: string) => {
+		const [lat, lng] = coords.split(',').map(coord => parseFloat(coord.trim()));
+		return { lat: isNaN(lat) ? 41.4032 : lat, lng: isNaN(lng) ? 3.17403 : lng };
+	};
 
-	//
+	const parsedCoordinates = parseCoordinates(LandCoordinates);
+
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
 		setSoil((prevSoil) => ({
@@ -386,7 +396,20 @@ const Yourland: React.FC = () => {
 							<Flex direction={'column'} width={'60%'} align={'center'} gap={'30px'}>
 
 								<Text fontWeight='semibold' fontSize='4xl'>Your current land</Text>
-								<img src={land.land1} alt="" width='70%' />
+
+								<MapContainer
+									style={{ height: '400px', width: '100%' }}
+								>
+									<SetMapView center={[parsedCoordinates.lat, parsedCoordinates.lng]} zoom={13} />
+									<TileLayer
+										url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+									/>
+									<Marker position={[parsedCoordinates.lat, parsedCoordinates.lng]}>
+										<Popup>
+											New Land
+										</Popup>
+									</Marker>
+								</MapContainer>
 							</Flex>
 							<Flex direction={'column'} width={'40%'} gap={'20px'}>
 								<Text fontWeight='normal' fontSize='xl'>Your current coordinates:</Text>
@@ -395,7 +418,7 @@ const Yourland: React.FC = () => {
 									borderRadius: '15px',
 									border: 'none'
 								}}
-									value="41.4032, 3.17403"
+									value={LandCoordinates}
 									readOnly />
 								<Text fontWeight='normal' fontSize='xl'>Your current size:</Text>
 								<input type="text" style={{
@@ -413,7 +436,7 @@ const Yourland: React.FC = () => {
 									fontSize: '20px',
 									fontWeight: 'bold'
 								}}
-									onClick={openPopupWithInputs}> Modify Land Information </button>
+									onClick={() => setShowPopup(true)}> Modify Land Information </button>
 							</Flex>
 						</Flex>
 					</Box>
