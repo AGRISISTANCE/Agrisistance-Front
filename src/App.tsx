@@ -1,5 +1,5 @@
 import './assets/css/App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import AuthLayout from './layouts/auth';
 import AdminLayout from './layouts/admin';
 import {
@@ -7,11 +7,15 @@ import {
 } from '@chakra-ui/react';
 import initialTheme from './theme/theme';
 import { useState } from 'react';
+import Chatbot from './components/chatbot/Chatbot'
 
 // Import Landing Page
 import LandingPage from './views/Landing/landingPage';
 
 export default function Main() {
+  const location = useLocation();
+  const showChatbot = !location.pathname.startsWith('/auth');
+
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
   return (
     <ChakraProvider theme={currentTheme}>
@@ -31,6 +35,7 @@ export default function Main() {
           }
         />
       </Routes>
+      {showChatbot && <Chatbot />}
     </ChakraProvider>
   );
 }
