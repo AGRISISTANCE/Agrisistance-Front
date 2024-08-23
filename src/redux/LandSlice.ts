@@ -12,7 +12,7 @@ interface LandState {
     potassium: number;
     oxygen_level: number;
     nitrogen: number;
-    selected?:boolean,
+    selected?:boolean,  
 }
 
 const initialState: LandState[] = [];
