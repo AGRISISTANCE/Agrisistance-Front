@@ -4,6 +4,7 @@
       "node_modules/@types",
       "src/types"
     ],
+    "types": ["jest", "node"],
     "target": "es2016",
     "lib": [
       "dom",
@@ -23,7 +24,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": false,
@@ -32,9 +33,11 @@
     "paths": {
       "@assets/*": ["./src/assets/*"],
       "views/*": ["views/*"]
-    },
+    }
   },
   "include": [
-    "./src"
+    "./src",
+    "**/*.ts",
+    "**/*.tsx"
   ]
 }
