@@ -11,6 +11,8 @@ import Chatbot from './components/chatbot/Chatbot'
 
 // Import Landing Page
 import LandingPage from './views/Landing/landingPage';
+import { Provider } from 'react-redux';
+import { store } from 'redux/store';
 
 export default function Main() {
   const location = useLocation();
@@ -19,22 +21,23 @@ export default function Main() {
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
   return (
     <ChakraProvider theme={currentTheme}>
+      {/* <Provider store={store} > */}
+        <Routes>
+          {/* Landing Page Route */}
+          <Route path="/" element={<LandingPage />} />
 
-      <Routes>
-        {/* Landing Page Route */}
-        <Route path="/" element={<LandingPage />} />
+          {/* Authentication Layout */}
+          <Route path="auth/*" element={<AuthLayout />} />
 
-        {/* Authentication Layout */}
-        <Route path="auth/*" element={<AuthLayout />} />
-
-        {/* Admin Layout */}
-        <Route
-          path="dashboard/*"
-          element={
-            <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
-          }
-        />
-      </Routes>
+          {/* Admin Layout */}
+          <Route
+            path="dashboard/*"
+            element={
+              <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+            }
+          />
+        </Routes>
+      {/* </Provider> */}
       {showChatbot && <Chatbot />}
     </ChakraProvider>
   );

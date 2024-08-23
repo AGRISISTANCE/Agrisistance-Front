@@ -83,13 +83,13 @@ const routes = [
     icon: <Icon as={PiVirtualReality} width="20px" height="20px" color="inherit" />,
     component: <Virtualland />,
   },
-  {
-    name: 'Disconnect',
-    layout: '/auth',
-    path: '/landing',
-    icon: <Icon as={MdLogout} width="20px" height="20px" color="inherit" />,
-    component: <LandingPage />,
-  }
+  // {
+  //   name: 'Disconnect',
+  //   layout: '/authz',
+  //   path: '/landing',
+  //   icon: <Icon as={MdLogout} width="20px" height="20px" color="inherit" />,
+  //   component: <LandingPage />,
+  // }
 ];
 
 

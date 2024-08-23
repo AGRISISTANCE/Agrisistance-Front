@@ -20,11 +20,14 @@ export default function Land({
   isNew = false,
   onAddLand
 }: LandProps) {
+  // Assuming 'land_name', 'latitude', and 'longitude' are coming from the parent or a different part of the state
+  // Adjust if necessary
+  const landName = name;
+  const latitude = coordinates[0];
+  const longitude = coordinates[1];
+  
   const [selected, setSelected] = useState<boolean>(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const coordinateX = coordinates[0];
-  const coordinateY = coordinates[1];
 
   const backgroundImage = name && land.land1 ? `url('${land.land1}')` : '#C4C4C4';
 
@@ -51,8 +54,8 @@ export default function Land({
       <Flex direction="row" padding="20px" justifyContent="space-between" alignItems="center">
         {!isNew && (
           <Flex direction="column" gap="10px">
-            <Text fontSize="25px" fontWeight="bold">{name}</Text>
-            <Text fontSize="17px">{coordinateX}, {coordinateY}</Text>
+            <Text fontSize="25px" fontWeight="bold">{landName}</Text>
+            <Text fontSize="17px">{latitude}, {longitude}</Text>
           </Flex>
         )}
         {select && !isNew && (
@@ -79,7 +82,7 @@ export default function Land({
                 justifyContent="center"
               >
                 <Box background="#fff" borderRadius="30px" position="relative">
-                  <AddNewLand  />
+                  <AddNewLand />
                   <Button
                     onClick={onClose}
                     position="absolute"

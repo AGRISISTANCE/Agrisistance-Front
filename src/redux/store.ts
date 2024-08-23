@@ -1,16 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-// import your reducers here when you create them
-import exampleReducer from './exampleSlice';
+import landSlice from './LandSlice'; // Import the entire slice
 
-
+// Extract the reducer from the slice
 export const store = configureStore({
-  reducer: {
-    // Add your reducers here
-    example: exampleReducer,
-
-  },
+    reducer: {
+        // land: landSlice, // Use landSlice.reducer
+    },
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
