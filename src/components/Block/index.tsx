@@ -1,3 +1,4 @@
+import React from 'react';
 import { Container, TextWrapper, Content } from "./styles";
 
 interface Props {

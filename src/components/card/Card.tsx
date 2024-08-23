@@ -1,4 +1,5 @@
 // import { Box, useStyleConfig} from '@chakra-ui/react';
+import React from 'react';
 
 import { useStyleConfig, chakra, forwardRef } from '@chakra-ui/react';
 import { CustomCardProps } from 'theme/theme';

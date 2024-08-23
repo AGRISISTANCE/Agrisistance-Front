@@ -1,3 +1,4 @@
+import React from 'react';
 import { createIcon } from '@chakra-ui/icons';
 import agrisistancelogo from '../../assets/img/layout/logowtext2_green.png'
 

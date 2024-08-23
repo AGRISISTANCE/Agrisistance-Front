@@ -1,5 +1,6 @@
 import { Row, Col } from "antd";
 // import { Fade } from "react-awesome-reveal"; // Commented out for now
+import React from 'react';
 
 import { ContentBlockProps } from "./types";
 import { Button } from "../../common/Button";

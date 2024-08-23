@@ -1,3 +1,4 @@
+import React from 'react';
 // Chakra imports
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import PropTypes from 'prop-types';

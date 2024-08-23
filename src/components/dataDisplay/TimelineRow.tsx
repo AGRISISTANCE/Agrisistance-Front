@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Box, Flex, Icon, Text, useColorModeValue } from '@chakra-ui/react'; 
 export default function TimelineRow(props:{logo:any, title:string, date:string, color:string, index:number,arrLength:number}) {
 	const { logo, title, date, color, index, arrLength } = props;

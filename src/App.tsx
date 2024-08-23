@@ -1,3 +1,4 @@
+import React from 'react';
 import './assets/css/App.css';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import AuthLayout from './layouts/auth';

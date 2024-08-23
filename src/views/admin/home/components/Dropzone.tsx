@@ -1,3 +1,4 @@
+import React from 'react';
 // Chakra imports
 import { Button, Flex, useColorModeValue } from '@chakra-ui/react';
 // Assets

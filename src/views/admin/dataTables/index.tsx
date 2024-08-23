@@ -1,3 +1,4 @@
+import React from 'react';
 
 // Chakra imports
 import { Box, SimpleGrid } from '@chakra-ui/react';

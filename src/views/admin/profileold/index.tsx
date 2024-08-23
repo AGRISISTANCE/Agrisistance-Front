@@ -1,3 +1,4 @@
+import React from 'react';
 
 // Chakra imports
 import { Box, Grid } from '@chakra-ui/react';

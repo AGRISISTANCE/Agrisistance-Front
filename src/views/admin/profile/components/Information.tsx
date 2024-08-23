@@ -1,3 +1,4 @@
+import React from 'react';
 // Chakra imports
 import { Box, Text, useColorModeValue } from '@chakra-ui/react';
 // Custom components

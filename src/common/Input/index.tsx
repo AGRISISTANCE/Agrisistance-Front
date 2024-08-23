@@ -1,6 +1,8 @@
 import { Container, StyledInput } from "./styles";
 import { Label } from "../TextArea/styles";
 import { InputProps } from "../types";
+import React from 'react';
+
 
 const Input = ({ name, placeholder, onChange }: InputProps) => (
   <Container>

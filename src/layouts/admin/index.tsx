@@ -1,3 +1,4 @@
+import React from 'react';
 // Chakra imports
 import { Box } from '@chakra-ui/react';
 // Layout components

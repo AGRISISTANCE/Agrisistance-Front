@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { SvgIcon } from "../SvgIcon";
 import { ScrollUpContainer } from "./styles";
+import React from 'react';
+
 
 const ScrollToTop = () => {
   const [showScroll, setShowScroll] = useState(false);

@@ -1,3 +1,4 @@
+import React from 'react';
 // Chakra imports
 import { Text, useColorModeValue } from '@chakra-ui/react';
 // Assets
