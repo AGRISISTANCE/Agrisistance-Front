@@ -2,10 +2,8 @@ import React from 'react';
 import { Flex, Text } from '@chakra-ui/react';
 import Profile from './components/Profile';
 import avatars from '../../../assets/img/avatars/avatars';
-import Land from './components/Land';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store'; // Adjust the import according to your project structure
-import LandAdd from './components/LandAdd';
 
 export default function Home() {
   // Access lands from the Redux store
@@ -39,6 +37,7 @@ export default function Home() {
         Other Lands:
       </Text>
       <Flex wrap="wrap" gap="40px" padding="40px">
+        {/* <AddNewLand/> */}
         {/* {lands.map((land, key) => (
           <Land key={key} {...land} />
         ))} */}

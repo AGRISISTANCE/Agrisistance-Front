@@ -11,7 +11,6 @@ import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
-
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -521,7 +520,7 @@ const Yourland: React.FC = () => {
 							<Flex padding='20px'>
 								<TotalSpent />
 							</Flex>
-						</Flex>
+						</Flex>	
 					</Box>
 				);
 			default:

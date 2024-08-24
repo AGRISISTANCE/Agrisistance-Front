@@ -5,7 +5,9 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { Form, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addLand } from '../../../../redux/LandSlice';
-
+import animationData from '../../../../assets/img/dashboards/cropanimated.json'
+import Player from 'lottie-react';
+import Lottie from 'lottie-react';
 interface AddNewLandProps {
     initialStep?: number;
 }
@@ -30,7 +32,14 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
     const [modalContent, setModalContent] = useState<string>('');
     const [showProgress, setShowProgress] = useState<boolean>(false);
     const [progressMessage, setProgressMessage] = useState<string>('Starting...');
-
+    const defaultOptions = {
+        loop: false,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
     const handleAddLand = () => {
         if (landName && latitude && longitude && landSize && budget && phLevel && phosphorus && potassium && oxygenLevel && nitrogen) {
             const newLand = {
@@ -398,8 +407,8 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                     padding="20px"
                     borderRadius="10px"
                 >
+                    <Lottie animationData={animationData} width={'300px'} height={'300px'} />
                     <Text color="white" fontSize="xl" mb="10px">{progressMessage}</Text>
-                    <Progress hasStripe value={100} size="lg" isAnimated />
                 </Flex>
             )}
         </Flex>
