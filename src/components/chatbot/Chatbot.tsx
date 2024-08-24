@@ -1,19 +1,30 @@
-// ChatBot.tsx
 import React, { useState, useEffect, KeyboardEvent } from 'react';
 import './Chatbot.css';
 import farmerEmoji from '../../assets/img/icons/farmeremoji.png'; // Import the chatbot icon
 import headerIcon from '../../assets/img/icons/farmeremoji.png'; // Import the header icon
+
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<{ text: string; fromUser: boolean }[]>([]);
+  const [messages, setMessages] = useState<{ text: string; fromUser: boolean }[]>(() => {
+      const savedMessages = localStorage.getItem('chatbotMessages');
+      return savedMessages ? JSON.parse(savedMessages) : [];
+  });
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
 
   useEffect(() => {
       if (!isOpen) return;
-      // Add the initial message when the chatbot opens
-      setMessages([{ text: 'Hello farmer, how can I help you today?', fromUser: false }]);
+
+      // Only add the initial message if there are no saved messages
+      if (messages.length === 0) {
+          const initialMessage = { text: 'Hello farmer, how can I help you today?', fromUser: false };
+          setMessages([initialMessage]);
+      }
   }, [isOpen]);
+
+  useEffect(() => {
+      localStorage.setItem('chatbotMessages', JSON.stringify(messages));
+  }, [messages]);
 
   const handleToggle = () => {
       setIsOpen(!isOpen);
