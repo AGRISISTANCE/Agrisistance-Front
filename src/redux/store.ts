@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-//import landSlice from './LandSlice'; // Import the entire slice
+import userReducer from './userSlice';
+import landsReducer from './landsSlice';
+import postsReducer from './postsSlice';
 
-// Extract the reducer from the slice
-export const store = configureStore({
-    reducer: {
-        // land: landSlice, // Use landSlice.reducer
-    },
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+    lands: landsReducer,
+    posts: postsReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+
+export default store;

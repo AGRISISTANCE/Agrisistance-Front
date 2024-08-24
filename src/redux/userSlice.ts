@@ -12,10 +12,10 @@ interface UserInfo {
 }
 
 const initialState: UserInfo = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  phoneNumber: '',
+  firstName: 'Amel',
+  lastName: 'FEDDAG',
+  email: 'amel.feddag@ensia.edu.dz',
+  phoneNumber: '+213 555 05 04 96',
   country: '',
   userId: '',
   profilePicture: '',

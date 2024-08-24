@@ -9,7 +9,7 @@ import App from './App';
 import { Suspense } from 'react';
 import { Styles } from './styles/styles';
 import { Provider } from 'react-redux';
-import { store } from './redux/store'; // Adjust the import path according to where your store.ts file is located
+import store from './redux/store'; // Adjust the import path according to where your store.ts file is located
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 

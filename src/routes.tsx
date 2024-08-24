@@ -18,7 +18,7 @@ import {
 
 //
 import Home from './views/admin/home'
-import Profile from './views/admin/profile'
+import Profile from './views/admin/profile/index'
 import Yourland from './views/admin/yourland'
 //import Calendar from './views/admin/calendar'
 //import Yournetwork from './views/admin/yournetwork'
