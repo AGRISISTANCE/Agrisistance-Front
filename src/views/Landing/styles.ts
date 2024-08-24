@@ -7,7 +7,7 @@ export const ContentSection = styled("section")`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
+  height: 70vh; /* Full viewport height */
   padding: 0; /* Remove padding for perfect centering */
 `;
 

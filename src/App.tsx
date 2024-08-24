@@ -12,8 +12,6 @@ import Chatbot from './components/chatbot/Chatbot'
 
 // Import Landing Page
 import LandingPage from './views/Landing/landingPage';
-import { Provider } from 'react-redux';
-import { store } from 'redux/store';
 
 export default function Main() {
   const location = useLocation();

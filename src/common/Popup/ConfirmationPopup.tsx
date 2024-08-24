@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface Input {
   label: string;
-  value: string;
-  onChange: (newValue: string) => void;
+  value: number;
+  onChange: (newValue: number) => void;
   type?: string;
 }
 
@@ -26,27 +26,13 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
   isConfirmPhase,
   showPopup,
 }) => {
-
   // Handle the confirmation action
   const handleConfirm = () => {
     onConfirm();
   };
 
-  // Validate and parse the coordinates input
-  const parseCoordinates = (coords: string) => {
-    const [lat, lng] = coords.split(',').map(coord => parseFloat(coord.trim()));
-    return { lat: isNaN(lat) ? null : lat, lng: isNaN(lng) ? null : lng };
-  };
-
-  // Check if all inputs are filled and the coordinates are valid
-  const allInputsFilled = inputs.every(input => input.value);
-  const areCoordinatesValid = inputs.some(input => {
-    if (input.label === 'New Land coordinate') {
-      const { lat, lng } = parseCoordinates(input.value);
-      return lat !== null && lng !== null;
-    }
-    return true;
-  });
+  // Validate if all inputs are filled
+  const allInputsFilled = inputs.every(input => input.value !== null && input.value !== undefined);
 
   if (!showPopup) return null;
 
@@ -63,7 +49,7 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1000
+        zIndex: 1000,
       }}
     >
       <div
@@ -75,7 +61,7 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
           width: '400px',
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <h2 style={{ marginBottom: '10px' }}>
@@ -89,14 +75,14 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
           <div key={index} style={{ width: '100%', marginBottom: '15px' }}>
             <label style={{ display: 'block', marginBottom: '5px' }}>{input.label}</label>
             <input
-              type={input.type || "text"}
+              type={input.type || "number"}
               value={input.value}
-              onChange={(e) => input.onChange(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => input.onChange(Number(e.target.value))}
               style={{
                 width: '100%',
                 padding: '8px',
                 borderRadius: '4px',
-                border: '1px solid #ddd'
+                border: '1px solid #ddd',
               }}
             />
           </div>
@@ -105,16 +91,16 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
         <div className='w-full flex' style={{ marginTop: '20px' }}>
           <button
             onClick={handleConfirm}
-            disabled={!isConfirmPhase && (!allInputsFilled || !areCoordinatesValid)}
+            disabled={!isConfirmPhase && !allInputsFilled}
             style={{
-              backgroundColor: isConfirmPhase || (allInputsFilled && areCoordinatesValid) ? '#4CAF50' : 'gray',
-              cursor: isConfirmPhase || (allInputsFilled && areCoordinatesValid) ? 'pointer' : 'not-allowed',
+              backgroundColor: isConfirmPhase || allInputsFilled ? '#4CAF50' : 'gray',
+              cursor: isConfirmPhase || allInputsFilled ? 'pointer' : 'not-allowed',
               padding: '10px 20px',
               borderRadius: '5px',
               color: 'white',
               flex: 1,
               marginRight: '10px',
-              border: 'none'
+              border: 'none',
             }}
           >
             {isConfirmPhase ? "Confirm" : "Save Changes"}
@@ -128,7 +114,7 @@ const ConfirmationPopup: React.FC<ConfirmationPopupProps> = ({
               borderRadius: '5px',
               color: 'white',
               flex: 1,
-              border: 'none'
+              border: 'none',
             }}
           >
             Cancel

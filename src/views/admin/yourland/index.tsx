@@ -11,6 +11,8 @@ import TotalSpent from '../default/components/TotalSpent';
 import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
+import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
+
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -46,13 +48,6 @@ const crops: Crops = cropsData;
 const city = 'Tissemsilt';
 const country = 'Algeria';
 
-// Define the revenue array with its type
-const crop = {
-	water_sufficient: 80,
-	sunlight: 60,
-	pestisides_level: 44,
-	pest_invation: 77
-}
 type SoilType = {
 	oxygen: number;
 	azote: number;
@@ -76,6 +71,12 @@ const Yourland: React.FC = () => {
 		phosphorus: 8,
 		humidity: 65,
 		ph: 30,
+	});
+	const [crop, setCrop] = useState({
+		water_sufficient: 80,
+		sunlight: 60,
+		pestisides_level: 44,
+		pest_invation: 77
 	});
 	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
 	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
@@ -124,15 +125,8 @@ const Yourland: React.FC = () => {
 	};
 
 	//! pop up state
-	const [LandSize, setLandSize] = useState('');
-	const [budget, setBudget] = useState('');
-	const [LandCoordinates, setLandCoordinates] = useState('35.60777780, 1.81111110');
-	const parseCoordinates = (coords: string) => {
-		const [lat, lng] = coords.split(',').map(coord => parseFloat(coord.trim()));
-		return { lat: isNaN(lat) ? 41.4032 : lat, lng: isNaN(lng) ? 3.17403 : lng };
-	};
+	const [budget, setBudget] = useState(10000);
 
-	const parsedCoordinates = parseCoordinates(LandCoordinates);
 
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
@@ -151,6 +145,16 @@ const Yourland: React.FC = () => {
 		console.log(soil);
 		// TODO: make a post request
 	}
+
+	// State for the inputs
+	const [LandLongtitude, setLandLongtitude] = useState<number>(1.81081);
+	const [LandLatitude, setLandLatitude] = useState<number>(35.60722);
+	const [LandSize, setLandSize] = useState<number>(120);
+
+	const handleOpenPopup = () => {
+		setShowPopup(true);
+		setIsConfirmPhase(false); // Initial phase
+	};
 	const [activeSection, setActiveSection] = useState<string>('Predict Revenue');
 	const renderContent = () => {
 		switch (activeSection) {
@@ -175,9 +179,27 @@ const Yourland: React.FC = () => {
 													<Text fontWeight='bold'>{item.CropName}</Text>
 													<Text color='grey' fontSize={'lg'}>{item.area} m<sup>2</sup></Text>
 												</Flex>
-												<Flex gap='20px' ml='auto'>
-													<Text border='2px solid #218225' borderRadius='20px' padding='5px 10px'>{item.weight} $+</Text>
-													<Text border='2px solid #218225' borderRadius='20px' padding='5px 10px'>{item.price} kg+</Text>
+												<Flex gap="20px" ml="auto">
+													<Tooltip label="This is the weight in kilograms" aria-label="Weight Tooltip">
+														<Text
+															border="2px solid #218225"
+															borderRadius="20px"
+															padding="5px 10px"
+															cursor="pointer"
+														>
+															{item.weight} kg+
+														</Text>
+													</Tooltip>
+													<Tooltip label="This is the price per dollars" aria-label="Price Tooltip">
+														<Text
+															border="2px solid #218225"
+															borderRadius="20px"
+															padding="5px 10px"
+															cursor="pointer"
+														>
+															{item.price} $+
+														</Text>
+													</Tooltip>
 												</Flex>
 											</Flex>
 											<Text mt={1} color='grey' fontSize={'lg'}>{item.description}</Text>
@@ -212,13 +234,14 @@ const Yourland: React.FC = () => {
 										showPopup={showPopup}
 									/>
 								)}
-								<Flex justify='space-around'>
+								<Flex justify='space-around' >
 									{Object.keys(soil).map((key) => (
 										<Flex
 											key={key}
 											direction='column'
 											align='center'
 											gap='15px'
+											cursor={'pointer'}
 											onClick={() => handleCircularProgressClick(key as keyof SoilType)}
 											shadow={selectedSoil === key ? '0 0 10px rgba(0, 0, 0, 0.2)' : undefined}
 											backgroundColor={selectedSoil === key ? '#eaefef' : '#f4f6fa'}
@@ -304,7 +327,8 @@ const Yourland: React.FC = () => {
 									</Flex>
 								</Flex>
 							</Box>)}
-					</Box >)
+					</Box >
+				)
 
 			case 'Crop maintenance':
 				return (
@@ -369,8 +393,9 @@ const Yourland: React.FC = () => {
 								title="Modify Data"
 								message="Please provide the necessary information."
 								inputs={[
-									{ label: 'New Land coordinate', value: LandCoordinates, onChange: setLandCoordinates },
-									{ label: 'New Land Size in hectar', value: LandSize, onChange: setLandSize },
+									{ label: 'New Land Longitude', value: LandLongtitude, onChange: setLandLongtitude },
+									{ label: 'New Land Latitude', value: LandLatitude, onChange: setLandLatitude },
+									{ label: 'New Land Size in hectare', value: LandSize, onChange: setLandSize },
 								]}
 								onConfirm={handleSubmit}
 								onCancel={handleCancel}
@@ -419,11 +444,11 @@ const Yourland: React.FC = () => {
 										<MapContainer
 											style={{ height: '400px', width: '100%' }}
 										>
-											<SetMapView center={[parsedCoordinates.lat, parsedCoordinates.lng]} zoom={13} />
+											<SetMapView center={[LandLatitude, LandLongtitude]} zoom={13} />
 											<TileLayer
 												url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
 											/>
-											<Marker position={[parsedCoordinates.lat, parsedCoordinates.lng]}>
+											<Marker position={[LandLatitude, LandLongtitude]}>
 												<Popup>
 													New Land
 												</Popup>
@@ -432,12 +457,19 @@ const Yourland: React.FC = () => {
 									</Flex>
 									<Flex direction={'column'} width={'40%'} gap={'20px'}>
 										<Text fontWeight='normal' fontSize='xl'>Your current coordinates:</Text>
-										<input type="text" style={{
+										<input type="number" style={{
 											background: '#d8e1dc',
 											borderRadius: '15px',
 											border: 'none'
 										}}
-											value={LandCoordinates}
+											value={LandLongtitude}
+											readOnly />
+										<input type="number" style={{
+											background: '#d8e1dc',
+											borderRadius: '15px',
+											border: 'none'
+										}}
+											value={LandLatitude}
 											readOnly />
 										<Text fontWeight='normal' fontSize='xl'>Your current size:</Text>
 										<input type="text" style={{
@@ -478,12 +510,12 @@ const Yourland: React.FC = () => {
 					)}
 						<Flex padding='40px'>
 							<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
-								<BusinessPlanModal /> {/* Integrate the modal here */}
+								<BusinessPlanModal isDisabled={revenue.length === 0}/> {/* Integrate the modal here */}
 								<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>
 									Your budget
 								</Text>
 								<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
-									<Text>10 000 ETB</Text>
+									<Text>{budget} ETB</Text>
 								</Flex>
 								<Button onClick={openPopupWithInputs}>Modify</Button>
 							</Flex>
@@ -500,6 +532,12 @@ const Yourland: React.FC = () => {
 
 	return (
 		<Flex direction="column" p={4}>
+			{/* <AdminNavbar secondary={true} fixed={true}  onOpen={AdminNavbar}/> */}
+			<AdminNavbarLinks
+				onOpen={AdminNavbarLinks}
+				secondary={false}
+				fixed={true}
+			/>
 			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{city}, {country}</Text>
 			<Flex gap='40px' mb={4}>
 				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (
