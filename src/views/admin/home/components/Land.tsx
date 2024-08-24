@@ -1,39 +1,43 @@
 import React, { useState } from 'react';
 import { Flex, Button, Box, Text, useDisclosure } from '@chakra-ui/react';
-import land from '../../../../assets/img/land/land';
-import AddNewLand from './AddNewLand';
 import { IoIosClose } from 'react-icons/io';
+import { useDispatch } from 'react-redux';
+import { selectLand, removeLand } from '../../../../redux/landsSlice'; // Ensure this import is correct
+import AddNewLand from './AddNewLand';
+import land from '../../../../assets/img/land/land';
+
 
 interface LandProps {
-  name?: string;
-  coordinates?: [string, string];
+  landId: string;
+  name: string;
+  coordinates: [string, string];
   select?: boolean;
   isNew?: boolean;
-  selected?: boolean;
   onAddLand?: (landData: { name: string; coordinates: [string, string] }) => void;
 }
 
 export default function Land({
-  name = '',
-  coordinates = ['0', '0'],
+  landId,
+  name,
+  coordinates,
   select = false,
   isNew = false,
   onAddLand
 }: LandProps) {
-  // Assuming 'land_name', 'latitude', and 'longitude' are coming from the parent or a different part of the state
-  // Adjust if necessary
-  const landName = name;
-  const latitude = coordinates[0];
-  const longitude = coordinates[1];
-  
-  const [selected, setSelected] = useState<boolean>(false);
+  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const backgroundImage = name && land.land1 ? `url('${land.land1}')` : '#C4C4C4';
+  const backgroundImage = name ? `url('${land.land1}')` : '#C4C4C4'; // Adjust image path if necessary
 
-  const handleSelect = () => setSelected(!selected);
+  const handleSelect = () => {
+    dispatch(selectLand(landId));
+  };
+
+  const handleDelete = () => {
+    dispatch(removeLand(landId));
+  };
+
   const handleButtonClick = () => onOpen();
-
   const handleAddNewLand = () => {
     if (onAddLand) {
       onAddLand({ name, coordinates });
@@ -54,52 +58,14 @@ export default function Land({
       <Flex direction="row" padding="20px" justifyContent="space-between" alignItems="center">
         {!isNew && (
           <Flex direction="column" gap="10px">
-            <Text fontSize="25px" fontWeight="bold">{landName}</Text>
-            <Text fontSize="17px">{latitude}, {longitude}</Text>
+            <Text fontSize="25px" fontWeight="bold">{name}</Text>
+            <Text fontSize="17px">{coordinates[0]}, {coordinates[1]}</Text>
           </Flex>
         )}
-        {select && !isNew && (
+        {!select && (
           <Flex direction="column" gap="10px">
             <Button colorScheme="green" borderRadius="20px" height="40px" fontSize="18px" onClick={handleSelect}>Select</Button>
-            <Button colorScheme="gray" borderRadius="20px" height="40px" fontSize="18px">Delete</Button>
-          </Flex>
-        )}
-        {isNew && (
-          <Flex direction="column">
-            <Button onClick={handleButtonClick} fontSize="25px">+ Add New Land</Button>
-            {isOpen && (
-              <Box
-                className="modal-overlay"
-                position="fixed"
-                top="0"
-                left="0"
-                width="100%"
-                height="100%"
-                background="rgba(0,0,0,0.5)"
-                zIndex="999"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Box background="#fff" borderRadius="30px" position="relative">
-                  <AddNewLand />
-                  <Button
-                    onClick={onClose}
-                    position="absolute"
-                    top="-20px"
-                    right="-40px"
-                    colorScheme="none"
-                    border="2px"
-                    color="#fff"
-                    padding="10px"
-                    borderRadius="50%"
-                    fontSize="30px"
-                  >
-                    <IoIosClose />
-                  </Button>
-                </Box>
-              </Box>
-            )}
+            <Button colorScheme="gray" borderRadius="20px" height="40px" fontSize="18px" onClick={handleDelete}>Delete</Button>
           </Flex>
         )}
       </Flex>
