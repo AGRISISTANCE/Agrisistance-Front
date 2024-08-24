@@ -19,6 +19,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 
 // Assets
 import { IoMenuOutline } from 'react-icons/io5';
+import { MdLogout } from 'react-icons/md';
 
 function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
 	const { routes } = props;
@@ -102,6 +103,7 @@ export function SidebarResponsive(props: { routes: RoutesType[] }) {
 					</DrawerBody>
 				</DrawerContent>
 			</Drawer>
+			<Icon as={MdLogout} width="20px" height="20px" color="inherit" />
 		</Flex>
 	);
 }

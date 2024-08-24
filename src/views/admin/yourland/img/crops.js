@@ -6,7 +6,8 @@ import empty from './Frame.png'
 import sun from './Sun.svg'
 import union from './Union.svg'
 import vector from './Vector.svg'
-const crops ={
+import tractor from './Group.png'
+const crops = {
     beans,
     rice,
     cashew,
@@ -14,7 +15,8 @@ const crops ={
     empty,
     sun,
     vector,
-    union
+    union,
+    tractor
 };
 
 export default crops;
