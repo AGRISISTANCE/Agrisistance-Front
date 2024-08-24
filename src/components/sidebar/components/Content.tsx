@@ -5,7 +5,7 @@ import { Box, Flex, Icon, Stack, Text } from '@chakra-ui/react';
 import Brand from './Brand';
 import Links from './Links';
 import { MdLogout } from 'react-icons/md';
-import { redirect } from 'react-router-dom';
+//import { redirect } from 'react-router-dom';
 
 // FUNCTIONS
 

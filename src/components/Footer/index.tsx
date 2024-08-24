@@ -22,7 +22,7 @@ import {
 import phone from "../icons/phone.png";
 import gmail from "../icons/gmail.png";
 import whatsapp from "../icons/whatsapp.png";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const Footer: React.FC = () => {
   const handleScrollUp = (): void => {

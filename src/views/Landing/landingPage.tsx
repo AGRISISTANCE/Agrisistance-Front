@@ -11,7 +11,7 @@ import screen1 from './png/screen1.png';
 import screen2 from './png/screen2.png';
 import screen3 from './png/screen3.png';
 import screen4 from './png/screen4.png';
-import Preloader from './Preloade';
+//import Preloader from './Preloade';
 
 
 

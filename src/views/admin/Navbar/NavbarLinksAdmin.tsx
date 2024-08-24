@@ -1,7 +1,8 @@
+
 // Chakra Imports
 import {
 	Avatar,
-	Button,
+//	Button,
 	Flex,
 	Icon,
 	Menu,
@@ -14,16 +15,16 @@ import {
 // Custom Components
 import { ItemContent } from 'components/menu/ItemContent';
 import { SearchBar } from './SearchBar/SearchBar';
-import { SidebarResponsive } from 'components/sidebar/Sidebar';
+//import { SidebarResponsive } from 'components/sidebar/Sidebar';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 // Assets
 import { MdNotificationsNone } from 'react-icons/md';
-import routes from 'routes';
+//import routes from 'routes';
 export default function HeaderLinks(props: { secondary: boolean }) {
 	const { secondary } = props;
 	// Chakra Color Mode
-	const navbarIcon = useColorModeValue('gray.400', 'white');
+//	const navbarIcon = useColorModeValue('gray.400', 'white');
 	let menuBg = useColorModeValue('white', 'navy.800');
 	const textColor = useColorModeValue('secondaryGray.900', 'white');
 	const textColorBrand = useColorModeValue('brand.700', 'brand.400');

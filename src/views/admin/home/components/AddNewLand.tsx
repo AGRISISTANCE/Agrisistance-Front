@@ -4,7 +4,7 @@ import { Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHead
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { Form, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addLand } from '../../../../redux/LandSlice';
+//import { addLand } from '../../../../redux/LandSlice';
 
 interface AddNewLandProps {
     initialStep?: number;
@@ -47,7 +47,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                 nitrogen: Number(nitrogen),
             };
 
-            dispatch(addLand(newLand));
+//            dispatch(addLand(newLand));
 
             setLandName('');
             setLatitude('');

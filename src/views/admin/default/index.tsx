@@ -8,7 +8,7 @@ import MiniCalendar from 'components/calendar/MiniCalendar';
 import MiniStatistics from 'components/card/MiniStatistics';
 import IconBox from 'components/icons/IconBox';
 import { MdAddTask, MdAttachMoney, MdBarChart, MdFileCopy } from 'react-icons/md';
-import CheckTable from 'views/admin/virtualland/components/CheckTable';
+import CheckTable from 'views/admin/default/components/CheckTable';
 import ComplexTable from 'views/admin/default/components/ComplexTable';
 import DailyTraffic from 'views/admin/default/components/DailyTraffic';
 import PieCard from 'views/admin/default/components/PieCard';

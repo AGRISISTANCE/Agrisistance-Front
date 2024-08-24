@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import landSlice from './LandSlice'; // Import the entire slice
+//import landSlice from './LandSlice'; // Import the entire slice
 
 // Extract the reducer from the slice
 export const store = configureStore({
