@@ -451,11 +451,14 @@ export const SpotifyLogo = createIcon({
 
 export const AgrisistanceLogo = () => {
 	return (
-		<img src={agrisistancelogo} alt="Logo"style={{
-			width:'170px'
-		}}  />
+		<a href='/'>
+			<img src={agrisistancelogo} alt="Logo" style={{
+				width: '170px'
+			}} />
+		</a>
+
 	);
-  };
+};
 
 /*
 export const HorizonLogo = createIcon({

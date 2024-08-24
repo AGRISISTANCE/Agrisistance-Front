@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -9,10 +8,16 @@ import {
   useDisclosure,
   Box,
   Text,
-  Flex
+  Flex,
+  propNames
 } from '@chakra-ui/react';
 import asset from '../../../../assets/img/dashboards/asset';
 import { IoClose } from 'react-icons/io5';
+import { Button } from 'antd';
+import { Button as BUtton } from '@chakra-ui/react';
+interface BusinessPlanModalprops{
+  isDisabled: boolean,
+}
 const text = [
   {
     title: 'Resource Managemnet',
@@ -40,12 +45,18 @@ const text = [
     text2: 'Explore the use of solar panels to reduce irrigation system costs and enhance sustainability.'
   },
 ]
-const BusinessPlanModal: React.FC = () => {
+const BusinessPlanModal: React.FC<BusinessPlanModalprops> = ({isDisabled}) => {
+  console.log(isDisabled);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <Button onClick={onOpen} className='btn-view' colorScheme="blackAlpha">
+      <Button disabled={isDisabled} onClick={onOpen} className='btn-view'  
+      style={{
+        background: isDisabled ? '#2acc32': '#c5c0b6', 
+        color: '#fff'
+      }}
+      >
         View your business plan
       </Button>
 
@@ -86,9 +97,9 @@ const BusinessPlanModal: React.FC = () => {
                   </Text>
                 </Box>
               ))}
-              <Button width={'fit-content'} colorScheme='#2ACC32' bg={'#2ACC32'} alignSelf={'center'}>Download</Button>
+              <BUtton width={'fit-content'} colorScheme='#2ACC32' bg={'#2ACC32'} alignSelf={'center'}>Download</BUtton>
             </Flex>
-            <Button colorScheme="" padding={'10px'} border={'2px'} borderRadius={'50%'} position={'absolute'} top={'-20px'} right={'-40px'} onClick={onClose}><IoClose /></Button>
+            <BUtton colorScheme="" padding={'10px'} border={'2px'} borderRadius={'50%'} position={'absolute'} top={'-20px'} right={'-40px'} onClick={onClose}><IoClose /></BUtton>
           </ModalBody>
         </ModalContent>
       </Modal>

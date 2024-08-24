@@ -5,6 +5,7 @@ import avatars from '../../../assets/img/avatars/avatars';
 import Land from './components/Land';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store'; // Adjust the import according to your project structure
+import LandAdd from './components/LandAdd';
 
 export default function Home() {
   // Access lands from the Redux store
@@ -29,9 +30,9 @@ export default function Home() {
           </Text>
           {/* {selectedLandIndex >= 0 ? (
             <Land {...lands[selectedLandIndex]} select={false} />
-          ) : (
-            <Land />
-          )} */}
+            ) : (
+              <Land />
+              )} */}
         </Flex>
       </Flex>
       <Text color="#218225" fontWeight="bold" fontSize="30px" ml="20px">

@@ -3,7 +3,7 @@ import { Flex, Button, Box, Text, useDisclosure } from '@chakra-ui/react';
 import land from '../../../../assets/img/land/land';
 import AddNewLand from './AddNewLand';
 import { IoIosClose } from 'react-icons/io';
-export default function Land() {
+export default function LandAdd() {
     
     const [selected, setSelected] = useState<boolean>(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
