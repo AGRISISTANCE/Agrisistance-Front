@@ -549,7 +549,7 @@ const Yourland: React.FC = () => {
 							<Flex padding='20px'>
 								<TotalSpent />
 							</Flex>
-						</Flex>
+						</Flex>	
 					</Box>
 				);
 			default:

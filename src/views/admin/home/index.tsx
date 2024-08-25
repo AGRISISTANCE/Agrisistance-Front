@@ -9,6 +9,8 @@ import { selectLand } from '../../../redux/landsSlice';
 import { LandInfo } from '../../../redux/landsSlice'; // Import the LandInfo interface
 import { IoIosClose } from 'react-icons/io';
 import AddNewLand from './components/AddNewLand';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store'; // Adjust the import according to your project structure
 
 export default function Home() {
   const lands = useSelector((state: RootState) => state.lands.lands);
@@ -97,6 +99,10 @@ export default function Home() {
               select={false} // Include select functionality
             />
           ))}
+        {/* <AddNewLand/> */}
+        {/* {lands.map((land, key) => (
+          <Land key={key} {...land} />
+        ))} */}
       </Flex>
     </Flex>
   );
