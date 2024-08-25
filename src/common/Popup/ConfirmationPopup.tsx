@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 
 interface Input {
   label: string;
-  value: number;
+  value: number | string;
   onChange: (newValue: number) => void;
   type?: string;
 }

@@ -15,6 +15,9 @@ import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
 import { useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
 import { Crop } from '../../../redux/landsSlice';
+//import { Button } from 'antd';
+
+
 interface RevenueItem {
 	CropName: string;
 	area: number;
@@ -25,8 +28,26 @@ interface RevenueItem {
 	progress: number;
 }
 
+interface CropType {
+	water_sufficient: number;
+	sunlight: number;
+	pestisides_level: number;
+	landUse: number;
+	humanCoverage: number;
+	waterAvaliability: number;
+	distributionOptimality: number;
+}
 
 
+interface LandBusinessPlan {
+	title: string;
+	description: string;
+	}
+
+interface LandInfo {
+	budgetForLand: number | null;
+	LandBusinessPlan: LandBusinessPlan[] | null;
+	}
 interface SuggestionItem {
 	text: string;
 	link: string;
@@ -35,8 +56,12 @@ const Suggestions: SuggestionItem[] = [
 	{ text: 'Reduce the pest invasion by raising pestesides levels, we recommend', link: '/dewadaw' }
 ]
 
-
-// const crops: Crops = cropsData;
+interface LandDetails {
+	longitude: number | null;
+	latitude: number | null;
+	size: number | null;
+  }
+  
 
 const city = 'Tissemsilt';
 const country = 'Algeria';
@@ -58,13 +83,6 @@ const SetMapView: React.FC<{ center: [number, number]; zoom: number }> = ({ cent
 const Yourland: React.FC = () => {
 
 
-	
-	const [crop, setCrop] = useState({
-		water_sufficient: 80,
-		sunlight: 60,
-		pestisides_level: 44,
-		pest_invation: 77
-	});
 	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
 	const [showTooltip, setShowTooltip] = useState<boolean>(false);
 	const [showProgress, setShowProgress] = useState<boolean>(false);
@@ -111,7 +129,6 @@ const Yourland: React.FC = () => {
 	};
 
 	//! pop up state
-	const [budget, setBudget] = useState(10000);
 
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
@@ -126,14 +143,13 @@ const Yourland: React.FC = () => {
 		setSliderValue(soil[soilType]);
 	};
 
-	//! old State for the inputs
-	const [LandLongtitude, setLandLongtitude] = useState<number>(1.81081);
-	const [LandLatitude, setLandLatitude] = useState<number>(35.60722);
-	const [LandSize, setLandSize] = useState<number>(120);
 
 	//! New
 	//! New for redux
 	const selectedLand = useSelector((state: RootState) => state.lands.selectedLand);
+	
+	const [budget, setBudget] = useState<number | null>(selectedLand ? selectedLand.budgetForLand : null);
+	const [businessPlan, setBusinessPlan] = useState<LandBusinessPlan[] | null>(selectedLand ? selectedLand.LandBusinessPlan : null);
 
 	const revenue: RevenueItem[] = selectedLand
 		? selectedLand.crops.map((crop: Crop) => ({
@@ -147,32 +163,76 @@ const Yourland: React.FC = () => {
 		}))
 		: [];
 	
-	const [soil, setSoil] = useState<SoilType>({
-		oxygen: 20,
-		azote: 15,
-		potassium: 10,
-		phosphorus: 8,
-		humidity: 65,
-		ph: 30,
-		});
+	const [soil, setSoil] = useState<SoilType | null>(null);
 	
-		useEffect(() => {
-		if (selectedLand) {
-			setSoil({
+	useEffect(() => {
+	if (selectedLand) {
+		const newSoil = {
 			oxygen: selectedLand.oxygen_level,
 			azote: selectedLand.nitrogen,
 			potassium: selectedLand.potassium,
 			phosphorus: selectedLand.phosphorus,
 			humidity: selectedLand.humidity,
 			ph: selectedLand.ph_level,
-			});
+		};
+		setSoil(newSoil);
+
+		// Set the slider value to the value of selectedSoil in the newSoil object
+		setSliderValue(newSoil[selectedSoil] ?? 0); // Fallback to 0 if selectedSoil is not valid
+	}
+	else {
+		setSoil(null)
+		
+		setSliderValue(0); // Reset sliderValue to 0 if no land is selected
+	}
+	}, [selectedLand, selectedSoil]);
+
+	//const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
+	const [sliderValue, setSliderValue] = useState<number>(0); // Set initial sliderValue
+
+	const [crop, setCrop] = useState<CropType | null>(null);
+
+	useEffect(() => {
+		if (selectedLand) {
+		setCrop({
+			landUse: selectedLand.landUse,
+			water_sufficient: selectedLand.waterSufficecy,
+			sunlight: selectedLand.sunlight,
+			pestisides_level: selectedLand.pestisedesLevel,
+			waterAvaliability:selectedLand.waterAvaliability,
+			humanCoverage:selectedLand.humanCoverage,
+			distributionOptimality:selectedLand.distributionOptimality
+		});
+		setBudget(selectedLand.budgetForLand);
+      	setBusinessPlan(selectedLand.LandBusinessPlan);
+		} else {
+		setCrop(null); // Set crop to null if no selected land exists
+		setBudget(null);
+      	setBusinessPlan(null);
 		}
-		}, [selectedLand]);
+	}, [selectedLand]);
 
-	//! adapted to redux
-	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
+	const [landDetails, setLandDetails] = useState<LandDetails>({
+		longitude: null,
+		latitude: null,
+		size: null,
+	  });
 
-
+	useEffect(() => {
+	if (selectedLand) {
+		setLandDetails({
+		longitude: selectedLand.longitude,
+		latitude: selectedLand.latitude,
+		size: selectedLand.landSize,
+		});
+	} else {
+		setLandDetails({
+		longitude: null,
+		latitude: null,
+		size: null,
+		});
+	}
+	}, [selectedLand]);
 
 
 
@@ -181,6 +241,9 @@ const Yourland: React.FC = () => {
 		setIsConfirmPhase(false); // Initial phase
 	};
 	const [activeSection, setActiveSection] = useState<string>('Predict Revenue');
+
+	const [test, setTEST] = useState(null)
+	//! Component rendering
 	const renderContent = () => {
 		switch (activeSection) {
 			case 'Predict Revenue':
@@ -261,8 +324,9 @@ const Yourland: React.FC = () => {
 										showPopup={showPopup}
 									/>
 								)}
+								{/* ! ERROR HERE */}
 								<Flex justify='space-around' >
-									{Object.keys(soil).map((key) => (
+									{soil && Object.keys(soil).map((key) => (
 										<Flex
 											key={key}
 											direction='column'
@@ -293,7 +357,7 @@ const Yourland: React.FC = () => {
 									</Text>
 									<Slider
 										id='slider'
-										defaultValue={soil[selectedSoil]}
+										defaultValue={soil ? soil[selectedSoil] : 0}  // Provide a fallback if soil is null
 										min={0}
 										max={100}
 										colorScheme='green'
@@ -420,9 +484,9 @@ const Yourland: React.FC = () => {
 								title="Modify Data"
 								message="Please provide the necessary information."
 								inputs={[
-									{ label: 'New Land Longitude', value: LandLongtitude, onChange: setLandLongtitude },
-									{ label: 'New Land Latitude', value: LandLatitude, onChange: setLandLatitude },
-									{ label: 'New Land Size in hectare', value: LandSize, onChange: setLandSize },
+									{ label: 'New Land Longitude', value: landDetails.longitude, onChange: setTEST },
+									{ label: 'New Land Latitude', value: landDetails.latitude, onChange: setTEST },
+									{ label: 'New Land Size in hectare', value: landDetails.size, onChange: setTEST },
 								]}
 								onConfirm={handleSubmit}
 								onCancel={handleCancel}
@@ -437,27 +501,27 @@ const Yourland: React.FC = () => {
 							<Box>
 								<Flex justify='space-around'>
 									<Flex direction='column' align='center' gap='15px'>
-										<CircularProgress color='#218225' value={crop.water_sufficient} size='90px' trackColor='#BCCCBF'>
-											<CircularProgressLabel fontWeight='semibold'>{crop.water_sufficient}%</CircularProgressLabel>
+										<CircularProgress color='#218225' value={crop.landUse} size='90px' trackColor='#BCCCBF'>
+											<CircularProgressLabel fontWeight='semibold'>{crop.landUse}%</CircularProgressLabel>
 										</CircularProgress>
 										<Text fontWeight='bold'>Land use</Text>
 									</Flex>
 									<Flex direction='column' align='center' gap='15px'>
-										<CircularProgress color='#218225' value={crop.sunlight} size='90px' trackColor='#BCCCBF'>
-											<CircularProgressLabel fontWeight='semibold'>{crop.sunlight}%</CircularProgressLabel>
+										<CircularProgress color='#218225' value={crop.humanCoverage} size='90px' trackColor='#BCCCBF'>
+											<CircularProgressLabel fontWeight='semibold'>{crop.humanCoverage}%</CircularProgressLabel>
 										</CircularProgress>
 										<Text fontWeight='bold'>Human coverage</Text>
 									</Flex>
 									<Flex direction='column' align='center' gap='15px'>
-										<CircularProgress color='#218225' value={crop.pestisides_level} size='90px' trackColor='#BCCCBF'>
-											<CircularProgressLabel fontWeight='semibold'>{crop.pestisides_level}%</CircularProgressLabel>
+										<CircularProgress color='#218225' value={crop.waterAvaliability} size='90px' trackColor='#BCCCBF'>
+											<CircularProgressLabel fontWeight='semibold'>{crop.waterAvaliability}%</CircularProgressLabel>
 										</CircularProgress>
 										<Text fontWeight='bold'>Water avaliability</Text>
 									</Flex>
-
+									{/*!  handle this dynamically*/}
 									<Flex direction='column' align='center' gap='15px'>
-										<CircularProgress color='#218225' value={crop.pest_invation} size='90px' trackColor='#BCCCBF'>
-											<CircularProgressLabel fontWeight='semibold'>{crop.pest_invation}%</CircularProgressLabel>
+										<CircularProgress color='#218225' value={crop.distributionOptimality} size='90px' trackColor='#BCCCBF'>
+											<CircularProgressLabel fontWeight='semibold'>{crop.distributionOptimality}%</CircularProgressLabel>
 										</CircularProgress>
 										<Text fontWeight='bold'>Distribution optimality</Text>
 									</Flex>
@@ -471,11 +535,11 @@ const Yourland: React.FC = () => {
 										<MapContainer
 											style={{ height: '400px', width: '100%' }}
 										>
-											<SetMapView center={[LandLatitude, LandLongtitude]} zoom={13} />
+											<SetMapView center={[landDetails.latitude, landDetails.longitude]} zoom={13} />
 											<TileLayer
 												url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
 											/>
-											<Marker position={[LandLatitude, LandLongtitude]}>
+											<Marker position={[landDetails.latitude, landDetails.longitude]}>
 												<Popup>
 													New Land
 												</Popup>
@@ -489,14 +553,14 @@ const Yourland: React.FC = () => {
 											borderRadius: '15px',
 											border: 'none'
 										}}
-											value={LandLongtitude}
+											value={landDetails.latitude}
 											readOnly />
 										<input type="number" style={{
 											background: '#d8e1dc',
 											borderRadius: '15px',
 											border: 'none'
 										}}
-											value={LandLatitude}
+											value={landDetails.longitude}
 											readOnly />
 										<Text fontWeight='normal' fontSize='xl'>Your current size:</Text>
 										<input type="text" style={{
@@ -504,7 +568,7 @@ const Yourland: React.FC = () => {
 											borderRadius: '15px',
 											border: 'none',
 										}}
-											value="100 Ha"
+											value={`${landDetails.size} Ha`}
 											readOnly />
 										<button style={{
 											background: '#2acc32',
@@ -522,35 +586,48 @@ const Yourland: React.FC = () => {
 				);
 			case 'Finance management':
 				return (
-					<Box>{showPopup && (
+					<Box>
+					{showPopup && (
 						<ConfirmationPopup
-							title="Modify Data"
-							message="Please provide the necessary information."
-							inputs={[
-								{ label: 'Budget in dollars', value: budget, onChange: setBudget }
-							]}
-							onConfirm={handleSubmit}
-							onCancel={handleCancel}
-							isConfirmPhase={isConfirmPhase}
-							showPopup={showPopup}
+						title="Modify Data"
+						message="Please provide the necessary information."
+						inputs={[
+							{ label: 'Budget in dollars', value: budget ?? '', onChange: setBudget }
+						]}
+						onConfirm={handleSubmit}
+						onCancel={handleCancel}
+						isConfirmPhase={isConfirmPhase}
+						showPopup={showPopup}
 						/>
 					)}
-						<Flex padding='40px'>
-							<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
-								<BusinessPlanModal isDisabled={revenue.length === 0}/> {/* Integrate the modal here */}
-								<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>
-									Your budget
-								</Text>
-								<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
-									<Text>{budget} ETB</Text>
-								</Flex>
-								<Button onClick={openPopupWithInputs}>Modify</Button>
-							</Flex>
-							<Flex padding='20px'>
-								<TotalSpent />
-							</Flex>
+					<Flex padding='40px'>
+						<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
+						{/* <BusinessPlanModal isDisabled={!businessPlan || businessPlan.length === 0} /> */}
+						<BusinessPlanModal isDisabled={!businessPlan || businessPlan.length === 0} businessPlan={businessPlan} />
+						<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>
+							Your budget
+						</Text>
+						<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
+							<Text>{budget ? `${budget} ETB` : 'No budget set'}</Text>
 						</Flex>
+						<Button
+						onClick={openPopupWithInputs}
+						//disabled={budget === null}
+						// style={{
+						// 	background: budget ? '#c5c0b6' : '#2acc32',  // Gray color when disabled
+						// 	color: budget ? '#6c757d' : '#fff',          // Slightly muted gray text color when disabled
+						// 	cursor: budget ? 'not-allowed' : 'pointer',  // Change cursor style when disabled
+						// }}
+						>
+						Modify
+						</Button>
+						</Flex>
+						<Flex padding='20px'>
+						<TotalSpent />
+						</Flex>
+					</Flex>
 					</Box>
+
 				);
 			default:
 				return <Text>Select a section</Text>;

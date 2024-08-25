@@ -36,7 +36,7 @@ export interface LandInfo {
   waterSufficecy: number;
   sunlight: number;
   pestisedesLevel: number;
-  landUse: string;
+  landUse: number;
   humanCoverage: number;
   waterAvaliability: number;
   distributionOptimality: number;
@@ -95,8 +95,8 @@ const initialDummyLands: LandInfo[] = [
     waterSufficecy: 80,
     sunlight: 70,
     pestisedesLevel: 5,
-    landUse: 'Agriculture',
-    humanCoverage: 3,
+    landUse: 30,
+    humanCoverage: 70,
     waterAvaliability: 70,
     distributionOptimality: 85,
     suggestedImprovementSoil: ['Increase organic matter', 'Improve drainage'],
@@ -147,8 +147,8 @@ const initialDummyLands: LandInfo[] = [
     waterSufficecy: 85,
     sunlight: 75,
     pestisedesLevel: 3,
-    landUse: 'Agriculture',
-    humanCoverage: 4,
+    landUse: 95,
+    humanCoverage: 50,
     waterAvaliability: 80,
     distributionOptimality: 90,
     suggestedImprovementSoil: ['Add compost', 'Reduce tillage'],
