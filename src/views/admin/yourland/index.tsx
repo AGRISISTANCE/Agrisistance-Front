@@ -3,7 +3,7 @@ import {
 	Flex, Text, Box, Progress, CircularProgress, CircularProgressLabel, Slider, SliderTrack, SliderFilledTrack, SliderThumb, SliderMark,
 	Tooltip,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import cropsData from './img/crops';
 import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
@@ -12,24 +12,20 @@ import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
-
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/store';
+import { Crop } from '../../../redux/landsSlice';
 interface RevenueItem {
 	CropName: string;
 	area: number;
 	description: string;
-	weight: string;
+	weight: number;
 	price: number;
 	img: string;
 	progress: number;
 }
 
-const revenue: RevenueItem[] = [
-	// Example data
-	// { CropName: 'beans', area: 90, description: 'Beans are protein-rich legumes, easy to grow and essential in many diets. They also boost soil health by fixing nitrogen.', weight: '2000', price: 3000, img: 'beans', progress: 80 },
-	// { CropName: 'rice', area: 30, description: ' Rice is a staple grain grown in flooded fields, essential for energy due to its high carbohydrate content. It is widely used in global cuisines', weight: '200', price: 3100, img: 'rice', progress: 50 },
-	// { CropName: 'groundnut', area: 40, description: 'Groundnut, also known as peanut, is a protein-rich legume grown in warm climates. It is valued for its edible seeds and oil', weight: '2100', price: 3100, img: 'groundnut', progress: 50 },
-	// { CropName: 'cashew', area: 10, description: ' Cashew is a tropical nut known for its rich, buttery flavor. It grows on cashew trees and is commonly used in snacks and cooking.', weight: '10', price: 3100, img: 'cashew', progress: 50 },
-];
+
 
 interface SuggestionItem {
 	text: string;
@@ -39,23 +35,21 @@ const Suggestions: SuggestionItem[] = [
 	{ text: 'Reduce the pest invasion by raising pestesides levels, we recommend', link: '/dewadaw' }
 ]
 
-interface Crops {
-	[key: string]: string;
-}
 
-const crops: Crops = cropsData;
+// const crops: Crops = cropsData;
 
 const city = 'Tissemsilt';
 const country = 'Algeria';
 
-type SoilType = {
+interface SoilType {
 	oxygen: number;
 	azote: number;
 	potassium: number;
 	phosphorus: number;
 	humidity: number;
 	ph: number;
-};
+}
+
 const SetMapView: React.FC<{ center: [number, number]; zoom: number }> = ({ center, zoom }) => {
 	const map = useMap();
 	map.setView(center, zoom);
@@ -64,14 +58,7 @@ const SetMapView: React.FC<{ center: [number, number]; zoom: number }> = ({ cent
 const Yourland: React.FC = () => {
 
 
-	const [soil, setSoil] = useState<SoilType>({
-		oxygen: 20,
-		azote: 15,
-		potassium: 10,
-		phosphorus: 8,
-		humidity: 65,
-		ph: 30,
-	});
+	
 	const [crop, setCrop] = useState({
 		water_sufficient: 80,
 		sunlight: 60,
@@ -79,7 +66,6 @@ const Yourland: React.FC = () => {
 		pest_invation: 77
 	});
 	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
-	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
 	const [showTooltip, setShowTooltip] = useState<boolean>(false);
 	const [showProgress, setShowProgress] = useState<boolean>(false);
 	const [progressMessage, setProgressMessage] = useState<string>('Starting...');
@@ -127,7 +113,6 @@ const Yourland: React.FC = () => {
 	//! pop up state
 	const [budget, setBudget] = useState(10000);
 
-
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
 		setSoil((prevSoil) => ({
@@ -141,15 +126,55 @@ const Yourland: React.FC = () => {
 		setSliderValue(soil[soilType]);
 	};
 
-	const Applychanges = (soil: SoilType) => {
-		console.log(soil);
-		// TODO: make a post request
-	}
-
-	// State for the inputs
+	//! old State for the inputs
 	const [LandLongtitude, setLandLongtitude] = useState<number>(1.81081);
 	const [LandLatitude, setLandLatitude] = useState<number>(35.60722);
 	const [LandSize, setLandSize] = useState<number>(120);
+
+	//! New
+	//! New for redux
+	const selectedLand = useSelector((state: RootState) => state.lands.selectedLand);
+
+	const revenue: RevenueItem[] = selectedLand
+		? selectedLand.crops.map((crop: Crop) => ({
+			CropName: crop.CropName,
+			area: crop.cropSize,
+			description: `${crop.CropName} is a valuable crop. It has a recommendation percentage of ${crop.recommendationPercentage}% and can generate a revenue of ${crop.expectedMoneyRevenue} with an expected weight of ${crop.expectedWeightRevenue}.`,
+			weight: crop.expectedWeightRevenue,
+			price: crop.expectedMoneyRevenue,
+			img: crop.CropImage,
+			progress: crop.recommendationPercentage,
+		}))
+		: [];
+	
+	const [soil, setSoil] = useState<SoilType>({
+		oxygen: 20,
+		azote: 15,
+		potassium: 10,
+		phosphorus: 8,
+		humidity: 65,
+		ph: 30,
+		});
+	
+		useEffect(() => {
+		if (selectedLand) {
+			setSoil({
+			oxygen: selectedLand.oxygen_level,
+			azote: selectedLand.nitrogen,
+			potassium: selectedLand.potassium,
+			phosphorus: selectedLand.phosphorus,
+			humidity: selectedLand.humidity,
+			ph: selectedLand.ph_level,
+			});
+		}
+		}, [selectedLand]);
+
+	//! adapted to redux
+	const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
+
+
+
+
 
 	const handleOpenPopup = () => {
 		setShowPopup(true);
@@ -174,7 +199,9 @@ const Yourland: React.FC = () => {
 									<li key={index}>
 										<Flex direction='column' mb={4} background={'#fff'} padding={'20px'} borderRadius='20px'>
 											<Flex align='center'>
-												<img src={crops[item.img] || '/default-crop-image.png'} alt={item.CropName} style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
+												{/* <img src={crops[item.img] || '/default-crop-image.png'} alt={item.CropName} style={{ width: '50px', height: 'auto', marginRight: '10px' }} /> */}
+												{/* ! Later the images will be handeled either accoring to cropName or by their state */}
+												<img src={'/default-crop-image.png'} alt={item.CropName} style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
 												<Flex direction='column'>
 													<Text fontWeight='bold'>{item.CropName}</Text>
 													<Text color='grey' fontSize={'lg'}>{item.area} m<sup>2</sup></Text>
