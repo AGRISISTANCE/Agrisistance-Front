@@ -29,8 +29,8 @@ import SignUpCentered from './views/auth/signUp';
 import LogInCentered from './views/auth/logIn'
 
 // Landing Page Import
-import LandingPage from './views/Landing/landingPage'; // <== Import the Landing Page Component
-import Yournetwork from 'views/admin/yournetwork';
+import LandingPage from './views/Landing/landingPage';
+// import Yournetwork from 'views/admin/yournetwork';
 
 
 const routes = [
@@ -77,13 +77,13 @@ const routes = [
     path: '/yourland',
     component: <Yourland />,
   },
-  {
-    name: 'Your Network',
-    layout: '/dashboard',
-    path: '/network',
-    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
-    component: <Yournetwork />,
-  }
+  // {
+  //   name: 'Your Network',
+  //   layout: '/dashboard',
+  //   path: '/network',
+  //   icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
+  //   component: <Yournetwork />,
+  // }
   // {
   //   name: 'Disconnect',
   //   layout: '/authz',
