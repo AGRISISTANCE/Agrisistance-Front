@@ -5,10 +5,23 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';  // Removed the `Form` import
 import { useDispatch } from 'react-redux';
 // import { addLand } from '../../../../redux/LandSlice';
+import animationData from '../../../../assets/img/dashboards/cropanimated.json'
+// import Player from 'lottie-react';
+import Lottie from 'lottie-react';
 
 interface AddNewLandProps {
     initialStep?: number;
 }
+
+const defaultOptions = {
+    loop: false,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice',
+    },
+};
+
 
 export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
     const dispatch = useDispatch();
@@ -79,7 +92,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         setShowProgress(true);
         setProgressMessage('Starting...');
         setTimeout(() => {
-            setProgressMessage('Getting prediction...');
+            setProgressMessage('Getting predictions...');
             setTimeout(() => {
                 setProgressMessage('Completed!');
                 setTimeout(() => {
@@ -87,8 +100,8 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                     onClose();
                     navigate('/dashboard/yourland');
                 }, 1000);
-            }, 1500);
-        }, 1500);
+            }, 4000);
+        }, 1000);
     };
 
     const openModal = (content: string) => {
@@ -472,20 +485,31 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                 )}
             </form>
             {showProgress && (
-                <Flex
-                    position="absolute"
-                    top="50%"
-                    left="50%"
-                    transform="translate(-50%, -50%)"
-                    direction="column"
-                    align="center"
-                    background="rgba(0, 0, 0, 0.8)"
-                    padding="20px"
-                    borderRadius="10px"
-                >
-                    <Text color="white" fontSize="xl" mb="10px">{progressMessage}</Text>
-                    <Progress hasStripe value={100} size="lg" isAnimated />
-                </Flex>
+                
+                    <Flex
+							direction={'column'}
+							align={'center'}
+							justify={'center'}
+							position={'fixed'}
+							top={'50%'}
+							left={'50%'}
+							transform={'translate(-50%, -50%)'}
+							p={'20px'}
+							bg={'#fff'}
+							borderRadius={'10px'}
+							shadow={'md'}
+							zIndex={1000} // Ensure it's above the blur overlay
+                            maxWidth={'60%'} // Limit the maximum width to 90% of the parent container
+                            maxHeight={'60%'} // Limit the maximum height to 90% of the parent container
+                            width={'auto'} // Adjust width based on content
+                            height={'auto'} // Adjust height based on content
+						>
+                            <Lottie animationData={animationData} style={{ width: '100%', maxWidth: '300px', height: 'auto' }} />
+
+							<Text my={4} fontSize={20} fontWeight={'bold'}>{progressMessage}</Text>
+							<Progress size='md' isIndeterminate />
+						</Flex>
+               
             )}
         </Flex>
     );
