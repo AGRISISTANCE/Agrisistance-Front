@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'redux/store';
 import { Crop } from '../../../redux/landsSlice';
 import axios from 'axios';
+import CropBarChart from './components/CropBarChart';
 
 //import { Button } from 'antd';
 
@@ -664,9 +665,8 @@ const Yourland: React.FC = () => {
 						Modify
 						</Button>
 						</Flex>
-						<Flex padding='20px'>
-						<TotalSpent />
-						</Flex>
+						<CropBarChart/>
+
 					</Flex>
 					</Box>
 

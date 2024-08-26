@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import asset from '../../../../assets/img/dashboards/asset';
 import { Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Progress } from '@chakra-ui/react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { Form, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';  // Removed the `Form` import
 import { useDispatch } from 'react-redux';
-//import { addLand } from '../../../../redux/LandSlice';
+// import { addLand } from '../../../../redux/LandSlice';
 
 interface AddNewLandProps {
     initialStep?: number;
@@ -25,6 +25,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
     const [potassium, setPotassium] = useState<number | ''>('');
     const [oxygenLevel, setOxygenLevel] = useState<number | ''>('');
     const [nitrogen, setNitrogen] = useState<number | ''>('');
+    const [azote, setAzote] = useState<number | ''>('');
 
     const [step, setStep] = useState<number>(initialStep);
     const [modalContent, setModalContent] = useState<string>('');
@@ -34,33 +35,33 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
     const handleAddLand = () => {
         if (landName && latitude && longitude && landSize && budget && phLevel && phosphorus && potassium && oxygenLevel && nitrogen) {
             const newLand = {
-                land_id: Date.now(),
+                //land_id: Date.now(),
                 land_name: landName,
                 latitude: Number(latitude),
                 longitude: Number(longitude),
                 land_size: Number(landSize),
                 budget: Number(budget),
-                ph_level: Number(phLevel),
-                phosphorus: Number(phosphorus),
-                potassium: Number(potassium),
                 oxygen_level: Number(oxygenLevel),
                 nitrogen: Number(nitrogen),
+                potassium: Number(potassium),
+                phosphorus: Number(phosphorus),
+                ph_level: Number(phLevel),
             };
-
-//            dispatch(addLand(newLand));
-
-            setLandName('');
-            setLatitude('');
-            setLongitude('');
-            setLandSize('');
-            setBudget('');
-            setPhLevel('');
-            setPhosphorus('');
-            setPotassium('');
-            setOxygenLevel('');
-            setNitrogen('');
-        }
-    };
+            console.log("land created successfully with data: ", newLand)
+        }}
+        
+    //         setLandName('');
+    //         setLatitude('');
+    //         setLongitude('');
+    //         setLandSize('');
+    //         setBudget('');
+    //         setPhLevel('');
+    //         setPhosphorus('');
+    //         setPotassium('');
+    //         setOxygenLevel('');
+    //         setNitrogen('');
+    //     }
+    // };
 
     const handleNext = () => setStep(step + 1);
     const handlePrevious = () => setStep(step - 1);
@@ -97,7 +98,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
 
     return (
         <Flex zIndex={3} direction={'column'} backgroundImage={asset.image} backgroundSize={'cover'} backgroundPosition={'center'} width={'1013px'} height={'677px'} align={'center'} justify={'center'}>
-            <Form
+            <form // Use a standard HTML form tag
                 onSubmit={(e) => {
                     e.preventDefault();
                     handleAddLand();
@@ -237,6 +238,47 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                 color: '#000'
                             }}
                         />
+                        <Flex>
+                            <Button
+                                bg={'#2acc32'}
+                                color={'#fff'}
+                                display={'flex'}
+                                alignItems={'center'}
+                                justifyContent={'center'}
+                                p={'10px 20px'}
+                                fontSize={'20px'}
+                                fontWeight={'bold'}
+                                gap={'20px'}
+                                borderRadius={'10px'}
+                                onClick={handlePrevious}
+                                width={'150px'}
+                            >
+                                <FaArrowLeft /> Previous
+                            </Button>
+                            <Button
+                                bg={'#2acc32'}
+                                color={'#fff'}
+                                display={'flex'}
+                                alignItems={'center'}
+                                justifyContent={'center'}
+                                p={'10px 20px'}
+                                fontSize={'20px'}
+                                fontWeight={'bold'}
+                                gap={'20px'}
+                                borderRadius={'10px'}
+                                onClick={handleNext}
+                                width={'150px'}
+                            >
+                                Next <FaArrowRight />
+                            </Button>
+                        </Flex>
+                    </Flex>
+                )}
+                {step === 3 && (
+                    <Flex direction={'column'} align={'center'} width={'100%'} gap={'20px'}>
+                    <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
+                        <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>What is your budget?</Text>
+                    </Flex>
                         <Flex direction={'column'} align={'center'} gap={'10px'}>
                             <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Budget</label>
                             <Input
@@ -253,6 +295,129 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                 }}
                             />
                         </Flex>
+                        <Flex>
+                            <Button
+                                bg={'#2acc32'}
+                                color={'#fff'}
+                                display={'flex'}
+                                alignItems={'center'}
+                                justifyContent={'center'}
+                                p={'10px 20px'}
+                                fontSize={'20px'}
+                                fontWeight={'bold'}
+                                gap={'20px'}
+                                borderRadius={'10px'}
+                                onClick={handlePrevious}
+                                width={'150px'}
+                            >
+                                <FaArrowLeft /> Previous
+                            </Button>
+                            <Button
+                                bg={'#2acc32'}
+                                color={'#fff'}
+                                display={'flex'}
+                                alignItems={'center'}
+                                justifyContent={'center'}
+                                p={'10px 20px'}
+                                fontSize={'20px'}
+                                fontWeight={'bold'}
+                                gap={'20px'}
+                                borderRadius={'10px'}
+                                onClick={handleNext}
+                                width={'150px'}
+                            >
+                                Next <FaArrowRight />
+                                    </Button>
+                                </Flex>
+                            </Flex>
+                        )}
+                        {step === 4 && (
+                            <Flex direction={'column'} align={'center'} width={'100%'} gap={'20px'}>
+                            <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
+                                <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>Entre those details about your soil:</Text>
+                            </Flex>
+                            <Flex direction={'column'} align={'center'} gap={'10px'}>
+                                <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Oxygen Level</label>
+                                <Input
+                                    type="text"
+                                    placeholder='Enter oxygen level'
+                                    value={oxygenLevel}
+                                    onChange={(e) => setOxygenLevel(Number(e.target.value) || '')}
+                                    style={{
+                                        borderRadius: '0px',
+                                        width: '562px',
+                                        height: '40px',
+                                        background: '#fff',
+                                        color: '#000'
+                                    }}
+                                />
+                            </Flex>
+                            <Flex direction={'column'} align={'center'} gap={'10px'}>
+                                <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Nitrogen</label>
+                                <Input
+                                    type="text"
+                                    placeholder='Enter Nitrogen level'
+                                    value={nitrogen}
+                                    onChange={(e) => setNitrogen(Number(e.target.value) || '')}
+                                    style={{
+                                        borderRadius: '0px',
+                                        width: '562px',
+                                        height: '40px',
+                                        background: '#fff',
+                                        color: '#000'
+                                    }}
+                                />
+                            </Flex>
+                            <Flex direction={'column'} align={'center'} gap={'10px'}>
+                                <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Potassium</label>
+                                <Input
+                                    type="text"
+                                    placeholder='Enter potassium level'
+                                    value={potassium}
+                                    onChange={(e) => setPotassium(Number(e.target.value) || '')}
+                                    style={{
+                                        borderRadius: '0px',
+                                        width: '562px',
+                                        height: '40px',
+                                        background: '#fff',
+                                        color: '#000'
+                                    }}
+                                />
+                            </Flex>
+                            <Flex direction={'column'} align={'center'} gap={'10px'}>
+                                <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Phosphorus</label>
+                                <Input
+                                    type="text"
+                                    placeholder='Enter phosphorus level'
+                                    value={phosphorus}
+                                    onChange={(e) => setPhosphorus(Number(e.target.value) || '')}
+                                    style={{
+                                        borderRadius: '0px',
+                                        width: '562px',
+                                        height: '40px',
+                                        background: '#fff',
+                                        color: '#000'
+                                    }}
+                                />
+                            </Flex>
+                            <Flex direction={'column'} align={'center'} gap={'10px'}>
+                                <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Ph level</label>
+                                <Input
+                                    type="text"
+                                    placeholder='Enter ph Level'
+                                    value={phLevel}
+                                    onChange={(e) => setPhLevel(Number(e.target.value) || '')}
+                                    style={{
+                                        borderRadius: '0px',
+                                        width: '562px',
+                                        height: '40px',
+                                        background: '#fff',
+                                        color: '#000'
+                                    }}
+                                />
+                            </Flex>
+                        {/* 
+                        Leave this commented idk if we will need it
                         <Flex direction={'column'} align={'center'} gap={'10px'}>
                             <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>pH Level</label>
                             <Input
@@ -268,71 +433,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                     color: '#000'
                                 }}
                             />
-                        </Flex>
-                        <Flex direction={'column'} align={'center'} gap={'10px'}>
-                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Phosphorus</label>
-                            <Input
-                                type="text"
-                                placeholder='Enter phosphorus level'
-                                value={phosphorus}
-                                onChange={(e) => setPhosphorus(Number(e.target.value) || '')}
-                                style={{
-                                    borderRadius: '0px',
-                                    width: '562px',
-                                    height: '40px',
-                                    background: '#fff',
-                                    color: '#000'
-                                }}
-                            />
-                        </Flex>
-                        <Flex direction={'column'} align={'center'} gap={'10px'}>
-                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Potassium</label>
-                            <Input
-                                type="text"
-                                placeholder='Enter potassium level'
-                                value={potassium}
-                                onChange={(e) => setPotassium(Number(e.target.value) || '')}
-                                style={{
-                                    borderRadius: '0px',
-                                    width: '562px',
-                                    height: '40px',
-                                    background: '#fff',
-                                    color: '#000'
-                                }}
-                            />
-                        </Flex>
-                        <Flex direction={'column'} align={'center'} gap={'10px'}>
-                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Oxygen Level</label>
-                            <Input
-                                type="text"
-                                placeholder='Enter oxygen level'
-                                value={oxygenLevel}
-                                onChange={(e) => setOxygenLevel(Number(e.target.value) || '')}
-                                style={{
-                                    borderRadius: '0px',
-                                    width: '562px',
-                                    height: '40px',
-                                    background: '#fff',
-                                    color: '#000'
-                                }}
-                            />
-                        </Flex>
-                        <Flex direction={'column'} align={'center'} gap={'10px'}>
-                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Nitrogen</label>
-                            <Input
-                                type="text"
-                                placeholder='Enter nitrogen level'
-                                value={nitrogen}
-                                onChange={(e) => setNitrogen(Number(e.target.value) || '')}
-                                style={{
-                                    borderRadius: '0px',
-                                    width: '562px',
-                                    height: '40px',
-                                    background: '#fff',
-                                    color: '#000'
-                                }}
-                            />
-                        </Flex>
+                        </Flex> */}
                         <Flex gap={'30px'}>
                             <Button
                                 bg={'#2acc32'}
@@ -369,23 +470,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                         </Flex>
                     </Flex>
                 )}
-            </Form>
-                
-            {/* <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Modal Title</ModalHeader>
-                    <ModalBody>
-                        {modalContent}
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal> */}
-
+            </form>
             {showProgress && (
                 <Flex
                     position="absolute"
@@ -404,4 +489,4 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
             )}
         </Flex>
     );
-}
+    }
