@@ -12,9 +12,11 @@ import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from 'redux/store';
 import { Crop } from '../../../redux/landsSlice';
+import axios from 'axios';
+
 //import { Button } from 'antd';
 
 
@@ -63,8 +65,15 @@ interface LandDetails {
   }
   
 
-const city = 'Tissemsilt';
-const country = 'Algeria';
+interface cityCountry {
+	country: string | null;
+	city: string | null
+}
+
+interface suggestion {
+	suggestedImprovementSoil: string[];
+	suggestedImprovementCrop: string[];
+}
 
 interface SoilType {
 	oxygen: number;
@@ -144,9 +153,14 @@ const Yourland: React.FC = () => {
 	};
 
 
-	//! New
 	//! New for redux
+	const user = useSelector((state: any) => state.user);
+	const dispatch = useDispatch();
+	const [cityCountry, setcityCountry] = useState<cityCountry | null>(null);
+
+
 	const selectedLand = useSelector((state: RootState) => state.lands.selectedLand);
+
 	
 	const [budget, setBudget] = useState<number | null>(selectedLand ? selectedLand.budgetForLand : null);
 	const [businessPlan, setBusinessPlan] = useState<LandBusinessPlan[] | null>(selectedLand ? selectedLand.LandBusinessPlan : null);
@@ -235,7 +249,39 @@ const Yourland: React.FC = () => {
 	}, [selectedLand]);
 
 
+	useEffect(() => {
+		if (landDetails.latitude && landDetails.longitude) {
+		  const fetchCityFromCoordinates = async () => {
+			try {
+			  const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
+				params: {
+				  lat: landDetails.latitude,
+				  lon: landDetails.longitude,
+				  format: 'json',
+				  addressdetails: 1,
+				  'accept-language': 'en',
+				},
+			  });
+			  const address = response.data.address;
+			  const city = address.city || address.town || address.village || 'Unknown City';
+			  const country = address.country || 'Unknown Country';
+			  setcityCountry({ city, country });
+			} catch (error) {
+			  console.error('Error fetching city from coordinates:', error);
+			  setcityCountry({ city: 'Error', country: 'Error' });
+			}
+		  };
+	
+		  fetchCityFromCoordinates();
+		} else {
+		  setcityCountry(null);
+		}
+	}, [landDetails]);
 
+	const soilSuggestions = selectedLand?.suggestedImprovementSoil || [];
+	const cropSuggestions = selectedLand?.suggestedImprovementCrop || [];
+
+	
 	const handleOpenPopup = () => {
 		setShowPopup(true);
 		setIsConfirmPhase(false); // Initial phase
@@ -395,32 +441,31 @@ const Yourland: React.FC = () => {
 								</Flex>
 								<Flex>
 									<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
-										<Flex gap='40px'>
-											<Text fontWeight='semibold'>Suggested improvements</Text>
-											{Suggestions.length === 0 ? (
-												<Text color='#2ACC32' textAlign='end'>No new suggestions</Text>
-											) : (
-												<Text color='#FC0D0D'>{Suggestions.length} new suggestions</Text>
-											)}
-										</Flex>
-										{Suggestions.length === 0 ? null : (
-											<ul style={{ padding: '20px' }}>
-												{Suggestions.map((item, index) => (
-													<li key={index}>
-														<Flex gap='10px'>
-															<Text>{item.text}</Text>
-															<a href={item.link}><Text color={'#00A6CB'}>Brand</Text></a>
-														</Flex>
-													</li>
-												))}
-											</ul>
+									<Flex gap='40px'>
+										<Text fontWeight='semibold'>Soil Improvement Suggestions</Text>
+										{soilSuggestions.length === 0 ? (
+											<Text color='#2ACC32' textAlign='end'>No new soil suggestions</Text>
+										) : (
+											<Text color='#FC0D0D'>{soilSuggestions.length} new soil suggestions</Text>
 										)}
+										</Flex>
+										{soilSuggestions.length === 0 ? null : (
+										<ul style={{ padding: '20px' }}>
+											{soilSuggestions.map((item, index) => (
+											<li key={index}>
+												<Flex gap='10px'>
+												<Text>{item}</Text>
+												<a href={`/suggestion/soil/${index}`}><Text color={'#00A6CB'}>More Info</Text></a>
+												</Flex>
+											</li>
+											))}
+										</ul>
+        )}
 									</Flex>
 								</Flex>
 							</Box>)}
-					</Box >
-				)
-
+							</Box >
+							)
 			case 'Crop maintenance':
 				return (
 					<Box>
@@ -448,29 +493,26 @@ const Yourland: React.FC = () => {
 								</Flex>
 								<Flex>
 									<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
-										<Flex gap='40px'>
-											<Text fontWeight='semibold'>Suggested improvements</Text>
-											{Suggestions.length === 0 ? (
-												<Text color='#2ACC32' textAlign='end'>No new suggestions</Text>) :
-												(
-													<Text color='#FC0D0D'>{Suggestions.length} new suggestions</Text>
-												)}
-
+									<Flex gap='40px' mt='20px'>
+										<Text fontWeight='semibold'>Crop Improvement Suggestions</Text>
+										{cropSuggestions.length === 0 ? (
+											<Text color='#2ACC32' textAlign='end'>No new crop suggestions</Text>
+										) : (
+											<Text color='#FC0D0D'>{cropSuggestions.length} new crop suggestions</Text>
+										)}
 										</Flex>
-										{Suggestions.length === 0 ? null : (
-											<ul style={{
-												padding: '20px'
-											}}>
-												{Suggestions.map((item, index) => (
-													<li key={index}>
-														<Flex gap='10px'>
-															<Text>{item.text}</Text>
-															<a href={item.link}><Text color={'#00A6CB'}>Brand</Text></a>
-														</Flex>
-													</li>))}
-											</ul>
-										)
-										}
+										{cropSuggestions.length === 0 ? null : (
+										<ul style={{ padding: '20px' }}>
+											{cropSuggestions.map((item, index) => (
+											<li key={index}>
+												<Flex gap='10px'>
+												<Text>{item}</Text>
+												<a href={`/suggestion/crop/${index}`}><Text color={'#00A6CB'}>More Info</Text></a>
+												</Flex>
+											</li>
+											))}
+										</ul>
+										)}
 									</Flex>
 								</Flex>
 							</Box>)}
@@ -642,7 +684,7 @@ const Yourland: React.FC = () => {
 				secondary={false}
 				fixed={true}
 			/>
-			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{city}, {country}</Text>
+			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{cityCountry ? `${cityCountry.city}, ${cityCountry.country}` : 'No location available'}</Text>
 			<Flex gap='40px' mb={4}>
 				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (
 					<Text

@@ -16,7 +16,7 @@ const initialState: UserInfo = {
   lastName: 'FEDDAG',
   email: 'amel.feddag@ensia.edu.dz',
   phoneNumber: '+213 555 05 04 96',
-  country: '',
+  country: 'Algeria',
   userId: '',
   profilePicture: '',
   currentPlan: 'free',

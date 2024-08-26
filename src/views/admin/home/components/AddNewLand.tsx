@@ -221,7 +221,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                 {step === 2 && (
                     <Flex direction={'column'} align={'center'} width={'100%'} gap={'20px'}>
                         <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
-                            <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>What is land size?</Text>
+                            <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>What is your land size?</Text>
                         </Flex>
                         <Text color={'white'} fontWeight={'semibold'} fontSize={'3xl'}>Land size (in hectares)</Text>
                         <Input
@@ -370,8 +370,8 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                     </Flex>
                 )}
             </Form>
-
-            <Modal isOpen={isOpen} onClose={onClose}>
+                
+            {/* <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Modal Title</ModalHeader>
@@ -384,7 +384,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                         </Button>
                     </ModalFooter>
                 </ModalContent>
-            </Modal>
+            </Modal> */}
 
             {showProgress && (
                 <Flex
