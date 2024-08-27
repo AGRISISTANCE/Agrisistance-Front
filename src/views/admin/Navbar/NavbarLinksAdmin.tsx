@@ -19,7 +19,12 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 // Assets
 import { MdNotificationsNone } from 'react-icons/md';
+<<<<<<< Updated upstream
 import routes from 'routes';
+=======
+import { redirect } from 'react-router-dom';
+//import routes from 'routes';
+>>>>>>> Stashed changes
 export default function HeaderLinks(props: { secondary: boolean }) {
 	const { secondary } = props;
 	// Chakra Color Mode
@@ -81,6 +86,7 @@ export default function HeaderLinks(props: { secondary: boolean }) {
 						padding: '10px'
 					}}
 					fontSize={'md'}
+					onClick={()=>redirect('/')}
 				>
 					Premium
 				</Text>

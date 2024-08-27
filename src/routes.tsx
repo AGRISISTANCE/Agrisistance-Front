@@ -5,9 +5,15 @@ import {
   MdHome,
   MdLock,
   MdOutlineYard,
+<<<<<<< Updated upstream
   MdOutlineCalendarMonth,
   MdGroups,
   MdLogout 
+=======
+  //  MdOutlineCalendarMonth,
+  MdGroups,
+  // MdLogout 
+>>>>>>> Stashed changes
 } from 'react-icons/md';
 
 import {
@@ -29,8 +35,15 @@ import SignUpCentered from './views/auth/signUp';
 import LogInCentered from './views/auth/logIn'
 
 // Landing Page Import
+<<<<<<< Updated upstream
 import LandingPage from './views/Landing/landingPage'; // <== Import the Landing Page Component
 
+=======
+import LandingPage from './views/Landing/landingPage';
+// import Yournetwork from 'views/admin/yournetwork';
+import Error from 'views/404';
+import Plan from 'views/admin/plan';
+>>>>>>> Stashed changes
 
 const routes = [
   {
@@ -68,6 +81,13 @@ const routes = [
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     component: <Profile />,
     secondary: true,
+  },
+  {
+    name: 'Error',
+    layout: '/dashboard',
+    path: '*', // This should be the last route
+    icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
+    component: <Error header={true}/>,
   },
   {
     name: 'Your Land',
