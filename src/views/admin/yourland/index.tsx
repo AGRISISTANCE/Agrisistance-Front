@@ -680,9 +680,9 @@ const Yourland: React.FC = () => {
 		<Flex direction="column" p={4}>
 			{/* <AdminNavbar secondary={true} fixed={true}  onOpen={AdminNavbar}/> */}
 			<AdminNavbarLinks
-				onOpen={AdminNavbarLinks}
+				//onOpen={AdminNavbarLinks}
 				secondary={false}
-				fixed={true}
+				//fixed={true}
 			/>
 			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{cityCountry ? `${cityCountry.city}, ${cityCountry.country}` : 'No location available'}</Text>
 			<Flex gap='40px' mb={4}>

@@ -22,7 +22,7 @@ root.render(
     <BrowserRouter>
       <Suspense fallback={null}>
         <Styles />
-        <App /> {/* No RouterProvider here */}
+        <App />
       </Suspense>
     </BrowserRouter>
   </Provider>

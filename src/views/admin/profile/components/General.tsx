@@ -3,7 +3,7 @@ import React from 'react';
 import { SimpleGrid, Text, useColorModeValue } from '@chakra-ui/react';
 // Custom components
 import Card from 'components/card/Card';
-import Information from 'views/admin/profileold/components/Information';
+import Information from 'views/admin/profile/components/Information';
 
 // Assets
 export default function GeneralInformation(props: { [x: string]: any }) {

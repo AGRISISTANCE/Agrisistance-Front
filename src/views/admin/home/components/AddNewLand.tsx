@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import asset from '../../../../assets/img/dashboards/asset';
-import { Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Progress } from '@chakra-ui/react';
+import {Tooltip, Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, useDisclosure, Progress } from '@chakra-ui/react';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';  // Removed the `Form` import
 import { useDispatch } from 'react-redux';
@@ -198,10 +198,25 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                 }}
                             />
                         </Flex>
-                        <Text color={'white'} fontWeight={'semibold'} fontSize={'2xl'} onClick={() => openModal('To get your land coordinates, use a GPS device or a mapping service. Enter the latitude and longitude separated by a comma.')} style={{ cursor: 'pointer' }}>
-                            How to get land coordinates
-                        </Text>
-                        <Flex>
+                        <Tooltip 
+                            label="To get your land coordinates, use a GPS device or a mapping service, Or you can navigate to your land on google maps and get the coordinates from the link." 
+                            fontSize="md" 
+                            bg="gray.700" 
+                            color="white"
+                            borderRadius="md"
+                            p={2}
+                            >
+                            <Text 
+                                color={'white'} 
+                                fontWeight={'semibold'} 
+                                fontSize={'2xl'} 
+                                onClick={() => openModal('To get your land coordinates, use a GPS device or a mapping service, Or you can navigate to your land in google maps and get the coordinates from the link')} 
+                                style={{ cursor: 'pointer' }}
+                            >
+                                How to get land coordinates
+                            </Text>
+                        </Tooltip>
+                        <Flex gap="20px">
                             <Button
                                 bg={'#2acc32'}
                                 color={'#fff'}
@@ -242,7 +257,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                         <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
                             <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>What is your land size?</Text>
                         </Flex>
-                        <Text color={'white'} fontWeight={'semibold'} fontSize={'3xl'}>Land size (in hectares)</Text>
+                        <Text color={'white'} fontWeight={'semibold'} fontSize={'3xl'}>Land size (in hectars)</Text>
                         <Input
                             type="text"
                             placeholder='Enter land size'
@@ -256,7 +271,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                 color: '#000'
                             }}
                         />
-                        <Flex>
+                        <Flex gap="20px">
                             <Button
                                 bg={'#2acc32'}
                                 color={'#fff'}
@@ -298,7 +313,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                         <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>What is your budget?</Text>
                     </Flex>
                         <Flex direction={'column'} align={'center'} gap={'10px'}>
-                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Budget</label>
+                            <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Budget (in dollars)</label>
                             <Input
                                 type="text"
                                 placeholder='Enter budget'
@@ -313,7 +328,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                 }}
                             />
                         </Flex>
-                        <Flex>
+                        <Flex gap="20px">
                             <Button
                                 bg={'#2acc32'}
                                 color={'#fff'}
@@ -350,11 +365,18 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                             </Flex>
                         )}
                         {step === 4 && (
-                            <Flex direction={'column'} align={'center'} width={'100%'} gap={'20px'}>
+                            <Flex direction={'column'} align={'center'} width={'100%'} gap={'0px'}>
                             <Flex backgroundColor={'#218225'} padding={'20px'} borderRadius={'50px'}>
                                 <Text color={'white'} fontWeight={'semibold'} fontSize={'30px'}>Entre those details about your soil:</Text>
                             </Flex>
-                            <Flex direction={'column'} align={'center'} gap={'10px'}>
+                            <Flex 
+                                direction={'row'} 
+                                align={'center'} 
+                                gap={'5px'}  // Increased gap to separate form elements clearly
+                                wrap={'wrap'}
+                                justify={'center'}  // Optional: Centers the rows horizontally
+                                >
+                            <Flex direction={'column'} align={'center'} gap={'10px'} >
                                 <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Oxygen Level</label>
                                 <Input
                                     type="text"
@@ -369,6 +391,15 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                         color: '#000'
                                     }}
                                 />
+                                
+                                <Text 
+                                color={'white'} 
+                                fontWeight={'semibold'} 
+                                fontSize={'md'}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                Percentage of gas volume in the soil (%)
+                            </Text>
                             </Flex>
                             <Flex direction={'column'} align={'center'} gap={'10px'}>
                                 <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Nitrogen</label>
@@ -385,6 +416,14 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                         color: '#000'
                                     }}
                                 />
+                                <Text 
+                                color={'white'} 
+                                fontWeight={'semibold'} 
+                                fontSize={'md'}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                Kg/ha (kilogramme per hectar)
+                            </Text>
                             </Flex>
                             <Flex direction={'column'} align={'center'} gap={'10px'}>
                                 <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Potassium</label>
@@ -401,6 +440,14 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                         color: '#000'
                                     }}
                                 />
+                                <Text 
+                                color={'white'} 
+                                fontWeight={'semibold'} 
+                                fontSize={'md'}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                Kg/ha (kilogramme per hectar)
+                            </Text>
                             </Flex>
                             <Flex direction={'column'} align={'center'} gap={'10px'}>
                                 <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Phosphorus</label>
@@ -417,9 +464,17 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                         color: '#000'
                                     }}
                                 />
+                                <Text 
+                                color={'white'} 
+                                fontWeight={'semibold'} 
+                                fontSize={'md'}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                Kg/ha (kilogramme per hectar)
+                            </Text>
                             </Flex>
                             <Flex direction={'column'} align={'center'} gap={'10px'}>
-                                <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Ph level</label>
+                                <label style={{ color: '#fff', fontWeight: 'bold', fontSize: '25px' }}>Ph level (0-14)</label>
                                 <Input
                                     type="text"
                                     placeholder='Enter ph Level'
@@ -433,6 +488,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                         color: '#000'
                                     }}
                                 />
+                            </Flex>
                             </Flex>
                         {/* 
                         Leave this commented idk if we will need it
@@ -452,7 +508,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                 }}
                             />
                         </Flex> */}
-                        <Flex gap={'30px'}>
+                        <Flex gap={'20px'}>
                             <Button
                                 bg={'#2acc32'}
                                 color={'#fff'}

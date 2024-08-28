@@ -93,9 +93,9 @@ export default function AdminNavbar(props: {
 				mb={gap}>
 				<Box ms='auto' w={{ sm: '100%', md: 'unset' }}>
 					<AdminNavbarLinks
-						onOpen={props.onOpen} 
+						//onOpen={props.onOpen} 
 						secondary={props.secondary}
-						fixed={props.fixed} 
+						//fixed={props.fixed} 
 					/>
 				</Box>
 			</Flex> 

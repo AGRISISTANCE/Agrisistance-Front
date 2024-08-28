@@ -1,12 +1,39 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Flex } from '@chakra-ui/react';
 import { EditOutlined } from '@ant-design/icons';
 import { updateUser } from '../../../redux/userSlice';
+import { useLocation } from 'react-router-dom';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  useDisclosure,
+} from '@chakra-ui/react';
 
 const UserProfile: React.FC = () => {
   const user = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
+
+  const location = useLocation();
+  const emailUpdated = location.state?.emailUpdated;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (emailUpdated) {
+      setShowModal(true);
+      onOpen();
+    }
+  }, [emailUpdated, onOpen]);
+
+
+
 
   const [isEditing, setIsEditing] = useState({
     firstName: false,
@@ -109,6 +136,21 @@ const UserProfile: React.FC = () => {
           </button>
         </form>
       </Flex>
+      <Modal isOpen={showModal} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Email Updated</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            Your email has been updated successfully.
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };

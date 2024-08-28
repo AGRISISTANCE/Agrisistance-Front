@@ -6,7 +6,8 @@ import {
   MdHome,
   MdLock,
   MdOutlineYard,
-  MdGroups,
+  //MdGroups,
+  MdUpgrade
 // MdLogout 
 } from 'react-icons/md';
 
@@ -67,19 +68,19 @@ const routes = [
     secondary: true,
   },
   {
-    name: 'Error',
-    layout: '/dashboard',
-    path: '*', // This should be the last route
-    icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
-    component: <Error header={true}/>,
-  },
-  {
     name: 'Your Land',
     layout: '/dashboard',
     icon: <Icon as={MdOutlineYard} width="20px" height="20px" color="inherit" />,
     path: '/yourland',
     component: <Yourland />,
   },
+  {
+    name: 'Upgrade plan',
+    layout: '/dashboard',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/plans',
+    component: <Plan />,
+  }
   // {
   //   name: 'Your Network',
   //   layout: '/dashboard',

@@ -60,9 +60,9 @@ export default function Plan() {
                     </Flex>
                 </a>
                 <AdminNavbarLinks
-                    onOpen={() => { /* Handler function here */ }}
+                    //onOpen={() => { /* Handler function here */ }}
                     secondary={false}
-                    fixed={true}
+                    //fixed={true}
                 />
             </Flex>
             <Flex width={'100%'} direction={'column'} align={'center'} background={'#A2EF8C'} padding={'40px'} gap={'40px'}>
