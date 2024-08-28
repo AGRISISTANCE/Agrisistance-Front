@@ -4,9 +4,7 @@ import { Flex, Text, Button, Input, Modal, ModalOverlay, ModalContent, ModalHead
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';  // Removed the `Form` import
 import { useDispatch } from 'react-redux';
-// import { addLand } from '../../../../redux/LandSlice';
 import animationData from '../../../../assets/img/dashboards/cropanimated.json'
-// import Player from 'lottie-react';
 import Lottie from 'lottie-react';
 
 interface AddNewLandProps {
@@ -44,7 +42,14 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
     const [modalContent, setModalContent] = useState<string>('');
     const [showProgress, setShowProgress] = useState<boolean>(false);
     const [progressMessage, setProgressMessage] = useState<string>('Starting...');
-
+    const defaultOptions = {
+        loop: false,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
     const handleAddLand = () => {
         if (landName && latitude && longitude && landSize && budget && phLevel && phosphorus && potassium && oxygenLevel && nitrogen) {
             const newLand = {

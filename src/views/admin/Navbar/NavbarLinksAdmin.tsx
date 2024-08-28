@@ -20,6 +20,8 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 // Assets
 import { MdNotificationsNone } from 'react-icons/md';
+import routes from 'routes';
+import { redirect } from 'react-router-dom';
 //import routes from 'routes';
 export default function HeaderLinks(props: { secondary: boolean }) {
 	const { secondary } = props;
@@ -82,6 +84,7 @@ export default function HeaderLinks(props: { secondary: boolean }) {
 						padding: '10px'
 					}}
 					fontSize={'md'}
+					onClick={()=>redirect('/')}
 				>
 					Premium
 				</Text>

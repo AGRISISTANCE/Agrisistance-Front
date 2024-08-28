@@ -6,21 +6,15 @@ import {
   MdHome,
   MdLock,
   MdOutlineYard,
-//  MdOutlineCalendarMonth,
   MdGroups,
 // MdLogout 
 } from 'react-icons/md';
-
-import {
-  PiVirtualReality
-} from 'react-icons/pi';
 
 
 //
 import Home from './views/admin/home'
 import Profile from './views/admin/profile/index'
 import Yourland from './views/admin/yourland'
-//import Calendar from './views/admin/calendar'
 //import Yournetwork from './views/admin/yournetwork'
 
 
@@ -28,10 +22,12 @@ import Yourland from './views/admin/yourland'
 import SignUpCentered from './views/auth/signUp';
 import LogInCentered from './views/auth/logIn'
 
-// Landing Page Import
+
 import LandingPage from './views/Landing/landingPage';
 // import Yournetwork from 'views/admin/yournetwork';
 
+import Error from 'views/404';
+import Plan from 'views/admin/plan';
 
 const routes = [
   {
@@ -71,6 +67,13 @@ const routes = [
     secondary: true,
   },
   {
+    name: 'Error',
+    layout: '/dashboard',
+    path: '*', // This should be the last route
+    icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
+    component: <Error header={true}/>,
+  },
+  {
     name: 'Your Land',
     layout: '/dashboard',
     icon: <Icon as={MdOutlineYard} width="20px" height="20px" color="inherit" />,
@@ -84,28 +87,7 @@ const routes = [
   //   icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
   //   component: <Yournetwork />,
   // }
-  // {
-  //   name: 'Disconnect',
-  //   layout: '/authz',
-  //   path: '/landing',
-  //   icon: <Icon as={MdLogout} width="20px" height="20px" color="inherit" />,
-  //   component: <LandingPage />,
-  // }
 ];
 
 
 export default routes;
-{/*{
-    name: 'Calendar',
-    layout: '/dashboard',
-    path: '/calendar',
-    icon: <Icon as={MdOutlineCalendarMonth} width="20px" height="20px" color="inherit" />,
-    component: <Calendar />,
-  },
-  {
-    name: 'Your Network',
-    layout: '/dashboard',
-    path: '/network',
-    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
-    component: <Yournetwork />,
-  }*/}
