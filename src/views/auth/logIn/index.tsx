@@ -30,7 +30,7 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 
 import { setToken } from '../../../redux/tokenSlice';
-import { apiCall } from "services/api";
+import { apiCall } from "../../../services/api";
 import { useDispatch } from 'react-redux';
 
 function LogIn() {
@@ -70,10 +70,11 @@ function LogIn() {
       dispatch(setToken(response.token));
       
       console.log(response.msg); // Logged in successfully !
-
-      setMessage("Login successful! Redirecting...");
-  //  navigate("/dashboard/home"); // Redirect to dashboard on successful login
       console.log("your token: ", response.token)
+      setMessage("Login successful! Redirecting...");
+      setTimeout(() => {
+        navigate("/dashboard/home"); // Redirect to dashboard on successful login
+      }, 1000)
       }
       catch (error: any) {
         setMessage(error.message || "Login failed. Please try again.");

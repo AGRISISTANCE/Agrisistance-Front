@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react';
 import Profile from './components/Profile';
 import avatars from '../../../assets/img/avatars/avatars';
@@ -9,6 +9,10 @@ import { selectLand } from '../../../redux/landsSlice';
 import { LandInfo } from '../../../redux/landsSlice'; // Import the LandInfo interface
 import { IoIosClose } from 'react-icons/io';
 import AddNewLand from './components/AddNewLand';
+import { apiCall } from '../../../services/api';
+import { setUser } from '../../../redux/userSlice'; // Adjust the path as necessary
+
+
 
 export default function Home() {
   const lands = useSelector((state: RootState) => state.lands.lands);
@@ -19,6 +23,33 @@ export default function Home() {
   const handleSelectLand = (landId: string) => {
     dispatch(selectLand(landId));
   };
+
+  const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const profile = await apiCall('/profile/get-profile', {
+          method: 'GET',
+          requireAuth: true,
+        }, token);
+
+        dispatch(setUser({
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          email: profile.eMail,
+          phoneNumber: profile.phoneNumber,
+          country: profile.country,
+          userId: profile.user_id,
+          profilePicture: profile.profile_picture,
+          currentPlan: profile.subscription_type === 'Basic' ? 'Basic' : 'premium',
+        }));
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+      }
+    };
+    fetchUserProfile();
+  }, [dispatch, token]);
 
   return (
     <Flex direction="column" height="100vh">

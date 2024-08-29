@@ -29,7 +29,6 @@ import { RiEyeCloseLine } from "react-icons/ri";
 import DefaultAuth from "../../../layouts/auth/Default";
 import illustration from "../../../assets/img/auth/auth.png";
 import { apiCall } from "../../../services/api";
-// import { apiRequest } from "../../../services/api";
 
 
 
