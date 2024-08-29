@@ -8,7 +8,7 @@ export interface UserInfo {
   country: string;
   userId: string;
   profilePicture: string;
-  currentPlan: 'free' | 'premium';
+  currentPlan: 'Basic' | 'premium';
 }
 
 const initialState: UserInfo = {
@@ -19,7 +19,7 @@ const initialState: UserInfo = {
   country: 'Algeria',
   userId: '',
   profilePicture: '',
-  currentPlan: 'free',
+  currentPlan: 'Basic',
 };
 
 const userSlice = createSlice({

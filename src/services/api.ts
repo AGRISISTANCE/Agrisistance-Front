@@ -1,32 +1,26 @@
-const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8081/api";
+import axios, { AxiosRequestConfig } from 'axios';
 
-export const apiRequest = async (
-  endpoint: string,
-  method: string = "GET",
-  body?: object
-) => {
-  const headers = {
-    "Content-Type": "application/json",
-  };
+const BASE_URL = 'http://localhost:8081/api';
 
-  const options: RequestInit = {
-    method,
-    headers,
-    ...(body && { body: JSON.stringify(body) }), // Only add body if it's provided
+interface ApiOptions extends AxiosRequestConfig {
+  requireAuth?: boolean; // Optional flag to indicate if the call requires authentication
+}
+
+export const apiCall = async (route: string, options: ApiOptions, token?: string) => {
+  const config: AxiosRequestConfig = {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: options.requireAuth && token ? `Bearer ${token}` : undefined,
+    },
+    url: `${BASE_URL}${route}`,
   };
 
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, options);
-
-    // Parse the response JSON
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "An error occurred");
-    }
-
-    return data;
-  } catch (error: any) {
-    throw new Error(error.message || "An error occurred");
+    const response = await axios(config);
+    return response.data;
+  } catch (error) {
+    console.error('API call error:', error);
+    throw error;
   }
 };

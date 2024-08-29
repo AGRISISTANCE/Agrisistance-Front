@@ -3,7 +3,6 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
-import { apiRequest } from "../../../services/api";
 
 // Chakra imports
 import {
@@ -30,6 +29,10 @@ import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 
+import { setToken } from '../../../redux/tokenSlice';
+import { apiCall } from "services/api";
+import { useDispatch } from 'react-redux';
+
 function LogIn() {
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
@@ -47,23 +50,35 @@ function LogIn() {
   const [message, setMessage] = React.useState("");
 
   const navigate = useNavigate();
-
-
   const handleClick = () => setShow(!show);
+  
+  const dispatch = useDispatch();
 
-
-  const handleLogin = async () => {
+  const loginUser = async () => {
     try {
-      // Use centralized API call
-      const data = await apiRequest("/auth/login", "POST", { email, password });
+      const credentials = {
+        email: email,
+        password: password,
+      };
+    
+      const response = await apiCall('/auth/login', {
+        method: 'POST',
+        data: credentials,
+      });
+
+      // Store token in Redux
+      dispatch(setToken(response.token));
+      
+      console.log(response.msg); // Logged in successfully !
 
       setMessage("Login successful! Redirecting...");
-      navigate("/dashboard/home"); // Redirect to dashboard on successful login
-    } catch (error: any) {
-      setMessage(error.message || "Login failed. Please try again.");
-    }
+  //  navigate("/dashboard/home"); // Redirect to dashboard on successful login
+      console.log("your token: ", response.token)
+      }
+      catch (error: any) {
+        setMessage(error.message || "Login failed. Please try again.");
+      }
   };
-
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
       <Flex
@@ -186,7 +201,7 @@ function LogIn() {
               w='100%'
               h='50'
               mb='24px'
-              onClick={handleLogin}
+              onClick={loginUser}
               disabled={!email || !password}
             >
               Log In
@@ -219,3 +234,7 @@ function LogIn() {
 }
 
 export default LogIn;
+function dispatch(arg0: { payload: string; type: "token/setToken"; }) {
+  throw new Error("Function not implemented.");
+}
+

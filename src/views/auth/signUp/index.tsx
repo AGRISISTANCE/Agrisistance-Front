@@ -28,7 +28,8 @@ import { MdOutlineRemoveRedEye, MdArrowDropDown } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import DefaultAuth from "../../../layouts/auth/Default";
 import illustration from "../../../assets/img/auth/auth.png";
-import { apiRequest } from "../../../services/api";
+import { apiCall } from "../../../services/api";
+// import { apiRequest } from "../../../services/api";
 
 
 
@@ -59,33 +60,39 @@ function SignUp() {
 
   const handleClick = () => setShow(!show);
 
-  const handleSignUp = async () => {
-    try {
-      const response = await apiRequest("/auth/register", "POST", {
-        firstName,
-        lastName,
-        country,
-        role: "Owner", // Static role value
-        eMail: email,
-        //phoneNumber,
-        password,
-      });
-  
-      // Check if the response contains the message
-      if (response.message) {
-        setMessage(response.message);
-        setMessageColor("green");
-      } else {
-        setMessage("Registration successful!");
-        setMessageColor("green");
+  const registerUser = async () => {
+      try{
+        const userData = {
+          firstName: firstName,
+          lastName: lastName,
+          country: country,
+          role : "Owner",
+          // phoneNumber: '+213659783694',
+          eMail: email,
+          password: password,
+        };
+      
+        const response = await apiCall('/auth/register', {
+          method: 'POST',
+          data: userData,
+        });
+        if (response.message) {
+          setMessage(response.message);
+          setMessageColor("green");
+        } else {
+          setMessage("Registration successful!");
+          setMessageColor("green");
+        }
       }
-    } catch (error: any) {
+      // Check if the response contains the message
+      catch (error: any) {
       // Handle the error based on the structure
       setMessage(error.message || "An unexpected error occurred.");
       setMessageColor("red");
     }
-  };
-
+  }
+      
+    
   
 
   return (
@@ -189,7 +196,7 @@ function SignUp() {
                 {message}
               </Text>
             )}
-            <Button onClick={handleSignUp} fontSize="sm" variant="brand" fontWeight="500" w="100%" h="50px" mb="24px">
+            <Button /* onClick={handleSignUp} */ onClick={registerUser} fontSize="sm" variant="brand" fontWeight="500" w="100%" h="50px" mb="24px">
               Sign Up
             </Button>
           </FormControl>

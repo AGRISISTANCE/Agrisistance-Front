@@ -14,7 +14,7 @@ export default function HeaderLinks(props: { secondary: boolean }) {
 	const navigate = useNavigate();
 
 	const toggleSelect = () => {
-		if (user.currentPlan === 'free') {
+		if (user.currentPlan === 'Basic') {
 			// Dispatch action to update plan to 'premium'
 			// dispatch(updateUserPlan('premium'));
 		} else {
@@ -56,8 +56,8 @@ export default function HeaderLinks(props: { secondary: boolean }) {
 				<Text
 					style={{
 						borderRadius: '40px',
-						background: user.currentPlan === 'free' ? '#fff' : '#f5f5f5',
-						color: user.currentPlan === 'free' ? '#218225' : '#858585',
+						background: user.currentPlan === 'Basic' ? '#fff' : '#f5f5f5',
+						color: user.currentPlan === 'Basic' ? '#218225' : '#858585',
 						padding: '10px'
 					}}
 					fontSize={'md'}
