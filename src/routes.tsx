@@ -27,8 +27,8 @@ import LogInCentered from './views/auth/logIn'
 import LandingPage from './views/Landing/landingPage';
 // import Yournetwork from 'views/admin/yournetwork';
 
-import Error from 'views/404';
-import Plan from 'views/admin/plan';
+import Error from './views/404';
+import Plan from './views/admin/plan';
 
 const routes = [
   {

@@ -8,9 +8,9 @@ import initialTheme from './theme/theme';
 import { useState } from 'react';
 import Chatbot from './components/chatbot/Chatbot';
 import LandingPage from './views/Landing/landingPage';
-import Error from 'views/404';
-import Plan from 'views/admin/plan';
-import Profile from 'views/admin/profile';
+import Error from './views/404';
+import Plan from './views/admin/plan';
+import Profile from './views/admin/profile';
 
 export default function Main() {
   const location = useLocation();

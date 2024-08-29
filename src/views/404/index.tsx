@@ -1,10 +1,10 @@
 import { Flex, Text } from "@chakra-ui/react";
-import Container from "common/Container";
-import Header from "components/Header";
+import Container from "../../common/Container";
+import Header from "../../components/Header";
 import React from "react";
 import { useNavigate } from 'react-router-dom';
-import bgImage from "assets/img/404/bg.png";
-import { Button } from "common/Button";
+import bgImage from "../../assets/img/404/bg.png";
+import { Button } from "../../common/Button";
 interface ErrorProps {
     header?: boolean;
 }
