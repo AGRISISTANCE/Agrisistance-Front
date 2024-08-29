@@ -52,8 +52,7 @@ const Footer: React.FC = () => {
             </ContactItem>
             <ContactItem>
               <ContactIcon src={gmail} alt="Email Icon" />
-              <Spatexts>a2sv.agrisistance@gmail.com
-              </Spatexts>
+              <Spatexts>a2sv.agrisistance@gmail.com</Spatexts>
             </ContactItem>
           </ContactInfo>
         </LeftSide>

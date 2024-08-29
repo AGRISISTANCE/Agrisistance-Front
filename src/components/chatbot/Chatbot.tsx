@@ -27,80 +27,90 @@ const ChatBot: React.FC = () => {
   }, [messages]);
 
   const handleToggle = () => {
-      setIsOpen(!isOpen);
+    setIsOpen(!isOpen);
   };
 
   const handleClose = () => {
-      setIsOpen(false);
+    setIsOpen(false);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInput(event.target.value);
+    setInput(event.target.value);
   };
 
   const handleSendMessage = () => {
-      if (input.trim()) {
-          setMessages([...messages, { text: input, fromUser: true }]);
-          setInput('');
-          setLoading(true); // Start loading indicator
-          // Simulate a response from the chatbot
-          setTimeout(() => {
-              setMessages(prevMessages => [
-                  ...prevMessages,
-                  { text: 'Thank you for your message!', fromUser: false }
-              ]);
-              setLoading(false); // Stop loading indicator
-          }, 1000);
-      }
+    if (input.trim()) {
+      setMessages([...messages, { text: input, fromUser: true }]);
+      setInput("");
+      setLoading(true); // Start loading indicator
+      // Simulate a response from the chatbot
+      setTimeout(() => {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: "Thank you for your message!", fromUser: false },
+        ]);
+        setLoading(false); // Stop loading indicator
+      }, 1000);
+    }
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter') {
-          handleSendMessage();
-      }
+    if (event.key === "Enter") {
+      handleSendMessage();
+    }
   };
 
   return (
-      <div className={`chatbot-container ${isOpen ? 'open' : ''}`}>
-          <button className="chatbot-toggle" onClick={handleToggle}>
-              <img src={farmerEmoji} alt="Chat" className="chatbot-icon" />
-          </button>
-          {isOpen && (
-              <div className="chatbot-box">
-                  <div className="chatbot-header">
-                      <img src={headerIcon} alt="Header Icon" className="chatbot-header-icon" />
-                      <span className="chatbot-header-title">AgriHelper</span>
-                      <button className="chatbot-close" onClick={handleClose}>✕</button>
-                  </div>
-                  <div className="chatbot-messages">
-                      {messages.map((msg, index) => (
-                          <div
-                              key={index}
-                              className={`chatbot-message ${msg.fromUser ? 'user' : 'bot'}`}
-                          >
-                              {msg.text}
-                          </div>
-                      ))}
-                      {loading && (
-                          <div className="chatbot-message bot loading">
-                              <div className="loading-spinner"></div> {/* Loading spinner */}
-                              <span>...</span>
-                          </div>
-                      )}
-                  </div>
-                  <div className="chatbot-input">
-                      <input
-                          type="text"
-                          value={input}
-                          onChange={handleInputChange}
-                          onKeyDown={handleKeyDown}
-                          placeholder="Type a message..."
-                      />
-                      <button onClick={handleSendMessage}>Send</button>
-                  </div>
+    <div className={`chatbot-container ${isOpen ? "open" : ""}`}>
+      <button
+        className="chatbot-toggle"
+        onClick={handleToggle}
+        aria-label="Chat"
+      >
+        <img src={farmerEmoji} alt="Chat" className="chatbot-icon" />
+      </button>
+      {isOpen && (
+        <div className="chatbot-box">
+          <div className="chatbot-header">
+            <img
+              src={headerIcon}
+              alt="Header Icon"
+              className="chatbot-header-icon"
+            />
+            <span className="chatbot-header-title">AgriHelper</span>
+            <button className="chatbot-close" onClick={handleClose}>
+              ✕
+            </button>
+          </div>
+          <div className="chatbot-messages">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`chatbot-message ${msg.fromUser ? "user" : "bot"}`}
+              >
+                {msg.text}
               </div>
-          )}
-      </div>
+            ))}
+            {loading && (
+              <div className="chatbot-message bot loading">
+                <div className="loading-spinner"></div> {/* Loading spinner */}
+                <span>...</span>
+              </div>
+            )}
+          </div>
+          <div className="chatbot-input">
+            <input
+              type="text"
+              value={input}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Type a message..."
+            />
+            <button onClick={handleSendMessage}>Send</button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

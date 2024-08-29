@@ -14,7 +14,7 @@ import Profile from './views/admin/profile';
 
 export default function Main() {
   const location = useLocation();
-  const showChatbot = !location.pathname.startsWith('/auth');
+  const showChatbot = !location.pathname.startsWith("/auth");
 
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
 

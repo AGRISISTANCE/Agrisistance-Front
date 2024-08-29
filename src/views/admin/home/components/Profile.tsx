@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 // Chakra imports
 import { Avatar,Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import Card from '../../../../components/card/Card';
@@ -8,10 +8,10 @@ import { useSelector } from 'react-redux';
 
 
 export default function Profile(props: {
-    avatar: string;
-    name: string;
-    days: string;
-    suggestions: string;
+  avatar: string;
+  name: string;
+  days: string;
+  suggestions: string;
 }) {
     const { avatar, name, days, suggestions, ...rest } = props;
     
