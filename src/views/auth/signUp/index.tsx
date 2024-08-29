@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { NavLink } from "react-router-dom";
 import { africanCountries } from "./africanCountries";
+import { africanCountriesCodes } from './countryCodes'
 
 // Chakra imports
 import {
@@ -21,6 +22,7 @@ import {
   MenuList,
   MenuItem,
   Icon,
+  Select
 } from "@chakra-ui/react";
 import { MdOutlineRemoveRedEye, MdArrowDropDown } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
@@ -42,6 +44,19 @@ function SignUp() {
   const [country, setCountry] = useState("Select your Country");
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("");
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string>('+1');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCountryCode(e.target.value);
+  };
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhoneNumber(e.target.value);
+  };
+
+
+
   const handleClick = () => setShow(!show);
 
   const handleSignUp = async () => {
@@ -52,6 +67,7 @@ function SignUp() {
         country,
         role: "Owner", // Static role value
         eMail: email,
+        //phoneNumber,
         password,
       });
   
@@ -127,6 +143,29 @@ function SignUp() {
                   ))}
                 </MenuList>
               </Menu>
+            </Box>
+            <FormLabel color="navy.700">Phone Number</FormLabel>
+            <Box display="flex" alignItems="center">
+              <Select
+                value={selectedCountryCode}
+                onChange={handleCountryChange}
+                mb="24px"
+                width="200px"
+                mr="10px"
+              >
+                {africanCountriesCodes.map((country) => (
+                  <option key={country.code} value={country.code}>
+                    {country.code} {country.name}
+                  </option>
+                ))}
+              </Select>
+              <Input
+                value={phoneNumber}
+                onChange={handlePhoneNumberChange}
+                placeholder="Phone Number"
+                mb="24px"
+                
+              />
             </Box>
             <FormLabel color="navy.700">Password</FormLabel>
             <InputGroup size="md">

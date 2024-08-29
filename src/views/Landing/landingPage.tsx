@@ -15,6 +15,7 @@ import screen4 from './png/screen4.png';
 
 
 
+
 import {
     ContentSection,
     Content,
@@ -31,33 +32,55 @@ interface CustomFadeProps extends FadeProps {
     children: ReactNode;
 }
 const Contact = lazy(() => import("../../components/ContactForm"));
-// const MiddleBlock = lazy(() => import("../../components/MiddleBlock"));
 const Container = lazy(() => import("../../common/Container"));
 const ScrollToTop = lazy(() => import("../../common/ScrollToTop"));
-// const ContentBlock = lazy(() => import("../../components/ContentBlock"));
-// const handleClick = () => {
-//     const element = document.getElementById('what');
-//     if (element) {
-//       element.scrollIntoView({ behavior: 'smooth' });
-//     }
-//   };
+
 
 
 interface LandingPageState {
     isPreloadComplete: boolean;
-}
+    backendUrl?: string;  // Add `backendUrl` as optional or required depending on your use case
+  }
 
 class LandingPage extends Component<{}, LandingPageState> {
     constructor(props: {}) {
         super(props);
-        this.state = {
-            isPreloadComplete: false,
-        };
+
+    // Initialize state
+    this.state = {
+      isPreloadComplete: false,
+    };
+
     }
 
     handleAnimationComplete = () => {
         this.setState({ isPreloadComplete: true });
     };
+
+      // Function to make GET requests
+      makeGetRequests = async () => {
+        try {
+          const response1 = await fetch('http://localhost:8081/');
+          if (!response1.ok) {
+            throw new Error(`Failed to fetch from localhost:8081. Status: ${response1.status}`);
+          }
+          const data1 = await response1.json();
+          console.log('Response from localhost:8081:', data1);
+    
+          const response2 = await fetch('http://localhost:8000/');
+          if (!response2.ok) {
+            throw new Error(`Failed to fetch from localhost:8000. Status: ${response2.status}`);
+          }
+          const data2 = await response2.json();
+          console.log('Response from localhost:8000:', data2);
+        } catch (error) {
+          console.error('Error making GET requests:', error);
+        }
+      };
+
+  componentDidMount() {
+    this.makeGetRequests();
+  }
 
     render() {
         const { isPreloadComplete } = this.state;

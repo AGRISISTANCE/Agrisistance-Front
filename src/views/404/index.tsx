@@ -30,8 +30,8 @@ const Error: React.FC<ErrorProps> = ({ header }) => {
                     <Text fontSize={'7xl'} color={'#2C4026'} fontWeight={'semibold'} textShadow={'-7px 4px 5px rgba(0,0,0,0.25)'}>Page not found</Text>
                 </Flex>
                 <Flex direction={'column'} align={'center'} maxW={'400px'} padding={'40px'}>
-                    <Text fontWeight={'semibold'} align={'center'}>This page seems to have a problem, please try again later</Text>
-                    <Button onClick={() => navigate(-1)}>Go back</Button>
+                    <Text fontSize={'2xl'} fontWeight={'semibold'} align={'center'}>This page seems to have a problem or is not avaliable. <br/> Please make sure the website URL is correct.</Text>
+                    <Button  onClick={() => navigate(-1)}>&nbsp; &nbsp; Go back &nbsp; &nbsp;</Button>
                 </Flex>
             </Flex>
         </Flex>
