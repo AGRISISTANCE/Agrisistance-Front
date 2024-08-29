@@ -17,9 +17,15 @@ import { RootState } from 'redux/store';
 import { Crop } from '../../../redux/landsSlice';
 import axios from 'axios';
 import CropBarChart from './components/CropBarChart';
-
+import 'leaflet/dist/leaflet.css';
+import L from "leaflet";
 //import { Button } from 'antd';
-
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+	iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+	iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+	shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+});
 
 interface RevenueItem {
 	CropName: string;
@@ -45,12 +51,12 @@ interface CropType {
 interface LandBusinessPlan {
 	title: string;
 	description: string;
-	}
+}
 
 interface LandInfo {
 	budgetForLand: number | null;
 	LandBusinessPlan: LandBusinessPlan[] | null;
-	}
+}
 interface SuggestionItem {
 	text: string;
 	link: string;
@@ -63,8 +69,8 @@ interface LandDetails {
 	longitude: number | null;
 	latitude: number | null;
 	size: number | null;
-  }
-  
+}
+
 
 interface cityCountry {
 	country: string | null;
@@ -162,7 +168,7 @@ const Yourland: React.FC = () => {
 
 	const selectedLand = useSelector((state: RootState) => state.lands.selectedLand);
 
-	
+
 	const [budget, setBudget] = useState<number | null>(selectedLand ? selectedLand.budgetForLand : null);
 	const [businessPlan, setBusinessPlan] = useState<LandBusinessPlan[] | null>(selectedLand ? selectedLand.LandBusinessPlan : null);
 
@@ -177,28 +183,28 @@ const Yourland: React.FC = () => {
 			progress: crop.recommendationPercentage,
 		}))
 		: [];
-	
-	const [soil, setSoil] = useState<SoilType | null>(null);
-	
-	useEffect(() => {
-	if (selectedLand) {
-		const newSoil = {
-			oxygen: selectedLand.oxygen_level,
-			nitrogen: selectedLand.nitrogen,
-			potassium: selectedLand.potassium,
-			phosphorus: selectedLand.phosphorus,
-			humidity: selectedLand.humidity,
-			ph: selectedLand.ph_level,
-		};
-		setSoil(newSoil);
 
-		// Set the slider value to the value of selectedSoil in the newSoil object
-		setSliderValue(newSoil[selectedSoil] ?? 0); // Fallback to 0 if selectedSoil is not valid
-	}
-	else {
-		setSoil(null)
-		setSliderValue(0); // Reset sliderValue to 0 if no land is selected
-	}
+	const [soil, setSoil] = useState<SoilType | null>(null);
+
+	useEffect(() => {
+		if (selectedLand) {
+			const newSoil = {
+				oxygen: selectedLand.oxygen_level,
+				nitrogen: selectedLand.nitrogen,
+				potassium: selectedLand.potassium,
+				phosphorus: selectedLand.phosphorus,
+				humidity: selectedLand.humidity,
+				ph: selectedLand.ph_level,
+			};
+			setSoil(newSoil);
+
+			// Set the slider value to the value of selectedSoil in the newSoil object
+			setSliderValue(newSoil[selectedSoil] ?? 0); // Fallback to 0 if selectedSoil is not valid
+		}
+		else {
+			setSoil(null)
+			setSliderValue(0); // Reset sliderValue to 0 if no land is selected
+		}
 	}, [selectedLand, selectedSoil]);
 
 	//const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
@@ -208,21 +214,21 @@ const Yourland: React.FC = () => {
 
 	useEffect(() => {
 		if (selectedLand) {
-		setCrop({
-			landUse: selectedLand.landUse,
-			water_sufficient: selectedLand.waterSufficecy,
-			sunlight: selectedLand.sunlight,
-			pestisides_level: selectedLand.pestisedesLevel,
-			waterAvaliability:selectedLand.waterAvaliability,
-			humanCoverage:selectedLand.humanCoverage,
-			distributionOptimality:selectedLand.distributionOptimality
-		});
-		setBudget(selectedLand.budgetForLand);
-      	setBusinessPlan(selectedLand.LandBusinessPlan);
+			setCrop({
+				landUse: selectedLand.landUse,
+				water_sufficient: selectedLand.waterSufficecy,
+				sunlight: selectedLand.sunlight,
+				pestisides_level: selectedLand.pestisedesLevel,
+				waterAvaliability: selectedLand.waterAvaliability,
+				humanCoverage: selectedLand.humanCoverage,
+				distributionOptimality: selectedLand.distributionOptimality
+			});
+			setBudget(selectedLand.budgetForLand);
+			setBusinessPlan(selectedLand.LandBusinessPlan);
 		} else {
-		setCrop(null); // Set crop to null if no selected land exists
-		setBudget(null);
-      	setBusinessPlan(null);
+			setCrop(null); // Set crop to null if no selected land exists
+			setBudget(null);
+			setBusinessPlan(null);
 		}
 	}, [selectedLand]);
 
@@ -230,51 +236,51 @@ const Yourland: React.FC = () => {
 		longitude: null,
 		latitude: null,
 		size: null,
-	  });
+	});
 
 	useEffect(() => {
-	if (selectedLand) {
-		setLandDetails({
-		longitude: selectedLand.longitude,
-		latitude: selectedLand.latitude,
-		size: selectedLand.landSize,
-		});
-	} else {
-		setLandDetails({
-		longitude: null,
-		latitude: null,
-		size: null,
-		});
-	}
+		if (selectedLand) {
+			setLandDetails({
+				longitude: selectedLand.longitude,
+				latitude: selectedLand.latitude,
+				size: selectedLand.landSize,
+			});
+		} else {
+			setLandDetails({
+				longitude: null,
+				latitude: null,
+				size: null,
+			});
+		}
 	}, [selectedLand]);
 
 
 	useEffect(() => {
 		if (landDetails.latitude && landDetails.longitude) {
-		  const fetchCityFromCoordinates = async () => {
-			try {
-			  const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
-				params: {
-				  lat: landDetails.latitude,
-				  lon: landDetails.longitude,
-				  format: 'json',
-				  addressdetails: 1,
-				  'accept-language': 'en',
-				},
-			  });
-			  const address = response.data.address;
-			  const city = address.city || address.town || address.village || 'Unknown City';
-			  const country = address.country || 'Unknown Country';
-			  setcityCountry({ city, country });
-			} catch (error) {
-			  console.error('Error fetching city from coordinates:', error);
-			  setcityCountry({ city: 'Error', country: 'Error' });
-			}
-		  };
-	
-		  fetchCityFromCoordinates();
+			const fetchCityFromCoordinates = async () => {
+				try {
+					const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
+						params: {
+							lat: landDetails.latitude,
+							lon: landDetails.longitude,
+							format: 'json',
+							addressdetails: 1,
+							'accept-language': 'en',
+						},
+					});
+					const address = response.data.address;
+					const city = address.city || address.town || address.village || 'Unknown City';
+					const country = address.country || 'Unknown Country';
+					setcityCountry({ city, country });
+				} catch (error) {
+					console.error('Error fetching city from coordinates:', error);
+					setcityCountry({ city: 'Error', country: 'Error' });
+				}
+			};
+
+			fetchCityFromCoordinates();
 		} else {
-		  setcityCountry(null);
+			setcityCountry(null);
 		}
 	}, [landDetails]);
 
@@ -289,7 +295,7 @@ const Yourland: React.FC = () => {
 		humidity: { unit: '%', min: 0, max: 100 },
 		ph: { unit: '', min: 1, max: 14 }, // pH has no unit
 	}
-	
+
 	const handleOpenPopup = () => {
 		setShowPopup(true);
 		setIsConfirmPhase(false); // Initial phase
@@ -367,103 +373,103 @@ const Yourland: React.FC = () => {
 								<Flex width={'400px'} align={'center'} background={'#2c4026'}><img src={cropsData.tractor} alt='tractor' width={'100%'} /></Flex>
 							</Flex>) : (
 							<Box>
-							<Flex justify='space-around'>
-								{soil &&
-									Object.keys(soil).map((key) => (
-									<Flex
-										key={key}
-										direction='column'
-										align='center'
-										gap='15px'
-										cursor={'pointer'}
-										onClick={() => handleCircularProgressClick(key as keyof SoilType)}
-										shadow={selectedSoil === key ? '0 0 10px rgba(0, 0, 0, 0.2)' : undefined}
-										backgroundColor={selectedSoil === key ? '#eaefef' : '#f4f6fa'}
-										padding={'15px'}
-										borderRadius={'20px'}
-									>
-										<CircularProgress
-										color='#218225'
-										value={soil[key as keyof SoilType]}
-										size='90px'
-										trackColor='#BCCCBF'
-										>
-										<CircularProgressLabel fontWeight='semibold'>
-											<Text size={'sm'}>{soil[key as keyof SoilType]}<br/>{soilRanges[key as keyof typeof soilRanges].unit}</Text>
-										</CircularProgressLabel>
-										</CircularProgress>
-										<Text fontWeight='bold'>{key}</Text>
-									</Flex>
-									))}
+								<Flex justify='space-around'>
+									{soil &&
+										Object.keys(soil).map((key) => (
+											<Flex
+												key={key}
+												direction='column'
+												align='center'
+												gap='15px'
+												cursor={'pointer'}
+												onClick={() => handleCircularProgressClick(key as keyof SoilType)}
+												shadow={selectedSoil === key ? '0 0 10px rgba(0, 0, 0, 0.2)' : undefined}
+												backgroundColor={selectedSoil === key ? '#eaefef' : '#f4f6fa'}
+												padding={'15px'}
+												borderRadius={'20px'}
+											>
+												<CircularProgress
+													color='#218225'
+													value={soil[key as keyof SoilType]}
+													size='90px'
+													trackColor='#BCCCBF'
+												>
+													<CircularProgressLabel fontWeight='semibold'>
+														<Text size={'sm'}>{soil[key as keyof SoilType]}<br />{soilRanges[key as keyof typeof soilRanges].unit}</Text>
+													</CircularProgressLabel>
+												</CircularProgress>
+												<Text fontWeight='bold'>{key}</Text>
+											</Flex>
+										))}
 								</Flex>
 
 								<Flex direction='column' align='center' gap='20px' padding='40px'>
-								<Text textAlign='center' fontWeight='bold' fontSize='3xl'>
-									Set Manually: {selectedSoil.charAt(0).toUpperCase() + selectedSoil.slice(1)} Level
-								</Text>
-								<Slider
-									id='slider'
-									defaultValue={soil ? soil[selectedSoil] : soilRanges[selectedSoil].min}  // Start from selected soil value
-									min={soilRanges[selectedSoil].min}
-									max={soilRanges[selectedSoil].max}
-									colorScheme='green'
-									onChange={handleSliderChange}
-									onMouseEnter={() => setShowTooltip(true)}
-									onMouseLeave={() => setShowTooltip(false)}
-									width='400px'
-								>
-									<SliderMark value={soilRanges[selectedSoil].min} mt='3' ml='-2.5' fontSize='sm'>
-									{soilRanges[selectedSoil].min}
-									</SliderMark>
-									<SliderMark value={(soilRanges[selectedSoil].max + soilRanges[selectedSoil].min) / 2} mt='3' ml='-2.5' fontSize='sm'>
-									{(soilRanges[selectedSoil].max + soilRanges[selectedSoil].min) / 2}
-									</SliderMark>
-									<SliderMark value={soilRanges[selectedSoil].max} mt='3' ml='-2.5' fontSize='sm'>
-									{soilRanges[selectedSoil].max}
-									</SliderMark>
-									<SliderTrack bg='green.200'>
-									<SliderFilledTrack />
-									</SliderTrack>
-									<Tooltip
-									hasArrow
-									bg='green.400'
-									color='white'
-									placement='top'
-									isOpen={showTooltip}
-									label={`${sliderValue}${soilRanges[selectedSoil].unit}`}
+									<Text textAlign='center' fontWeight='bold' fontSize='3xl'>
+										Set Manually: {selectedSoil.charAt(0).toUpperCase() + selectedSoil.slice(1)} Level
+									</Text>
+									<Slider
+										id='slider'
+										defaultValue={soil ? soil[selectedSoil] : soilRanges[selectedSoil].min}  // Start from selected soil value
+										min={soilRanges[selectedSoil].min}
+										max={soilRanges[selectedSoil].max}
+										colorScheme='green'
+										onChange={handleSliderChange}
+										onMouseEnter={() => setShowTooltip(true)}
+										onMouseLeave={() => setShowTooltip(false)}
+										width='400px'
 									>
-									<SliderThumb />
-									</Tooltip>
-								</Slider>
-								<Button onClick={openConfirmationOnly}> Apply changes</Button>
+										<SliderMark value={soilRanges[selectedSoil].min} mt='3' ml='-2.5' fontSize='sm'>
+											{soilRanges[selectedSoil].min}
+										</SliderMark>
+										<SliderMark value={(soilRanges[selectedSoil].max + soilRanges[selectedSoil].min) / 2} mt='3' ml='-2.5' fontSize='sm'>
+											{(soilRanges[selectedSoil].max + soilRanges[selectedSoil].min) / 2}
+										</SliderMark>
+										<SliderMark value={soilRanges[selectedSoil].max} mt='3' ml='-2.5' fontSize='sm'>
+											{soilRanges[selectedSoil].max}
+										</SliderMark>
+										<SliderTrack bg='green.200'>
+											<SliderFilledTrack />
+										</SliderTrack>
+										<Tooltip
+											hasArrow
+											bg='green.400'
+											color='white'
+											placement='top'
+											isOpen={showTooltip}
+											label={`${sliderValue}${soilRanges[selectedSoil].unit}`}
+										>
+											<SliderThumb />
+										</Tooltip>
+									</Slider>
+									<Button onClick={openConfirmationOnly}> Apply changes</Button>
 								</Flex>
 								<Flex>
 									<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
-									<Flex gap='40px'>
-										<Text fontWeight='semibold'>Soil Improvement Suggestions</Text>
-										{soilSuggestions.length === 0 ? (
-											<Text color='#2ACC32' textAlign='end'>No new soil suggestions</Text>
-										) : (
-											<Text color='#FC0D0D'>{soilSuggestions.length} new soil suggestions</Text>
-										)}
+										<Flex gap='40px'>
+											<Text fontWeight='semibold'>Soil Improvement Suggestions</Text>
+											{soilSuggestions.length === 0 ? (
+												<Text color='#2ACC32' textAlign='end'>No new soil suggestions</Text>
+											) : (
+												<Text color='#FC0D0D'>{soilSuggestions.length} new soil suggestions</Text>
+											)}
 										</Flex>
 										{soilSuggestions.length === 0 ? null : (
-										<ul style={{ padding: '20px' }}>
-											{soilSuggestions.map((item, index) => (
-											<li key={index}>
-												<Flex gap='10px'>
-												<Text>{item}</Text>
-												<a href={`/suggestion/soil/${index}`}><Text color={'#00A6CB'}>More Info</Text></a>
-												</Flex>
-											</li>
-											))}
-										</ul>
-        )}
+											<ul style={{ padding: '20px' }}>
+												{soilSuggestions.map((item, index) => (
+													<li key={index}>
+														<Flex gap='10px'>
+															<Text>{item}</Text>
+															<a href={`/suggestion/soil/${index}`}><Text color={'#00A6CB'}>More Info</Text></a>
+														</Flex>
+													</li>
+												))}
+											</ul>
+										)}
 									</Flex>
 								</Flex>
 							</Box>)}
-							</Box >
-							)
+					</Box >
+				)
 			case 'Crop maintenance':
 				return (
 					<Box>
@@ -491,25 +497,25 @@ const Yourland: React.FC = () => {
 								</Flex>
 								<Flex>
 									<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
-									<Flex gap='40px' mt='20px'>
-										<Text fontWeight='semibold'>Crop Improvement Suggestions</Text>
-										{cropSuggestions.length === 0 ? (
-											<Text color='#2ACC32' textAlign='end'>No new crop suggestions</Text>
-										) : (
-											<Text color='#FC0D0D'>{cropSuggestions.length} new crop suggestions</Text>
-										)}
+										<Flex gap='40px' mt='20px'>
+											<Text fontWeight='semibold'>Crop Improvement Suggestions</Text>
+											{cropSuggestions.length === 0 ? (
+												<Text color='#2ACC32' textAlign='end'>No new crop suggestions</Text>
+											) : (
+												<Text color='#FC0D0D'>{cropSuggestions.length} new crop suggestions</Text>
+											)}
 										</Flex>
 										{cropSuggestions.length === 0 ? null : (
-										<ul style={{ padding: '20px' }}>
-											{cropSuggestions.map((item, index) => (
-											<li key={index}>
-												<Flex gap='10px'>
-												<Text>{item}</Text>
-												<a href={`/suggestion/crop/${index}`}><Text color={'#00A6CB'}>More Info</Text></a>
-												</Flex>
-											</li>
-											))}
-										</ul>
+											<ul style={{ padding: '20px' }}>
+												{cropSuggestions.map((item, index) => (
+													<li key={index}>
+														<Flex gap='10px'>
+															<Text>{item}</Text>
+															<a href={`/suggestion/crop/${index}`}><Text color={'#00A6CB'}>More Info</Text></a>
+														</Flex>
+													</li>
+												))}
+											</ul>
 										)}
 									</Flex>
 								</Flex>
@@ -627,44 +633,44 @@ const Yourland: React.FC = () => {
 			case 'Finance management':
 				return (
 					<Box>
-					{showPopup && (
-						<ConfirmationPopup
-						title="Modify Data"
-						message="Please provide the necessary information."
-						inputs={[
-							{ label: 'Budget in dollars', value: budget ?? '', onChange: setBudget }
-						]}
-						onConfirm={handleSubmit}
-						onCancel={handleCancel}
-						isConfirmPhase={isConfirmPhase}
-						showPopup={showPopup}
-						/>
-					)}
-					<Flex padding='40px'>
-						<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
-						{/* <BusinessPlanModal isDisabled={!businessPlan || businessPlan.length === 0} /> */}
-						<BusinessPlanModal isDisabled={!businessPlan || businessPlan.length === 0} businessPlan={businessPlan} />
-						<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>
-							Your budget
-						</Text>
-						<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
-							<Text>{budget ? `${budget} ETB` : 'No budget set'}</Text>
-						</Flex>
-						<Button
-						onClick={openPopupWithInputs}
-						//disabled={budget === null}
-						// style={{
-						// 	background: budget ? '#c5c0b6' : '#2acc32',  // Gray color when disabled
-						// 	color: budget ? '#6c757d' : '#fff',          // Slightly muted gray text color when disabled
-						// 	cursor: budget ? 'not-allowed' : 'pointer',  // Change cursor style when disabled
-						// }}
-						>
-						Modify
-						</Button>
-						</Flex>
-						<CropBarChart/>
+						{showPopup && (
+							<ConfirmationPopup
+								title="Modify Data"
+								message="Please provide the necessary information."
+								inputs={[
+									{ label: 'Budget in dollars', value: budget ?? '', onChange: setBudget }
+								]}
+								onConfirm={handleSubmit}
+								onCancel={handleCancel}
+								isConfirmPhase={isConfirmPhase}
+								showPopup={showPopup}
+							/>
+						)}
+						<Flex padding='40px'>
+							<Flex width='50%' direction='column' justify='center' height='100%' align='center' gap='40px'>
+								{/* <BusinessPlanModal isDisabled={!businessPlan || businessPlan.length === 0} /> */}
+								<BusinessPlanModal isDisabled={!businessPlan || businessPlan.length === 0} businessPlan={businessPlan} />
+								<Text textAlign='start' fontSize='3xl' fontWeight='semibold' width='100%' margin='20px 20px 0px 20px'>
+									Your budget
+								</Text>
+								<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
+									<Text>{budget ? `${budget} ETB` : 'No budget set'}</Text>
+								</Flex>
+								<Button
+									onClick={openPopupWithInputs}
+								//disabled={budget === null}
+								// style={{
+								// 	background: budget ? '#c5c0b6' : '#2acc32',  // Gray color when disabled
+								// 	color: budget ? '#6c757d' : '#fff',          // Slightly muted gray text color when disabled
+								// 	cursor: budget ? 'not-allowed' : 'pointer',  // Change cursor style when disabled
+								// }}
+								>
+									Modify
+								</Button>
+							</Flex>
+							<CropBarChart />
 
-					</Flex>
+						</Flex>
 					</Box>
 
 				);
@@ -679,7 +685,7 @@ const Yourland: React.FC = () => {
 			<AdminNavbarLinks
 				//onOpen={AdminNavbarLinks}
 				secondary={false}
-				//fixed={true}
+			//fixed={true}
 			/>
 			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{cityCountry ? `${cityCountry.city}, ${cityCountry.country}` : 'No location available'}</Text>
 			<Flex gap='40px' mb={4}>
