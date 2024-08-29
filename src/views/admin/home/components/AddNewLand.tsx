@@ -17,9 +17,11 @@ import {
 } from "@chakra-ui/react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; // Removed the `Form` import
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import animationData from "../../../../assets/img/dashboards/cropanimated.json";
 import Lottie from "react-lottie-player";
+import { apiCall } from "../../../../services/api";
+import { RootState } from "../../../../redux/store";
 interface AddNewLandProps {
   initialStep?: number;
 }
@@ -55,7 +57,8 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
   const [showProgress, setShowProgress] = useState<boolean>(false);
   const [progressMessage, setProgressMessage] = useState<string>("Starting...");
 
-  const handleAddLand = () => {
+  const token = useSelector((state: RootState) => state.token.token); // Get the token from the state
+  const handleAddLand = async () => {
     if (
       landName &&
       latitude &&
@@ -69,7 +72,6 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       nitrogen
     ) {
       const newLand = {
-        //land_id: Date.now(),
         land_name: landName,
         latitude: Number(latitude),
         longitude: Number(longitude),
@@ -81,22 +83,27 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         phosphorus: Number(phosphorus),
         ph_level: Number(phLevel),
       };
-      console.log("land created successfully with data: ", newLand);
+  
+      try {
+        const response = await apiCall('/land/add-land', {
+          method: 'POST',
+          data: newLand, // Send the newLand object in the request body
+          requireAuth: true, // Indicate that this call requires authentication
+        }, token);
+  
+        console.log('Land added successfully:', response.message);
+        console.log('New land ID:', response.land_id);
+        // Optionally handle further actions after land is added successfully
+      } catch (error) {
+        console.error('Failed to add land:', error);
+        // Handle error as necessary, e.g., show an error message to the user
+      }
+    } else {
+      console.error('All land details must be provided.');
+      // Optionally display a warning to the user that all fields are required
     }
   };
 
-  //         setLandName('');
-  //         setLatitude('');
-  //         setLongitude('');
-  //         setLandSize('');
-  //         setBudget('');
-  //         setPhLevel('');
-  //         setPhosphorus('');
-  //         setPotassium('');
-  //         setOxygenLevel('');
-  //         setNitrogen('');
-  //     }
-  // };
 
   const handleNext = () => setStep(step + 1);
   const handlePrevious = () => setStep(step - 1);

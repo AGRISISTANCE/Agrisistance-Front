@@ -5,9 +5,9 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import cropsData from './img/crops';
-import land from '../../../assets/img/land/land';
+//import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
-import TotalSpent from '../default/components/TotalSpent';
+//import TotalSpent from '../default/components/TotalSpent';
 import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
@@ -78,7 +78,7 @@ interface suggestion {
 
 interface SoilType {
 	oxygen: number;
-	azote: number;
+	nitrogen: number;
 	potassium: number;
 	phosphorus: number;
 	humidity: number;
@@ -184,7 +184,7 @@ const Yourland: React.FC = () => {
 	if (selectedLand) {
 		const newSoil = {
 			oxygen: selectedLand.oxygen_level,
-			azote: selectedLand.nitrogen,
+			nitrogen: selectedLand.nitrogen,
 			potassium: selectedLand.potassium,
 			phosphorus: selectedLand.phosphorus,
 			humidity: selectedLand.humidity,
@@ -197,7 +197,6 @@ const Yourland: React.FC = () => {
 	}
 	else {
 		setSoil(null)
-		
 		setSliderValue(0); // Reset sliderValue to 0 if no land is selected
 	}
 	}, [selectedLand, selectedSoil]);
@@ -282,6 +281,14 @@ const Yourland: React.FC = () => {
 	const soilSuggestions = selectedLand?.suggestedImprovementSoil || [];
 	const cropSuggestions = selectedLand?.suggestedImprovementCrop || [];
 
+	const soilRanges = {
+		oxygen: { unit: '%', min: 0, max: 100 },
+		nitrogen: { unit: 'kg/ha', min: 0, max: 300 }, // example range for nitrogen
+		potassium: { unit: 'kg/ha', min: 0, max: 200 }, // example range for potassium
+		phosphorus: { unit: 'kg/ha', min: 0, max: 100 }, // example range for phosphorus
+		humidity: { unit: '%', min: 0, max: 100 },
+		ph: { unit: '', min: 1, max: 14 }, // pH has no unit
+	}
 	
 	const handleOpenPopup = () => {
 		setShowPopup(true);
@@ -360,85 +367,75 @@ const Yourland: React.FC = () => {
 								<Flex width={'400px'} align={'center'} background={'#2c4026'}><img src={cropsData.tractor} alt='tractor' width={'100%'} /></Flex>
 							</Flex>) : (
 							<Box>
-								{showPopup && (
-									<ConfirmationPopup
-										title="Modify Data"
-										message="Direct confirmation with no inputs."
-										inputs={[]} // No inputs
-										onConfirm={handleSubmit}
-										onCancel={handleCancel}
-										isConfirmPhase={isConfirmPhase}
-										showPopup={showPopup}
-									/>
-								)}
-								{/* ! ERROR HERE */}
-								<Flex justify='space-around' >
-									{soil && Object.keys(soil).map((key) => (
-										<Flex
-											key={key}
-											direction='column'
-											align='center'
-											gap='15px'
-											cursor={'pointer'}
-											onClick={() => handleCircularProgressClick(key as keyof SoilType)}
-											shadow={selectedSoil === key ? '0 0 10px rgba(0, 0, 0, 0.2)' : undefined}
-											backgroundColor={selectedSoil === key ? '#eaefef' : '#f4f6fa'}
-											padding={'15px'}
-											borderRadius={'20px'}
+							<Flex justify='space-around'>
+								{soil &&
+									Object.keys(soil).map((key) => (
+									<Flex
+										key={key}
+										direction='column'
+										align='center'
+										gap='15px'
+										cursor={'pointer'}
+										onClick={() => handleCircularProgressClick(key as keyof SoilType)}
+										shadow={selectedSoil === key ? '0 0 10px rgba(0, 0, 0, 0.2)' : undefined}
+										backgroundColor={selectedSoil === key ? '#eaefef' : '#f4f6fa'}
+										padding={'15px'}
+										borderRadius={'20px'}
+									>
+										<CircularProgress
+										color='#218225'
+										value={soil[key as keyof SoilType]}
+										size='90px'
+										trackColor='#BCCCBF'
 										>
-											<CircularProgress
-												color='#218225'
-												value={soil[key as keyof SoilType]}
-												size='90px'
-												trackColor='#BCCCBF'
-											>
-												<CircularProgressLabel fontWeight='semibold'>{soil[key as keyof SoilType]}%</CircularProgressLabel>
-											</CircularProgress>
-											<Text fontWeight='bold'>{key}</Text>
-										</Flex>
+										<CircularProgressLabel fontWeight='semibold'>
+											<Text size={'sm'}>{soil[key as keyof SoilType]}<br/>{soilRanges[key as keyof typeof soilRanges].unit}</Text>
+										</CircularProgressLabel>
+										</CircularProgress>
+										<Text fontWeight='bold'>{key}</Text>
+									</Flex>
 									))}
 								</Flex>
-								<Flex direction='column' align='center' gap='20px' padding='40px'>
-									<Text textAlign='center' fontWeight='bold' fontSize='3xl'>
-										Set Manually: {selectedSoil.charAt(0).toUpperCase() + selectedSoil.slice(1)} Level
-									</Text>
-									<Slider
-										id='slider'
-										defaultValue={soil ? soil[selectedSoil] : 0}  // Provide a fallback if soil is null
-										min={0}
-										max={100}
-										colorScheme='green'
-										onChange={handleSliderChange}
-										onMouseEnter={() => setShowTooltip(true)}
-										onMouseLeave={() => setShowTooltip(false)}
-										width='400px'
-									>
-										<SliderMark value={25} mt='3' ml='-2.5' fontSize='sm'>
-											25
-										</SliderMark>
-										<SliderMark value={50} mt='3' ml='-2.5' fontSize='sm'>
-											50
-										</SliderMark>
-										<SliderMark value={75} mt='3' ml='-2.5' fontSize='sm'>
-											75
-										</SliderMark>
-										<SliderTrack bg='green.200'>
-											<SliderFilledTrack />
-										</SliderTrack>
-										<Tooltip
-											hasArrow
-											bg='green.400'
-											color='white'
-											placement='top'
-											isOpen={showTooltip}
-											label={`${sliderValue}%`}
-										>
-											<SliderThumb />
-										</Tooltip>
-									</Slider>
 
-									{/*<Button onClick={() => { Applychanges(soil) }}>Apply changes</Button>*/}
-									<Button onClick={openConfirmationOnly}> Apply changes</Button>
+								<Flex direction='column' align='center' gap='20px' padding='40px'>
+								<Text textAlign='center' fontWeight='bold' fontSize='3xl'>
+									Set Manually: {selectedSoil.charAt(0).toUpperCase() + selectedSoil.slice(1)} Level
+								</Text>
+								<Slider
+									id='slider'
+									defaultValue={soil ? soil[selectedSoil] : soilRanges[selectedSoil].min}  // Start from selected soil value
+									min={soilRanges[selectedSoil].min}
+									max={soilRanges[selectedSoil].max}
+									colorScheme='green'
+									onChange={handleSliderChange}
+									onMouseEnter={() => setShowTooltip(true)}
+									onMouseLeave={() => setShowTooltip(false)}
+									width='400px'
+								>
+									<SliderMark value={soilRanges[selectedSoil].min} mt='3' ml='-2.5' fontSize='sm'>
+									{soilRanges[selectedSoil].min}
+									</SliderMark>
+									<SliderMark value={(soilRanges[selectedSoil].max + soilRanges[selectedSoil].min) / 2} mt='3' ml='-2.5' fontSize='sm'>
+									{(soilRanges[selectedSoil].max + soilRanges[selectedSoil].min) / 2}
+									</SliderMark>
+									<SliderMark value={soilRanges[selectedSoil].max} mt='3' ml='-2.5' fontSize='sm'>
+									{soilRanges[selectedSoil].max}
+									</SliderMark>
+									<SliderTrack bg='green.200'>
+									<SliderFilledTrack />
+									</SliderTrack>
+									<Tooltip
+									hasArrow
+									bg='green.400'
+									color='white'
+									placement='top'
+									isOpen={showTooltip}
+									label={`${sliderValue}${soilRanges[selectedSoil].unit}`}
+									>
+									<SliderThumb />
+									</Tooltip>
+								</Slider>
+								<Button onClick={openConfirmationOnly}> Apply changes</Button>
 								</Flex>
 								<Flex>
 									<Flex background='#fff' width='100%' padding='20px' mt='40px' borderRadius='20px' direction='column'>
