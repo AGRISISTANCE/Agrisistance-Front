@@ -91,20 +91,6 @@ export default function HeaderLinks(props: { secondary: boolean }) {
 							👋&nbsp; Hi, {user.firstName}
 						</Text>
 					</Flex>
-					<Flex flexDirection='column' p='10px'>
-						<MenuItem _hover={{ bg: 'none' }} _focus={{ bg: 'none' }} onClick={() => navigate('/dashboard/profile')} borderRadius='8px' px='14px'>
-							<Text fontSize='sm'>Profile Settings</Text>
-						</MenuItem>
-						<MenuItem
-							_hover={{ bg: 'none' }}
-							_focus={{ bg: 'none' }}
-							color='red.400'
-							borderRadius='8px'
-							px='14px'
-							onClick={() => navigate('/')}>
-							<Text fontSize='sm'>Log out</Text>
-						</MenuItem>
-					</Flex>
 				</MenuList>
 			</Menu>
 		</Flex>

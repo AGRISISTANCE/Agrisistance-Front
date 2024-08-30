@@ -11,12 +11,26 @@ export interface UserInfo {
   currentPlan: 'Basic' | 'premium';
 }
 
-const initialState: UserInfo = {
+// Flag to toggle between dummy and real data
+const USE_DUMMY_DATA = false;
+
+const dummyData: UserInfo = {
   firstName: 'Amel',
   lastName: 'FEDDAG',
   email: 'amel.feddag@ensia.edu.dz',
   phoneNumber: '+213 555 05 04 96',
   country: 'Algeria',
+  userId: '',
+  profilePicture: '',
+  currentPlan: 'Basic',
+};
+
+const initialState: UserInfo = USE_DUMMY_DATA ? dummyData : {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
+  country: '',
   userId: '',
   profilePicture: '',
   currentPlan: 'Basic',

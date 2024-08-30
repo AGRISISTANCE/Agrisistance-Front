@@ -29,50 +29,49 @@ export default function Home() {
   //Setting user info from backend to redux store
   //! todo: set all lands from backend to redux store, (later set all posts and content in your network section)
   // fetching lands data:
+  const fetchLands = async () => {
+    try {
+      const response = await apiCall('/land/your-lands', {
+        method: 'GET',
+        requireAuth: true,
+      }, token);
+
+      const mappedLands = response.result.map((land: any, index: number) => ({
+        landId: land.land_id,
+        owner: land.user_id,
+        landName: land.land_name,
+        latitude: land.latitude,
+        longitude: land.longitude,
+        landSize: land.land_size,
+        budgetForLand: response.budget[index]?.investment_amount || 0,
+        oxygen_level: land.oxygen_level,
+        nitrogen: land.nitrogen,
+        potassium: land.potassium,
+        phosphorus: land.phosphorus,
+        humidity: land.humidity,
+        ph_level: land.ph_level,
+        LandBusinessPlan: [] as LandBusinessPlan[], // Explicitly typing the array
+        crops: [] as Crop[], // Explicitly typing the array
+        waterSufficecy: 0, // Placeholder, fetch from another API if available
+        sunlight: 0, // Placeholder, fetch from another API if available
+        pestisedesLevel: 0, // Placeholder, fetch from another API if available
+        landUse: 0, // Placeholder, fetch from another API if available
+        humanCoverage: 0, // Placeholder, fetch from another API if available
+        waterAvaliability: 0, // Placeholder, fetch from another API if available
+        distributionOptimality: 0, // Placeholder, fetch from another API if available
+        suggestedImprovementSoil: [] as string[], // Explicitly typing the array
+        suggestedImprovementCrop: [] as string[], // Explicitly typing the array
+      }));
+
+      dispatch(setInitialLands(mappedLands));
+      console.log("inital lands setted successfully", response )
+      
+    } catch (error) {
+      console.error('Failed to fetch lands:', error);
+    }
+  };
   useEffect(() => {
-    const fetchLands = async () => {
-      try {
-        const response = await apiCall('/land/your-lands', {
-          method: 'GET',
-          requireAuth: true,
-        }, token);
-
-        const mappedLands = response.result.map((land: any, index: number) => ({
-          landId: land.land_id,
-          owner: land.user_id,
-          landName: land.land_name,
-          latitude: land.latitude,
-          longitude: land.longitude,
-          landSize: land.land_size,
-          budgetForLand: response.budget[index]?.investment_amount || 0,
-          oxygen_level: land.oxygen_level,
-          nitrogen: land.nitrogen,
-          potassium: land.potassium,
-          phosphorus: land.phosphorus,
-          humidity: land.humidity,
-          ph_level: land.ph_level,
-          LandBusinessPlan: [] as LandBusinessPlan[], // Explicitly typing the array
-          crops: [] as Crop[], // Explicitly typing the array
-          waterSufficecy: 0, // Placeholder, fetch from another API if available
-          sunlight: 0, // Placeholder, fetch from another API if available
-          pestisedesLevel: 0, // Placeholder, fetch from another API if available
-          landUse: 0, // Placeholder, fetch from another API if available
-          humanCoverage: 0, // Placeholder, fetch from another API if available
-          waterAvaliability: 0, // Placeholder, fetch from another API if available
-          distributionOptimality: 0, // Placeholder, fetch from another API if available
-          suggestedImprovementSoil: [] as string[], // Explicitly typing the array
-          suggestedImprovementCrop: [] as string[], // Explicitly typing the array
-        }));
-
-        dispatch(setInitialLands(mappedLands));
-        console.log("inital lands setted successfully", response )
-      } catch (error) {
-        console.error('Failed to fetch lands:', error);
-      }
-    };
-
     fetchLands();
-
   }, [dispatch, token]);
 
   // fetching user data!
@@ -113,7 +112,10 @@ export default function Home() {
         boxSizing="border-box"
         gap="50px"
       >
+        <div>
         <Profile avatar={avatars.avatar1} days="20" name="James Belfort" suggestions="1" />
+        <Button onClick={fetchLands}>Fetch lands</Button>
+        </div>
         <Flex direction="column" gap="10px" align="center">
           <Text color="#218225" textAlign="center" fontWeight="bold" fontSize="30px">
             Selected Land

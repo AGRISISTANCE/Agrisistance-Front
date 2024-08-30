@@ -21,13 +21,13 @@ const Network: React.FC = () => {
             <AllPosts />
           </TabPanel>
           <TabPanel>
-            <AllPosts category="Business Promotion" />
+            <AllPosts category='businessPromotion' />
           </TabPanel>
           <TabPanel>
-            <AllPosts category="Opportunities and Partnerships" />
+            <AllPosts category='opportunitiesAndPartnership' />
           </TabPanel>
           <TabPanel>
-            <AllPosts category="Products and Resources" />
+            <AllPosts category='resourcesAndProducts' />
           </TabPanel>
           <TabPanel>
             <MyPosts />

@@ -6,59 +6,41 @@ import AddNewPostModal from './AddNewPostModal';
 import farmerImage from './farmer.jpg';
 import toolImage from './tool.jpg';
 import landImage from './land.jpg';
+import { useSelector } from 'react-redux';
 
+import { RootState } from '../../../../redux/store'; // Adjust the import based on your store setup
 
 const MyPosts: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState(false);
-
-  const openModal = (post: any) => setModalOpen(true);
+  const posts = useSelector((state: RootState) => state.posts);
+  const user = useSelector((state: RootState) => state.user);
+  
+  const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
-  const activePosts: any[] = [
-    {
-      author: {
-        profilePicture: farmerImage,
-        name: 'Alice Johnson',
-        country: 'Kenya',
-        phoneNumber: '+254 700 123456',
-      },
-      content: {
-        category: 'Business Promotion',
-        title: 'Promoting Sustainable Agriculture',
-        description: 'Join us in promoting sustainable agriculture practices in Kenya.',
-        image: toolImage,
-        date: '2 days ago',
-      },
-    },
-  ];
-
-  const archivedPosts: any[] = [
-    {
-      author: {
-        profilePicture: farmerImage,
-        name: 'Bob Williams',
-        country: 'South Africa',
-        phoneNumber: '+27 123 456789',
-      },
-      content: {
-        category: 'Products and Resources',
-        title: 'Affordable Irrigation Systems',
-        description: 'Find the best deals on irrigation systems for your farm.',
-        image: landImage,
-        date: '01/08/2024',
-      },
-    },
-  ];
+  const activePosts = posts.filter(post => post.authorId === user.userId && post.active);
+  const archivedPosts = posts.filter(post => post.authorId === user.userId && !post.active);
 
   return (
     <Box>
-      {activePosts.map((post, index) => (
+      {activePosts.map(post => (
         <PostCard
-          key={index}
-          author={post.author}
-          content={post.content}
+          key={post.postID}
+          author={{
+            profilePicture: post.images[0], // Assuming the first image is the profile picture
+            name: post.authorName,
+            country: post.authorCountry,
+            phoneNumber: post.authorPhoneNumber,
+          }}
+          content={{
+            category: post.type,
+            title: post.Title,
+            description: post.Description,
+            image: post.images[0], // Assuming the first image is the main content image
+            date: post.postDate,
+          }}
           isMyPost
-          onModify={() => openModal(post)}
+          onModify={() => openModal()}
           onArchive={() => console.log('Archive')}
           onDelete={() => console.log('Delete')}
         />
@@ -66,11 +48,22 @@ const MyPosts: React.FC = () => {
 
       <Box mt={6} mb={6} borderBottom="2px" borderColor="gray.200" />
 
-      {archivedPosts.map((post, index) => (
+      {archivedPosts.map(post => (
         <PostCard
-          key={index}
-          author={post.author}
-          content={post.content}
+          key={post.postID}
+          author={{
+            profilePicture: post.images[0], // Assuming the first image is the profile picture
+            name: post.authorName,
+            country: post.authorCountry,
+            phoneNumber: post.authorPhoneNumber,
+          }}
+          content={{
+            category: post.type,
+            title: post.Title,
+            description: post.Description,
+            image: post.images[0], // Assuming the first image is the main content image
+            date: post.postDate,
+          }}
           isMyPost
           isArchived
           onModify={() => console.log('Modify')}

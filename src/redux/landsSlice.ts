@@ -49,6 +49,9 @@ interface LandsState {
   selectedLand: LandInfo | null;
 }
 
+// Flag to toggle between dummy and real data
+const USE_DUMMY_DATA = false;
+
 const initialDummyLands: LandInfo[] = [
   {
     landId: '1',
@@ -157,7 +160,7 @@ const initialDummyLands: LandInfo[] = [
 ];
 
 const initialState: LandsState = {
-  lands: initialDummyLands,
+  lands: USE_DUMMY_DATA ? initialDummyLands : [],
   selectedLand: null,
 };
 

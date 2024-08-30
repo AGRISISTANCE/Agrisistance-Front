@@ -8,7 +8,6 @@ import {
   MdOutlineYard,
   MdGroups,
   MdUpgrade
-// MdLogout 
 } from 'react-icons/md';
 
 

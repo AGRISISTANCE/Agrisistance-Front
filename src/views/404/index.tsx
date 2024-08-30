@@ -1,6 +1,6 @@
 import { Flex, Text } from "@chakra-ui/react";
 import Container from "../../common/Container";
-import Header from "../../components/Header";
+import Header from "./Header";
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 import bgImage from "../../assets/img/404/bg.png";

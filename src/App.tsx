@@ -11,6 +11,8 @@ import LandingPage from './views/Landing/landingPage';
 import Error from './views/404';
 import Plan from './views/admin/plan';
 import Profile from './views/admin/profile';
+import { useSelector } from 'react-redux';
+import { RootState } from './redux/store'; // Adjust the import path as needed
 
 export default function Main() {
   const location = useLocation();
@@ -18,21 +20,27 @@ export default function Main() {
 
   const [currentTheme, setCurrentTheme] = useState(initialTheme);
 
+  // Get the token from Redux state
+  const token = useSelector((state: RootState) => state.token.token);
+
   return (
     <ChakraProvider theme={currentTheme}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="auth/*" element={<AuthLayout />} />
-        {/* Admin Layout */}
-        <Route
-          path="dashboard/*"
-          element={
-            <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
-          }
-        />
+        {/* Conditionally render Admin Layout based on token */}
+        {token ? (
+          <Route
+            path="dashboard/*"
+            element={
+              <AdminLayout theme={currentTheme} setTheme={setCurrentTheme} />
+            }
+          />
+        ) : (
+          <Route path="dashboard/*" element={<Error />} />
+        )}
         <Route path='*' element={<Error />} />
         <Route path='/plan' element={<Plan />} />
-        
       </Routes>
       {showChatbot && <Chatbot />}
     </ChakraProvider>
