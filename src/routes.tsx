@@ -37,6 +37,7 @@ const routes = [
     path: '',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <LandingPage />,
+    included: true
   },
   {
     name: 'Sign Up',
@@ -44,6 +45,8 @@ const routes = [
     path: '/signup',
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     component: <SignUpCentered />,
+    included: false,
+
   },
   {
     name: 'Log In',
@@ -51,6 +54,8 @@ const routes = [
     path: '/login',
     icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
     component: <LogInCentered />,
+    included: false,
+
   },
   {
     name: 'Home',
@@ -58,6 +63,7 @@ const routes = [
     path: '/home',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <Home />,
+    included: true,
   },
   {
     name: 'Profile',
@@ -66,6 +72,7 @@ const routes = [
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     component: <Profile />,
     secondary: true,
+    included: true,
   },
   {
     name: 'Your Land',
@@ -73,6 +80,8 @@ const routes = [
     icon: <Icon as={MdOutlineYard} width="20px" height="20px" color="inherit" />,
     path: '/yourland',
     component: <Yourland />,
+    included: true,
+
   },
   {
     name: 'Upgrade plan',
@@ -80,6 +89,7 @@ const routes = [
     icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
     path: '/plans',
     component: <Plan />,
+    included: true,
   }
   // {
   //   name: 'Your Network',

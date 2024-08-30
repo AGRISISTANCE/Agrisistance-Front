@@ -1,41 +1,24 @@
+
+
+
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert, AlertDescription, AlertTitle, Box, CloseButton, Flex } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertTitle, CloseButton, Flex, AlertIcon } from '@chakra-ui/react';
 import { EditOutlined } from '@ant-design/icons';
 import { updateUser } from '../../../redux/userSlice';
 import { useLocation } from 'react-router-dom';
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button,
     useDisclosure,
 } from '@chakra-ui/react';
-import { AlertIcon } from '@chakra-ui/react';
 
-const EmailVerified: React.FC = () => {
+const EmailUpdatedSuccessfully: React.FC = () => {
     const user = useSelector((state: any) => state.user);
     const dispatch = useDispatch();
 
     const location = useLocation();
     const emailUpdated = location.state?.emailUpdated;
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [showModal, setShowModal] = useState(false);
 
-    useEffect(() => {
-        if (emailUpdated) {
-            setShowModal(true);
-            onOpen();
-        }
-    }, [emailUpdated, onOpen]);
-
-
-
-
+    const [ShowEmailUpdated, setShowEmailUpdated] = useState(true);
     const [isEditing, setIsEditing] = useState({
         firstName: false,
         lastName: false,
@@ -49,6 +32,9 @@ const EmailVerified: React.FC = () => {
         email: user.email,
         phoneNumber: user.phoneNumber,
     });
+    const handleChangePassword = () => {
+        {/* TODO: */ }
+    }
 
     const handleEditToggle = (field: keyof typeof isEditing) => {
         setIsEditing((prev) => ({
@@ -73,9 +59,10 @@ const EmailVerified: React.FC = () => {
             phoneNumber: false,
         });
     };
-    const [showEmailVerificationAlert, setShowEmailVerificationAlert] = React.useState(true);
+
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-    const handleEmailChange = async () => {
+
+    const handleChangeEmail = async () => {
         try {
             const response = await fetch('/api/send-verification-email', {
                 method: 'POST',
@@ -112,9 +99,7 @@ const EmailVerified: React.FC = () => {
                     });
 
                     if (response.ok) {
-                        alert('Email updated successfully.');
-                        setShowModal(true);
-                        onOpen();
+                        setShowEmailUpdated(true);
                     } else {
                         alert('Failed to verify email. The link may have expired.');
                     }
@@ -126,7 +111,7 @@ const EmailVerified: React.FC = () => {
 
             verifyEmail();
         }
-    }, [location.search, onOpen]);
+    }, []);
 
     return (
         <Flex
@@ -218,8 +203,57 @@ const EmailVerified: React.FC = () => {
                             }}
                         />
                     </div>
-                    <button className="btn-save" type="button" onClick={handleEmailChange}>
+                    <button className="btn-save" type="button" onClick={handleChangeEmail}>
                         Change email
+                    </button>
+                    <div
+                        key={'password'}
+                        style={{
+                            display: 'flex',
+                            width: '80%',
+                            gap: '20px',
+                            border: `1px solid ${!isEditing['password' as keyof typeof isEditing] ? '#78747A' : '#2ACC32'}`,
+                            borderRadius: '8px',
+                            padding: '0 10px 0 4px',
+                        }}
+                    >
+                        <input
+                            style={{
+                                border: 'none',
+                                outline: 'none',
+                                boxShadow: 'none',
+                            }}
+                            type="password"
+                            value={formData['password' as keyof typeof formData]}
+                            onChange={(e) => handleInputChange('password' as keyof typeof formData, e.target.value)}
+                            placeholder='Enter a strong password'
+                        />
+                    </div>
+                    <div
+                        key={'confirmPassword'}
+                        style={{
+                            display: 'flex',
+                            width: '80%',
+                            gap: '20px',
+                            border: `1px solid ${!isEditing['confirmPassword' as keyof typeof isEditing] ? '#78747A' : '#2ACC32'}`,
+                            borderRadius: '8px',
+                            padding: '0 10px 0 4px',
+                        }}
+                    >
+                        <input
+                            style={{
+                                border: 'none',
+                                outline: 'none',
+                                boxShadow: 'none',
+                            }}
+                            type="password"
+                            value={formData['confirmPassword' as keyof typeof formData]}
+                            onChange={(e) => handleInputChange('confirmPassword' as keyof typeof formData, e.target.value)}
+                            placeholder='Confirm password'
+                        />
+                    </div>
+                    <button className="btn-save" type="button" onClick={handleChangePassword}>
+                        Change password
                     </button>
                 </form>
             </Flex>
@@ -235,41 +269,20 @@ const EmailVerified: React.FC = () => {
                     <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowSuccessAlert(false)} />
                 </Alert>
             )}
-            {showEmailVerificationAlert && (
-                <Alert status="success">
-                    <AlertIcon />
-                    <Box>
-                        <AlertTitle>Email Verified!</AlertTitle>
-                        <AlertDescription>
-                            Your email has been verified successfully. Please log in to continue.
-                        </AlertDescription>
-                    </Box>
-                    <CloseButton
-                        alignSelf="flex-start"
-                        position="relative"
-                        right={-1}
-                        top={-1}
-                        onClick={() => setShowEmailVerificationAlert(false)}
-                    />
+            {ShowEmailUpdated && (
+                <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
+                    <AlertIcon boxSize="40px" mr={0} />
+                    <AlertTitle mt={4} mb={1} fontSize="lg">
+                        Email Updated successfully!
+                    </AlertTitle>
+                    <AlertDescription maxWidth="sm">
+                        Your email address has been changed successfully
+                    </AlertDescription>
+                    <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowEmailUpdated(false)} />
                 </Alert>
             )}
-            <Modal isOpen={showModal} onClose={onClose} isCentered>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Email Updated</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        Your email has been updated successfully.
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button colorScheme="blue" onClick={onClose}>
-                            Close
-                        </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
         </Flex>
     );
 };
 
-export default EmailVerified;
+export default EmailUpdatedSuccessfully;
