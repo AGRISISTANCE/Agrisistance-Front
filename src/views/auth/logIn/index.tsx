@@ -79,14 +79,8 @@ function LogIn() {
       setMessage(error.message || "Login failed. Please try again.");
     }
   };
-  const [showEmailVerificationAlert, setShowEmailVerificationAlert] = React.useState(false);
-  const [showPasswordResetAlert, setShowPasswordResetAlert] = React.useState(false);
+  const [showPasswordResetAlert, setShowPasswordResetAlert] = React.useState(true);
   
-  const handleEmailVerification = async () => {
-    // Simulate email verification logic
-    // If successful, show the email verification modal
-    setShowEmailVerificationAlert(true);
-  };
 
   const handlePasswordReset = async () => {
     // Simulate password reset logic
@@ -243,24 +237,7 @@ function LogIn() {
             </NavLink>
           </Text>
         </Flex>
-        {showEmailVerificationAlert && (
-        <Alert status="success">
-          <AlertIcon />
-          <Box>
-            <AlertTitle>Email Verified!</AlertTitle>
-            <AlertDescription>
-              Your email has been verified successfully. Please log in to continue.
-            </AlertDescription>
-          </Box>
-          <CloseButton
-            alignSelf="flex-start"
-            position="relative"
-            right={-1}
-            top={-1}
-            onClick={() => setShowEmailVerificationAlert(false)}
-          />
-        </Alert>
-      )}
+        
 
       {/* Password Reset Alert */}
       {showPasswordResetAlert && (

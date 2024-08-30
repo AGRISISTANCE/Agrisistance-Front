@@ -12,6 +12,7 @@ import Error from './views/404';
 import Plan from './views/admin/plan';
 import Profile from './views/admin/profile';
 import ResetPassword from 'views/auth/reset-password';
+import ForgetPassword from 'views/admin/ForgetPassword';
 
 export default function Main() {
   const location = useLocation();
@@ -33,7 +34,8 @@ export default function Main() {
         />
         <Route path='*' element={<Error />} />
         <Route path='/plan' element={<Plan />} />
-        <Route path='/auth/reset-password' element={<ResetPassword/>} />
+        <Route path='/auth/reset-password' element={<ResetPassword />} />
+        <Route path='/auth/forgot-password' element={<ForgetPassword />} />
       </Routes>
       {showChatbot && <Chatbot />}
     </ChakraProvider>
