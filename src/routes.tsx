@@ -29,7 +29,7 @@ import LandingPage from './views/Landing/landingPage';
 
 import Error from './views/404';
 import Plan from './views/admin/plan';
-import Yournetwork from 'views/admin/yournetwork';
+import Yournetwork from './views/admin/yournetwork';
 
 const routes = [
   {

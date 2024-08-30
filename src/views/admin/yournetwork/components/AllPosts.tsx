@@ -1,30 +1,45 @@
 // components/AllPosts.tsx
 import React from 'react';
 import PostCard from './PostCard';
+import farmerImage from './farmer.jpg';
+import toolImage from './tool.jpg';
 
 interface AllPostsProps {
   category?: string;
 }
 
 const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
-  // Fetch posts from your backend or use static data for now
   const posts = [
     {
       author: {
-        profilePicture: '/path/to/profile.jpg',
+        profilePicture: farmerImage,
         name: 'John Doe',
         country: 'USA',
         phoneNumber: '+1 123 456 7890',
       },
       content: {
         category: category || 'General',
-        title: 'Sample Post Title',
-        description: 'This is a description of the post.',
-        image: '/path/to/image.jpg',
+        title: 'Organic Farming Techniques',
+        description: 'Learn about the latest organic farming techniques to boost your yield.',
+        image: toolImage,
         date: '1h ago',
       },
     },
-    // More posts...
+    {
+      author: {
+        profilePicture: farmerImage,
+        name: 'Jane Smith',
+        country: 'Canada',
+        phoneNumber: '+1 987 654 3210',
+      },
+      content: {
+        category: category || 'General',
+        title: 'Agricultural Machinery for Sale',
+        description: 'Top-quality machinery at unbeatable prices. Get yours today!',
+        image: toolImage,
+        date: '30/08/2024',
+      },
+    },
   ];
 
   return (
