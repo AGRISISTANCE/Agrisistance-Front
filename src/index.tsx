@@ -9,9 +9,10 @@ import App from './App';
 import { Suspense } from 'react';
 import { Styles } from './styles/styles';
 import { Provider } from 'react-redux';
-import store from './redux/store'; // Adjust the import path according to where your store.ts file is located
+import store, { persistor } from './redux/store'; // Adjust the import path according to where your store.ts file is located
 
 import routes from './routes';
+import { PersistGate } from 'redux-persist/integration/react';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
@@ -19,11 +20,13 @@ const router = createBrowserRouter(routes);
 
 root.render(
   <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <BrowserRouter>
       <Suspense fallback={null}>
         <Styles />
         <App />
       </Suspense>
     </BrowserRouter>
+    </PersistGate>
   </Provider>
 );

@@ -19,7 +19,9 @@ import axios from 'axios';
 import CropBarChart from './components/CropBarChart';
 import 'leaflet/dist/leaflet.css';
 import L from "leaflet";
-//import { Button } from 'antd';
+import Lottie from 'react-lottie-player';
+import animationData from "../../../assets/img/dashboards/cropanimated.json";
+
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
 	iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
@@ -124,7 +126,7 @@ const Yourland: React.FC = () => {
 							setShowProgress(false);
 							window.location.reload();
 						}, 1000); // Duration for the completed message
-					}, 1500); // Duration for the "Almost Done" message
+					}, 2000); // Duration for the "Almost Done" message
 				}, 1500);
 			}
 		}
@@ -737,6 +739,12 @@ const Yourland: React.FC = () => {
 							shadow={'md'}
 							zIndex={1000} // Ensure it's above the blur overlay
 						>
+							<Lottie
+								animationData={animationData}
+								play
+								loop
+								style={{ width: "100%", maxWidth: "300px", height: "auto" }}
+							/>
 							<Text fontSize={'lg'} fontWeight={'bold'}>{progressMessage}</Text>
 							<Progress size='xs' isIndeterminate />
 						</Flex>

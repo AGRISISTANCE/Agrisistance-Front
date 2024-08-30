@@ -129,7 +129,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
           onClose();
           navigate("/dashboard/yourland");
         }, 1000);
-      }, 4000);
+      }, 2000);
     }, 1000);
   };
 
@@ -718,6 +718,8 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         >
           <Lottie
             animationData={animationData}
+            play
+            loop
             style={{ width: "100%", maxWidth: "300px", height: "auto" }}
           />
 

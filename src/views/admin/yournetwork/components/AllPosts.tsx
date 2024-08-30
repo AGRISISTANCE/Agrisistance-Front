@@ -3,6 +3,7 @@ import React from 'react';
 import PostCard from './PostCard';
 import farmerImage from './farmer.jpg';
 import toolImage from './tool.jpg';
+import landImage from './land.jpg';
 
 interface AllPostsProps {
   category?: string;
@@ -36,7 +37,7 @@ const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
         category: category || 'General',
         title: 'Agricultural Machinery for Sale',
         description: 'Top-quality machinery at unbeatable prices. Get yours today!',
-        image: toolImage,
+        image: landImage,
         date: '30/08/2024',
       },
     },

@@ -5,6 +5,7 @@ import PostCard from './PostCard';
 import AddNewPostModal from './AddNewPostModal';
 import farmerImage from './farmer.jpg';
 import toolImage from './tool.jpg';
+import landImage from './land.jpg';
 
 
 const MyPosts: React.FC = () => {
@@ -43,7 +44,7 @@ const MyPosts: React.FC = () => {
         category: 'Products and Resources',
         title: 'Affordable Irrigation Systems',
         description: 'Find the best deals on irrigation systems for your farm.',
-        image: toolImage,
+        image: landImage,
         date: '01/08/2024',
       },
     },
