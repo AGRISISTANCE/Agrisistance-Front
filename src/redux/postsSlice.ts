@@ -1,12 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Post {
+  postID: string;
   Title: string;
   type: 'opportuntitiesAndPartnership' | 'businessPromotion' | 'ressourcesAndProducts';
-  postDescription: string;
+  Description: string;
   images: string[];
-  contactInfos: string;
-  author: string;
+  authorId: string; //userID
+  authorName: string;
+  authorPhoneNumber: string;
+  authorCountry: string;
+  postDate: string;
+  active: Boolean;// true for active, false for archived
 }
 
 const initialState: Post[] = [];

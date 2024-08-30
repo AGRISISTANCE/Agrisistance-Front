@@ -5,13 +5,13 @@ import avatars from '../../../assets/img/avatars/avatars';
 import Land from './components/Land';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store'; // Ensure this import is correct
-import { selectLand } from '../../../redux/landsSlice';
+import { Crop, selectLand, LandBusinessPlan } from '../../../redux/landsSlice';
 import { LandInfo } from '../../../redux/landsSlice'; // Import the LandInfo interface
 import { IoIosClose } from 'react-icons/io';
 import AddNewLand from './components/AddNewLand';
 import { apiCall } from '../../../services/api';
 import { setUser } from '../../../redux/userSlice'; // Adjust the path as necessary
-
+import { setInitialLands } from '../../../redux/landsSlice';
 
 
 export default function Home() {
@@ -28,6 +28,54 @@ export default function Home() {
 
   //Setting user info from backend to redux store
   //! todo: set all lands from backend to redux store, (later set all posts and content in your network section)
+  // fetching lands data:
+  useEffect(() => {
+    const fetchLands = async () => {
+      try {
+        const response = await apiCall('/land/your-lands', {
+          method: 'GET',
+          requireAuth: true,
+        }, token);
+
+        const mappedLands = response.result.map((land: any, index: number) => ({
+          landId: land.land_id,
+          owner: land.user_id,
+          landName: land.land_name,
+          latitude: land.latitude,
+          longitude: land.longitude,
+          landSize: land.land_size,
+          budgetForLand: response.budget[index]?.investment_amount || 0,
+          oxygen_level: land.oxygen_level,
+          nitrogen: land.nitrogen,
+          potassium: land.potassium,
+          phosphorus: land.phosphorus,
+          humidity: land.humidity,
+          ph_level: land.ph_level,
+          LandBusinessPlan: [] as LandBusinessPlan[], // Explicitly typing the array
+          crops: [] as Crop[], // Explicitly typing the array
+          waterSufficecy: 0, // Placeholder, fetch from another API if available
+          sunlight: 0, // Placeholder, fetch from another API if available
+          pestisedesLevel: 0, // Placeholder, fetch from another API if available
+          landUse: 0, // Placeholder, fetch from another API if available
+          humanCoverage: 0, // Placeholder, fetch from another API if available
+          waterAvaliability: 0, // Placeholder, fetch from another API if available
+          distributionOptimality: 0, // Placeholder, fetch from another API if available
+          suggestedImprovementSoil: [] as string[], // Explicitly typing the array
+          suggestedImprovementCrop: [] as string[], // Explicitly typing the array
+        }));
+
+        dispatch(setInitialLands(mappedLands));
+        console.log("inital lands setted successfully", response )
+      } catch (error) {
+        console.error('Failed to fetch lands:', error);
+      }
+    };
+
+    fetchLands();
+
+  }, [dispatch, token]);
+
+  // fetching user data!
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
