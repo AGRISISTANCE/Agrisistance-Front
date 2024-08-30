@@ -36,10 +36,6 @@ export default function Main() {
         />
         <Route path='*' element={<Error />} />
         <Route path='/plan' element={<Plan />} />
-        <Route path='/auth/reset-password/*' element={<ResetPassword />} />
-        <Route path='/auth/forgot-password' element={<ForgetPassword />} />
-        <Route path='/dashboard/profile/email-updated-succefully' element={<EmailUpdatedSuccessfully />} />
-        <Route path='/dashboard/profile/email-verified' element={<Emailverified />} />
       </Routes>
       {showChatbot && <Chatbot />}
     </ChakraProvider>

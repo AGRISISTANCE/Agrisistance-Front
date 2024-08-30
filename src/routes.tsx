@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Icon } from '@chakra-ui/react';
 
 import {
@@ -8,7 +8,7 @@ import {
   MdOutlineYard,
   //MdGroups,
   MdUpgrade
-// MdLogout 
+  // MdLogout 
 } from 'react-icons/md';
 
 
@@ -29,6 +29,11 @@ import LandingPage from './views/Landing/landingPage';
 
 import Error from './views/404';
 import Plan from './views/admin/plan';
+import { layout } from '@chakra-ui/system';
+import EmailUpdatedSuccessfully from 'views/admin/emailUpdatedSuccessfully';
+import EmailVerified from 'views/admin/emailverified';
+import ForgetPassword from 'views/admin/ForgetPassword';
+import ResetPassword from 'views/auth/reset-password';
 
 const routes = [
   {
@@ -37,7 +42,6 @@ const routes = [
     path: '',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <LandingPage />,
-    included: true
   },
   {
     name: 'Sign Up',
@@ -45,8 +49,6 @@ const routes = [
     path: '/signup',
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     component: <SignUpCentered />,
-    included: false,
-
   },
   {
     name: 'Log In',
@@ -54,8 +56,6 @@ const routes = [
     path: '/login',
     icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
     component: <LogInCentered />,
-    included: false,
-
   },
   {
     name: 'Home',
@@ -63,7 +63,6 @@ const routes = [
     path: '/home',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <Home />,
-    included: true,
   },
   {
     name: 'Profile',
@@ -72,7 +71,6 @@ const routes = [
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     component: <Profile />,
     secondary: true,
-    included: true,
   },
   {
     name: 'Your Land',
@@ -80,8 +78,6 @@ const routes = [
     icon: <Icon as={MdOutlineYard} width="20px" height="20px" color="inherit" />,
     path: '/yourland',
     component: <Yourland />,
-    included: true,
-
   },
   {
     name: 'Upgrade plan',
@@ -89,8 +85,35 @@ const routes = [
     icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
     path: '/plans',
     component: <Plan />,
-    included: true,
-  }
+  },
+  {
+    name: 'email Updated',
+    layout: '/dashboard',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/profile/email-verified',
+    component: <EmailUpdatedSuccessfully />,
+  },
+  {
+    name: 'email Verified',
+    layout: '/dashboard',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/profile/email-verified',
+    component: <EmailVerified />,
+  },
+  {
+    name: 'forget password',
+    layout: '/auth',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/forget-password',
+    component: <ForgetPassword />,
+  },
+  {
+    name: 'reset password',
+    layout: '/auth',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/reset-password',
+    component: <ResetPassword />,
+  },
   // {
   //   name: 'Your Network',
   //   layout: '/dashboard',
