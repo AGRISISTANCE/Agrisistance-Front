@@ -298,6 +298,13 @@ const Yourland: React.FC = () => {
 		ph: { unit: '', min: 1, max: 14 }, // pH has no unit
 	}
 
+
+	const getProgressValue = (key: keyof SoilType) => {
+		const soilValue = soil[key];
+		const maxRange = soilRanges[key].max;
+		return (soilValue / maxRange) * 100; // Scale to 0-100 for CircularProgress
+	};
+
 	const handleOpenPopup = () => {
 		setShowPopup(true);
 		setIsConfirmPhase(false); // Initial phase
@@ -369,6 +376,21 @@ const Yourland: React.FC = () => {
 			case 'Soil maintenance':
 				return (
 					<Box>
+						{showPopup && (
+							<ConfirmationPopup
+								title="Modify Data"
+								message="Please provide the necessary information."
+								inputs={[
+									{ label: 'New Land Longitude', value: landDetails.longitude, onChange: setTEST },
+									{ label: 'New Land Latitude', value: landDetails.latitude, onChange: setTEST },
+									{ label: 'New Land Size in hectare', value: landDetails.size, onChange: setTEST },
+								]}
+								onConfirm={handleSubmit}
+								onCancel={handleCancel}
+								isConfirmPhase={isConfirmPhase}
+								showPopup={showPopup}
+							/>
+						)}
 						{revenue.length === 0 ? (
 							<Flex direction={'column'} gap={'50px'} align={'center'}>
 								<Text background={'#fff'} width={'100%'} padding={'20px'} maxWidth={'100%'} borderRadius={'2xl'}>This section offers manually modifiable data on your land soil, and provides  up to date suggestions to ensure the best results!</Text>
@@ -390,7 +412,7 @@ const Yourland: React.FC = () => {
 												padding={'15px'}
 												borderRadius={'20px'}
 											>
-												<CircularProgress
+												{/* <CircularProgress
 													color='#218225'
 													value={soil[key as keyof SoilType]}
 													size='90px'
@@ -398,6 +420,19 @@ const Yourland: React.FC = () => {
 												>
 													<CircularProgressLabel fontWeight='semibold'>
 														<Text size={'sm'}>{soil[key as keyof SoilType]}<br />{soilRanges[key as keyof typeof soilRanges].unit}</Text>
+													</CircularProgressLabel>
+												</CircularProgress> */}
+												<CircularProgress
+													color='#218225'
+													value={getProgressValue(key as keyof SoilType)}
+													size='90px'
+													trackColor='#BCCCBF'
+												>
+													<CircularProgressLabel fontWeight='semibold'>
+														<Text size={'sm'}>
+															{soil[key as keyof SoilType]}<br />
+															{soilRanges[key as keyof typeof soilRanges].unit}
+														</Text>
 													</CircularProgressLabel>
 												</CircularProgress>
 												<Text fontWeight='bold'>{key}</Text>
@@ -443,6 +478,38 @@ const Yourland: React.FC = () => {
 											<SliderThumb />
 										</Tooltip>
 									</Slider>
+									{/* <Slider
+										id='slider'
+										defaultValue={soil ? soil[selectedSoil] : soilRanges[selectedSoil].min}
+										min={soilRanges[selectedSoil].min}
+										max={soilRanges[selectedSoil].max}
+										step={0.5}  // Allows half-point increments
+										colorScheme='green'
+										onChange={handleSliderChange}
+										onMouseEnter={() => setShowTooltip(true)}
+										onMouseLeave={() => setShowTooltip(false)}
+										width='400px'
+									>
+										{Array.from({ length: ((soilRanges[selectedSoil].max - soilRanges[selectedSoil].min) / 0.5) + 1 }, (_, i) => i * 0.5 + soilRanges[selectedSoil].min)
+											.map(value => (
+												<SliderMark key={value} value={value} mt='3' ml='-2.5' fontSize='sm'>
+													{value}
+												</SliderMark>
+											))}
+										<SliderTrack bg='green.200'>
+											<SliderFilledTrack />
+										</SliderTrack>
+										<Tooltip
+											hasArrow
+											bg='green.400'
+											color='white'
+											placement='top'
+											isOpen={showTooltip}
+											label={`${sliderValue}${soilRanges[selectedSoil].unit}`}
+										>
+											<SliderThumb />
+										</Tooltip>
+									</Slider> */}
 									<Button onClick={openConfirmationOnly}> Apply changes</Button>
 								</Flex>
 								<Flex>
