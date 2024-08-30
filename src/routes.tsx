@@ -6,7 +6,7 @@ import {
   MdHome,
   MdLock,
   MdOutlineYard,
-  //MdGroups,
+  MdGroups,
   MdUpgrade
 // MdLogout 
 } from 'react-icons/md';
@@ -29,6 +29,7 @@ import LandingPage from './views/Landing/landingPage';
 
 import Error from './views/404';
 import Plan from './views/admin/plan';
+import Yournetwork from 'views/admin/yournetwork';
 
 const routes = [
   {
@@ -80,14 +81,14 @@ const routes = [
     icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
     path: '/plans',
     component: <Plan />,
+  },
+  {
+    name: 'Your Network',
+    layout: '/dashboard',
+    path: '/network',
+    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
+    component: <Yournetwork />,
   }
-  // {
-  //   name: 'Your Network',
-  //   layout: '/dashboard',
-  //   path: '/network',
-  //   icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
-  //   component: <Yournetwork />,
-  // }
 ];
 
 

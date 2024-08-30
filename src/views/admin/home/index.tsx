@@ -26,6 +26,8 @@ export default function Home() {
 
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
 
+  //Setting user info from backend to redux store
+  //! todo: set all lands from backend to redux store, (later set all posts and content in your network section)
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -51,6 +53,7 @@ export default function Home() {
     fetchUserProfile();
   }, [dispatch, token]);
 
+  //
   return (
     <Flex direction="column" height="100vh">
       <Flex

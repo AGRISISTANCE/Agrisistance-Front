@@ -32,9 +32,6 @@ const UserProfile: React.FC = () => {
     }
   }, [emailUpdated, onOpen]);
 
-
-
-
   const [isEditing, setIsEditing] = useState({
     firstName: false,
     lastName: false,

@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-import { Flex, Button, Box, Text, useDisclosure } from '@chakra-ui/react';
-import { IoIosClose } from 'react-icons/io';
+import React from 'react';
+import { Flex, Button, Text, useDisclosure } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { selectLand, removeLand } from '../../../../redux/landsSlice'; // Ensure this import is correct
-import AddNewLand from './AddNewLand';
 import land from '../../../../assets/img/land/land';
 
 
