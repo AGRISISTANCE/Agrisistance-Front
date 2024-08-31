@@ -1,22 +1,26 @@
 import React, { useState, useEffect, KeyboardEvent } from 'react';
 import './Chatbot.css';
-import farmerEmoji from '../../assets/img/icons/farmeremoji.png'; // Import the chatbot icon
-import headerIcon from '../../assets/img/icons/farmeremoji.png'; // Import the header icon
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
+import farmerEmoji from '../../assets/img/icons/farmeremoji.png';
+import headerIcon from '../../assets/img/icons/farmeremoji.png';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { LOGOUT } from '../../redux/actionTypes';
+import { apiCall } from '../../services/api';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [messages, setMessages] = useState<{ text: string; fromUser: boolean }[]>(() => {
-  //     const savedMessages = localStorage.getItem('chatbotMessages');
-  //     return savedMessages ? JSON.parse(savedMessages) : [];
-  // });
+  const [messages, setMessages] = useState<{ text: string; fromUser: boolean }[]>([]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const token = useSelector((state: RootState) => state.token.token);
-  const [messages, setMessages] = useState<{ text: string; fromUser: boolean }[]>(() => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
     const storageKey = token ? `chatbotMessages_${token}` : 'chatbotMessagesGuest';
     const savedMessages = token ? localStorage.getItem(storageKey) : sessionStorage.getItem(storageKey);
-    return savedMessages ? JSON.parse(savedMessages) : [];
-  });
+    setMessages(savedMessages ? JSON.parse(savedMessages) : []);
+  }, [token]);
 
   useEffect(() => {
     const storageKey = token ? `chatbotMessages_${token}` : 'chatbotMessagesGuest';
@@ -27,22 +31,13 @@ const ChatBot: React.FC = () => {
     }
   }, [messages, token]);
 
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state
-
   useEffect(() => {
-      if (!isOpen) return;
-
-      // Only add the initial message if there are no saved messages
-      if (messages.length === 0) {
-          const initialMessage = { text: 'Hello farmer, how can I help you today?', fromUser: false };
-          setMessages([initialMessage]);
-      }
+    if (isOpen && messages.length === 0) {
+      // Add initial message when the chatbot is opened and there are no messages
+      const initialMessage = { text: 'Hello farmer, how can I help you today?', fromUser: false };
+      setMessages([initialMessage]);
+    }
   }, [isOpen]);
-
-  useEffect(() => {
-      localStorage.setItem('chatbotMessages', JSON.stringify(messages));
-  }, [messages]);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -56,19 +51,31 @@ const ChatBot: React.FC = () => {
     setInput(event.target.value);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (input.trim()) {
       setMessages([...messages, { text: input, fromUser: true }]);
       setInput("");
-      setLoading(true); // Start loading indicator
-      // Simulate a response from the chatbot
-      setTimeout(() => {
+      setLoading(true);
+
+      try {
+        const response = await apiCall('/model/chat-bot', {
+          method: 'POST',
+          data: { message: input },
+          requireAuth: true,
+        }, token);
+
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: "Thank you for your message!", fromUser: false },
+          { text: response.result, fromUser: false },
         ]);
-        setLoading(false); // Stop loading indicator
-      }, 1000);
+      } catch (error) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { text: 'An error occurred. Please try again.', fromUser: false },
+        ]);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -76,6 +83,16 @@ const ChatBot: React.FC = () => {
     if (event.key === "Enter") {
       handleSendMessage();
     }
+  };
+
+  const handleLogout = () => {
+    dispatch({ type: LOGOUT });
+    if (token) {
+      localStorage.removeItem(`chatbotMessages_${token}`);
+    } else {
+      sessionStorage.removeItem('chatbotMessagesGuest');
+    }
+    window.location.href = '/';
   };
 
   return (
@@ -111,7 +128,7 @@ const ChatBot: React.FC = () => {
             ))}
             {loading && (
               <div className="chatbot-message bot loading">
-                <div className="loading-spinner"></div> {/* Loading spinner */}
+                <div className="loading-spinner"></div>
                 <span>...</span>
               </div>
             )}

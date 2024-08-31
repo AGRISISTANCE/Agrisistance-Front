@@ -30,10 +30,10 @@ import Error from './views/404';
 import Plan from './views/admin/plan';
 import Yournetwork from './views/admin/yournetwork';
 import { layout } from '@chakra-ui/system';
-import EmailUpdatedSuccessfully from 'views/admin/emailUpdatedSuccessfully';
-import EmailVerified from 'views/admin/emailverified';
-import ForgetPassword from 'views/admin/ForgotPassword';
-import ResetPassword from 'views/auth/reset-password';
+import EmailUpdatedSuccessfully from './views/admin/emailUpdatedSuccessfully';
+import EmailVerified from './views/admin/emailverified';
+import ForgetPassword from './views/admin/ForgotPassword';
+import ResetPassword from './views/auth/reset-password';
 
 const routes = [
   {

@@ -51,7 +51,7 @@ export default function Main() {
         <Route path='*' element={<Error />} />
         <Route path='/plan' element={<Plan />} />
       </Routes>
-      {showChatbot && <Chatbot />}
+      {showChatbot && token && <Chatbot />}
     </ChakraProvider>
   );
 }

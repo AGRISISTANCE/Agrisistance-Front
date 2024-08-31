@@ -3,8 +3,8 @@ import { Flex, Button, Text, useDisclosure } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLand, removeLand, setInitialLands, LandInfo, setSelectedLand } from '../../../../redux/landsSlice'; // Ensure this import is correct
 import land from '../../../../assets/img/land/land';
-import { apiCall } from 'services/api';
-import { RootState } from 'redux/store';
+import { apiCall } from '../../../../services/api';
+import { RootState } from '../../../../redux/store';
 
 
 interface LandProps {
