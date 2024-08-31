@@ -19,9 +19,13 @@ import {
 } from "./styles";
 
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 
 const Header = ({ t }: { t: TFunction }) => {
+  const token = useSelector((state: RootState) => state.token.token);
+
   const [visible, setVisibility] = useState(false);
 
   const toggleButton = () => {
@@ -55,7 +59,7 @@ const Header = ({ t }: { t: TFunction }) => {
           onClick={() => scrollTo("contact")}
         >
           <Span>
-          <NavLink to="/auth/login">
+          <NavLink to={token ? "/dashboard/home" : "/auth/login"}>
             <Button>{t("Get Started")}</Button>
           </NavLink>
           </Span>

@@ -27,6 +27,8 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Preload from './Preloade';
 import { Flex } from '@chakra-ui/react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/store';
 // import { redirect } from "react-router-dom";
 interface CustomFadeProps extends FadeProps {
     children: ReactNode;
@@ -52,6 +54,7 @@ class LandingPage extends Component<{}, LandingPageState> {
     };
 
     }
+    token = useSelector((state: RootState) => state.token.token);
 
     handleAnimationComplete = () => {
         this.setState({ isPreloadComplete: true });
@@ -111,7 +114,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                                                 <h4>From <span className="green">UNCERTAINTY</span> to <span className="green">OPPORTUNITY</span></h4>
                                                 <Content>Get the most out of your lands! We offre continuous help and assistance to boost your farming journey.</Content>
                                                 <ButtonWrapper>
-                                                    <NavLink to="/auth/login">
+                                                    <NavLink to={this.token ? "/dashboard/home" : "/auth/login"}>
                                                         <Button>
                                                             &nbsp; &nbsp; &nbsp; &nbsp;  Get Started &nbsp; &nbsp;  &nbsp; &nbsp;
                                                         </Button>

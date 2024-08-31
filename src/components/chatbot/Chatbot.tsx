@@ -2,13 +2,31 @@ import React, { useState, useEffect, KeyboardEvent } from 'react';
 import './Chatbot.css';
 import farmerEmoji from '../../assets/img/icons/farmeremoji.png'; // Import the chatbot icon
 import headerIcon from '../../assets/img/icons/farmeremoji.png'; // Import the header icon
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/store';
 
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  // const [messages, setMessages] = useState<{ text: string; fromUser: boolean }[]>(() => {
+  //     const savedMessages = localStorage.getItem('chatbotMessages');
+  //     return savedMessages ? JSON.parse(savedMessages) : [];
+  // });
+  const token = useSelector((state: RootState) => state.token.token);
   const [messages, setMessages] = useState<{ text: string; fromUser: boolean }[]>(() => {
-      const savedMessages = localStorage.getItem('chatbotMessages');
-      return savedMessages ? JSON.parse(savedMessages) : [];
+    const storageKey = token ? `chatbotMessages_${token}` : 'chatbotMessagesGuest';
+    const savedMessages = token ? localStorage.getItem(storageKey) : sessionStorage.getItem(storageKey);
+    return savedMessages ? JSON.parse(savedMessages) : [];
   });
+
+  useEffect(() => {
+    const storageKey = token ? `chatbotMessages_${token}` : 'chatbotMessagesGuest';
+    if (token) {
+      localStorage.setItem(storageKey, JSON.stringify(messages));
+    } else {
+      sessionStorage.setItem(storageKey, JSON.stringify(messages));
+    }
+  }, [messages, token]);
+
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false); // Loading state
 
