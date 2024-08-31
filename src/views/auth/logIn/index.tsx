@@ -6,9 +6,14 @@ import { useNavigate } from "react-router-dom";
 
 // Chakra imports
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Checkbox,
+  CloseButton,
   Flex,
   FormControl,
   FormLabel,
@@ -21,11 +26,9 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 // Custom components
-import { HSeparator } from "../../../components/separator/Separator";
 import DefaultAuth from "../../../layouts/auth/Default";
 // Assets
 import illustration from "../../../assets/img/auth/auth.png";
-import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 
@@ -39,10 +42,6 @@ function LogIn() {
   const textColorBrand = useColorModeValue("brand.500", "white");
   const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const brandStars = useColorModeValue("brand.500", "brand.400");
-  const googleBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
-  const googleText = useColorModeValue("navy.700", "white");
-  const googleHover = useColorModeValue({ bg: "gray.200" }, { bg: "whiteAlpha.300" });
-  const googleActive = useColorModeValue({ bg: "secondaryGray.300" }, { bg: "whiteAlpha.200" });
 
   const [show, setShow] = React.useState(false);
   const [email, setEmail] = React.useState("");
@@ -51,7 +50,7 @@ function LogIn() {
 
   const navigate = useNavigate();
   const handleClick = () => setShow(!show);
-  
+
   const dispatch = useDispatch();
 
   const loginUser = async () => {
@@ -60,7 +59,7 @@ function LogIn() {
         email: email,
         password: password,
       };
-    
+
       const response = await apiCall('/auth/login', {
         method: 'POST',
         data: credentials,
@@ -68,18 +67,33 @@ function LogIn() {
 
       // Store token in Redux
       dispatch(setToken(response.token));
-      
+
       console.log(response.msg); // Logged in successfully !
       console.log("your token: ", response.token)
       setMessage("Login successful! Redirecting...");
       setTimeout(() => {
         navigate("/dashboard/home"); // Redirect to dashboard on successful login
       }, 1000)
-      }
-      catch (error: any) {
-        setMessage(error.message || "Login failed. Please try again.");
-      }
+    }
+    catch (error: any) {
+      setMessage(error.message || "Login failed. Please try again.");
+    }
   };
+  const [showEmailVerificationAlert, setShowEmailVerificationAlert] = React.useState(false);
+  const [showPasswordResetAlert, setShowPasswordResetAlert] = React.useState(false);
+  
+  const handleEmailVerification = async () => {
+    // Simulate email verification logic
+    // If successful, show the email verification modal
+    setShowEmailVerificationAlert(true);
+  };
+
+  const handlePasswordReset = async () => {
+    // Simulate password reset logic
+    // If successful, show the password reset modal
+    setShowPasswordResetAlert(true);
+  };
+
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
       <Flex
@@ -229,13 +243,48 @@ function LogIn() {
             </NavLink>
           </Text>
         </Flex>
+        {showEmailVerificationAlert && (
+        <Alert status="success">
+          <AlertIcon />
+          <Box>
+            <AlertTitle>Email Verified!</AlertTitle>
+            <AlertDescription>
+              Your email has been verified successfully. Please log in to continue.
+            </AlertDescription>
+          </Box>
+          <CloseButton
+            alignSelf="flex-start"
+            position="relative"
+            right={-1}
+            top={-1}
+            onClick={() => setShowEmailVerificationAlert(false)}
+          />
+        </Alert>
+      )}
+
+      {/* Password Reset Alert */}
+      {showPasswordResetAlert && (
+        <Alert status="success">
+          <AlertIcon />
+          <Box>
+            <AlertTitle>Password Reset!</AlertTitle>
+            <AlertDescription>
+              Your password has been reset successfully. Please log in with your new password.
+            </AlertDescription>
+          </Box>
+          <CloseButton
+            alignSelf="flex-start"
+            position="relative"
+            right={-1}
+            top={-1}
+            onClick={() => setShowPasswordResetAlert(false)}
+          />
+        </Alert>
+      )}  
       </Flex>
-    </DefaultAuth>
+
+    </DefaultAuth >
   );
 }
 
 export default LogIn;
-function dispatch(arg0: { payload: string; type: "token/setToken"; }) {
-  throw new Error("Function not implemented.");
-}
-
