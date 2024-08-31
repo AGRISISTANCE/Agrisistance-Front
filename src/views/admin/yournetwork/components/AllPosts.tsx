@@ -14,8 +14,8 @@ interface AllPostsProps {
 const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
   const posts = useSelector((state: RootState) => state.posts);
 
-
-  console.log('Posts at allPosts: ', posts); // Add this line
+  // Check posts here
+  console.log('Current Posts State:', posts);
 
   return (
     <div>

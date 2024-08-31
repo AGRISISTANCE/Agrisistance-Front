@@ -84,7 +84,6 @@ const initialDummyPosts: Post[] = [
     active: false,
   },
 ];
-
 const initialState: Post[] = USE_DUMMY_DATA ? initialDummyPosts : [];
 
 const postsSlice = createSlice({
@@ -108,3 +107,4 @@ const postsSlice = createSlice({
 
 export const { addPost, updatePost, removePost } = postsSlice.actions;
 export default postsSlice.reducer;
+

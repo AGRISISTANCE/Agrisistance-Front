@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistStore, persistReducer, purgeStoredState } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import userReducer from './userSlice';
 import landsReducer from './landsSlice';
@@ -18,11 +18,13 @@ const appReducer = combineReducers({
 // Root reducer with logout handling
 const rootReducer = (state: ReturnType<typeof appReducer>, action: any) => {
   if (action.type === LOGOUT) {
-    // Reset state to initial values
+    // Clear persisted state
+    purgeStoredState({ key: 'root', storage });
     return appReducer(undefined, action);
   }
   return appReducer(state, action);
 };
+
 
 // Persist configuration
 const persistConfig = {

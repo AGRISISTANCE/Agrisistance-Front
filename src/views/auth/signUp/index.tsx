@@ -49,6 +49,7 @@ function SignUp() {
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCountryCode(e.target.value);
+    console.log("curent country code: ", selectedCountryCode)
   };
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,13 +61,13 @@ function SignUp() {
   const handleClick = () => setShow(!show);
 
   const registerUser = async () => {
+    console.log("selected country code:", selectedCountryCode)
       try{
         const userData = {
           firstName: firstName,
           lastName: lastName,
           country: country,
-          role : "Owner",
-          // phoneNumber: '+213659783694',
+          phoneNumber: `${selectedCountryCode}${phoneNumber}`,
           eMail: email,
           password: password,
         };
@@ -86,9 +87,12 @@ function SignUp() {
       // Check if the response contains the message
       catch (error: any) {
       // Handle the error based on the structure
+      
       setMessage(error.message || "An unexpected error occurred.");
       setMessageColor("red");
     }
+
+
   }
       
     
