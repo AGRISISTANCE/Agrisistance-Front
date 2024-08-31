@@ -79,7 +79,7 @@ function LogIn() {
       setMessage(error.message || "Login failed. Please try again.");
     }
   };
-  const [showPasswordResetAlert, setShowPasswordResetAlert] = React.useState(true);
+  const [showPasswordResetAlert, setShowPasswordResetAlert] = React.useState(false);
   
 
   const handlePasswordReset = async () => {

@@ -29,65 +29,74 @@ export function SidebarLinks(props: { routes: RouteType[] }) {
 	};
 
 	// Creates the links for each route
-	const createLinks = (routes: RouteType[]) => {
-		return routes.map((route: RouteType, index: number) => {
+		const createLinks = (routes: RouteType[]) => {
+			return routes.map((route: RouteType, index: number) => {
+			const isExcludedRoute =
+				route.path === '/signup' ||
+				route.path === '/login' ||
+				route.path === '/profile/email-updated-successfully' ||
+				route.path === '/profile/email-verified' ||
+				route.path === '/forgot-password' ||
+				route.path.startsWith('/reset-password');
+		
 			if (
 				(route.layout === '/dashboard' || route.layout === '/auth' || route.layout === '/rtl') &&
-				(route.path !== '/signup' && route.path !== '/login' && route.path !== '/profile/email-updated-successfully' && route.path !== '/profile/email-verified' && route.path !== '/forget-password' && route.path !== '/reset-password/*')
+				!isExcludedRoute
 			) {
 				return (
-					<NavLink key={index} to={route.layout + route.path}>
-						{route.icon ? (
-							<Box>
-								<HStack
-									spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'}
-									py="5px"
-									ps="10px"
-								>
-									<Flex w="100%" alignItems="center" justifyContent="center">
-										<Box color={activeRoute(route.path.toLowerCase()) ? activeIcon : textColor} me="18px">
-											{route.icon}
-										</Box>
-										<Text
-											me="auto"
-											color={activeRoute(route.path.toLowerCase()) ? activeColor : textColor}
-											fontWeight={activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'}
-										>
-											{route.name}
-										</Text>
-									</Flex>
-									<Box
-										h="36px"
-										w="4px"
-										bg={activeRoute(route.path.toLowerCase()) ? brandColor : 'transparent'}
-										borderRadius="5px"
-									/>
-								</HStack>
+				<NavLink key={index} to={route.layout + route.path}>
+					{route.icon ? (
+					<Box>
+						<HStack
+						spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'}
+						py="5px"
+						ps="10px"
+						>
+						<Flex w="100%" alignItems="center" justifyContent="center">
+							<Box color={activeRoute(route.path.toLowerCase()) ? activeIcon : textColor} me="18px">
+							{route.icon}
 							</Box>
-						) : (
-							<Box>
-								<HStack
-									spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'}
-									py="5px"
-									ps="10px"
-								>
-									<Text
-										me="auto"
-										color={activeRoute(route.path.toLowerCase()) ? activeColor : inactiveColor}
-										fontWeight={activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'}
-									>
-										{route.name}
-									</Text>
-									<Box h="36px" w="4px" bg="brand.400" borderRadius="5px" />
-								</HStack>
-							</Box>
-						)}
-					</NavLink>
+							<Text
+							me="auto"
+							color={activeRoute(route.path.toLowerCase()) ? activeColor : textColor}
+							fontWeight={activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'}
+							>
+							{route.name}
+							</Text>
+						</Flex>
+						<Box
+							h="36px"
+							w="4px"
+							bg={activeRoute(route.path.toLowerCase()) ? brandColor : 'transparent'}
+							borderRadius="5px"
+						/>
+						</HStack>
+					</Box>
+					) : (
+					<Box>
+						<HStack
+						spacing={activeRoute(route.path.toLowerCase()) ? '22px' : '26px'}
+						py="5px"
+						ps="10px"
+						>
+						<Text
+							me="auto"
+							color={activeRoute(route.path.toLowerCase()) ? activeColor : inactiveColor}
+							fontWeight={activeRoute(route.path.toLowerCase()) ? 'bold' : 'normal'}
+						>
+							{route.name}
+						</Text>
+						<Box h="36px" w="4px" bg="brand.400" borderRadius="5px" />
+						</HStack>
+					</Box>
+					)}
+				</NavLink>
 				);
 			}
 			return null; // Ensure a valid return for routes that do not match the criteria
-		});
-	};
+			});
+		};
+
 
 	// Render the created links
 	return <>{createLinks(routes)}</>;

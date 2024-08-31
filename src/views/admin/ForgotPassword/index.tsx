@@ -30,7 +30,7 @@ import { setToken } from '../../../redux/tokenSlice';
 import { apiCall } from "../../../services/api";
 import { useDispatch } from 'react-redux';
 
-function ForgetPassword() {
+function ForgotPassword() {
     const textColor = useColorModeValue("navy.700", "white");
     const textColorSecondary = "gray.400";
     const textColorBrand = useColorModeValue("brand.500", "white");
@@ -92,7 +92,7 @@ function ForgetPassword() {
                 flexDirection='column'>
                 <Box me='auto'>
                     <Heading color={textColor} fontSize='36px' mb='10px'>
-                        Forget password
+                        Forgot password
                     </Heading>
                     <Text
                         mb='36px'
@@ -197,4 +197,4 @@ function ForgetPassword() {
     );
 }
 
-export default ForgetPassword;
+export default ForgotPassword;

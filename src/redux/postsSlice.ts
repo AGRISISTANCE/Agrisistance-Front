@@ -15,7 +15,7 @@ interface Post {
 }
 
 // Flag to toggle between dummy and real data
-const USE_DUMMY_DATA = true;
+const USE_DUMMY_DATA = false;
 
 const initialDummyPosts: Post[] = [
   {

@@ -12,7 +12,7 @@ import Error from './views/404';
 import Plan from './views/admin/plan';
 import Profile from './views/admin/profile';
 import ResetPassword from 'views/auth/reset-password';
-import ForgetPassword from 'views/admin/ForgetPassword';
+import ForgetPassword from 'views/admin/ForgotPassword';
 import Emailverified from 'views/admin/emailverified';
 import EmailUpdatedSuccessfully from 'views/admin/emailUpdatedSuccessfully';
 import { useSelector } from 'react-redux';
@@ -31,7 +31,12 @@ export default function Main() {
     <ChakraProvider theme={currentTheme}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="auth/*" element={<AuthLayout />} />
+        {!token ? (
+          <Route path="auth/*" element={<AuthLayout />} />
+        ) : (
+          <Route path="auth/*" element={<Error />} />
+        )}
+        {/* <Route path="auth/*" element={<AuthLayout />} /> */}
         {/* Conditionally render Admin Layout based on token */}
         {token ? (
           <Route

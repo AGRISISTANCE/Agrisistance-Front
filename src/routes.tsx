@@ -32,7 +32,7 @@ import Yournetwork from './views/admin/yournetwork';
 import { layout } from '@chakra-ui/system';
 import EmailUpdatedSuccessfully from 'views/admin/emailUpdatedSuccessfully';
 import EmailVerified from 'views/admin/emailverified';
-import ForgetPassword from 'views/admin/ForgetPassword';
+import ForgetPassword from 'views/admin/ForgotPassword';
 import ResetPassword from 'views/auth/reset-password';
 
 const routes = [
@@ -101,10 +101,10 @@ const routes = [
     component: <EmailVerified />,
   },
   {
-    name: 'forget password',
+    name: 'forgot password',
     layout: '/auth',
     icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
-    path: '/forget-password',
+    path: '/forgot-password',
     component: <ForgetPassword />,
   },
   {
