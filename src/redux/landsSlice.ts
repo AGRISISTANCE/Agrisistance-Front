@@ -189,11 +189,14 @@ const landsSlice = createSlice({
     deselectLand: (state) => {
       state.selectedLand = null;
     },
+    setSelectedLand: (state, action: PayloadAction<LandInfo>) => {
+      state.selectedLand = action.payload;
+    },
     setInitialLands: (state, action: PayloadAction<LandInfo[]>) => {
       state.lands = action.payload;
     },
   },
 });
 
-export const { addLand, updateLand, removeLand, selectLand, deselectLand, setInitialLands } = landsSlice.actions;
+export const { addLand, updateLand, removeLand, selectLand, deselectLand, setSelectedLand, setInitialLands } = landsSlice.actions;
 export default landsSlice.reducer;
