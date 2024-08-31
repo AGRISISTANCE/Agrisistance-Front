@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Icon } from '@chakra-ui/react';
 
 import {
@@ -29,6 +29,11 @@ import LandingPage from './views/Landing/landingPage';
 import Error from './views/404';
 import Plan from './views/admin/plan';
 import Yournetwork from './views/admin/yournetwork';
+import { layout } from '@chakra-ui/system';
+import EmailUpdatedSuccessfully from 'views/admin/emailUpdatedSuccessfully';
+import EmailVerified from 'views/admin/emailverified';
+import ForgetPassword from 'views/admin/ForgetPassword';
+import ResetPassword from 'views/auth/reset-password';
 
 const routes = [
   {
@@ -80,6 +85,34 @@ const routes = [
     icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
     path: '/plans',
     component: <Plan />,
+  },
+  {
+    name: 'email Updated',
+    layout: '/dashboard',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/profile/email-verified',
+    component: <EmailUpdatedSuccessfully />,
+  },
+  {
+    name: 'email Verified',
+    layout: '/dashboard',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/profile/email-verified',
+    component: <EmailVerified />,
+  },
+  {
+    name: 'forget password',
+    layout: '/auth',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/forget-password',
+    component: <ForgetPassword />,
+  },
+  {
+    name: 'reset password',
+    layout: '/auth',
+    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
+    path: '/reset-password',
+    component: <ResetPassword />,
   },
   {
     name: 'Your Network',

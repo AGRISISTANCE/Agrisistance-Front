@@ -12,6 +12,9 @@ import Error from './views/404';
 import Plan from './views/admin/plan';
 import Profile from './views/admin/profile';
 import ResetPassword from 'views/auth/reset-password';
+import ForgetPassword from 'views/admin/ForgetPassword';
+import Emailverified from 'views/admin/emailverified';
+import EmailUpdatedSuccessfully from 'views/admin/emailUpdatedSuccessfully';
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store'; // Adjust the import path as needed
 
@@ -42,7 +45,6 @@ export default function Main() {
         )}
         <Route path='*' element={<Error />} />
         <Route path='/plan' element={<Plan />} />
-        <Route path='/auth/reset-password' element={<ResetPassword/>} />
       </Routes>
       {showChatbot && <Chatbot />}
     </ChakraProvider>
