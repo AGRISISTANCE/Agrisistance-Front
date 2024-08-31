@@ -1,21 +1,17 @@
-import React from 'react';
-import { Component } from "react";
+import React, { useState, useEffect, lazy } from 'react';
 import { Button } from "../../common/Button";
 import { SvgIcon } from "../../common/SvgIcon";
-import { lazy } from "react";
-import { Fade, FadeProps } from 'react-awesome-reveal';
+import { Fade } from 'react-awesome-reveal';
 import { Col } from 'antd';
-import { ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from 'redux/store';
 import screen1 from './png/screen1.png';
 import screen2 from './png/screen2.png';
 import screen3 from './png/screen3.png';
 import screen4 from './png/screen4.png';
-//import Preloader from './Preloade';
-
-
-
-
+import Preload from './Preloade';
+import { Flex } from '@chakra-ui/react';
 import {
     ContentSection,
     Content,
@@ -25,72 +21,46 @@ import {
 } from "./styles";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import Preload from './Preloade';
-import { Flex } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
-// import { redirect } from "react-router-dom";
-interface CustomFadeProps extends FadeProps {
-    children: ReactNode;
-}
+
 const Contact = lazy(() => import("../../components/ContactForm"));
 const Container = lazy(() => import("../../common/Container"));
 const ScrollToTop = lazy(() => import("../../common/ScrollToTop"));
 
+const LandingPage: React.FC = () => {
+    const [isPreloadComplete, setIsPreloadComplete] = useState(false);
+    const token = useSelector((state: RootState) => state.token.token);
 
-
-interface LandingPageState {
-    isPreloadComplete: boolean;
-    backendUrl?: string;  // Add `backendUrl` as optional or required depending on your use case
-  }
-
-class LandingPage extends Component<{}, LandingPageState> {
-    constructor(props: {}) {
-        super(props);
-
-    // Initialize state
-    this.state = {
-      isPreloadComplete: false,
+    const handleAnimationComplete = () => {
+        setIsPreloadComplete(true);
     };
 
-    }
-    token = useSelector((state: RootState) => state.token.token);
-
-    handleAnimationComplete = () => {
-        this.setState({ isPreloadComplete: true });
-    };
-
-      // Function to make GET requests
-      makeGetRequests = async () => {
+    const makeGetRequests = async () => {
         try {
-          const response1 = await fetch('http://localhost:8081/');
-          if (!response1.ok) {
-            throw new Error(`Failed to fetch from localhost:8081. Status: ${response1.status}`);
-          }
-          const data1 = await response1.json();
-          console.log('Response from localhost:8081:', data1);
-    
-          const response2 = await fetch('http://localhost:8000/');
-          if (!response2.ok) {
-            throw new Error(`Failed to fetch from localhost:8000. Status: ${response2.status}`);
-          }
-          const data2 = await response2.json();
-          console.log('Response from localhost:8000:', data2);
+            const response1 = await fetch('http://localhost:8081/');
+            if (!response1.ok) {
+                throw new Error(`Failed to fetch from localhost:8081. Status: ${response1.status}`);
+            }
+            const data1 = await response1.json();
+            console.log('Response from localhost:8081:', data1);
+
+            const response2 = await fetch('http://localhost:8000/');
+            if (!response2.ok) {
+                throw new Error(`Failed to fetch from localhost:8000. Status: ${response2.status}`);
+            }
+            const data2 = await response2.json();
+            console.log('Response from localhost:8000:', data2);
         } catch (error) {
-          console.error('Error making GET requests:', error);
+            console.error('Error making GET requests:', error);
         }
-      };
+    };
 
-  componentDidMount() {
-    this.makeGetRequests();
-  }
+    useEffect(() => {
+        makeGetRequests();
+    }, []); // Empty dependency array ensures this runs only once after the initial render.
 
-    render() {
-        const { isPreloadComplete } = this.state;
-
-        return (
+    return(
             <>
-                {!isPreloadComplete && <Preload onAnimationComplete={this.handleAnimationComplete} />}
+                {!isPreloadComplete && <Preload onAnimationComplete={handleAnimationComplete} />}
                 {isPreloadComplete && (
                     <div>
                         <Header />
@@ -98,7 +68,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                         <Container>
                             <ScrollToTop />
                             <ContentSection id="intro">
-                                <Fade direction="right" triggerOnce={true} {...(this.props as CustomFadeProps)}>
+                                <Fade direction="right" triggerOnce={true}>
                                     <StyledRow
                                         justify="space-between"
                                         align="middle"
@@ -114,7 +84,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                                                 <h4>From <span className="green">UNCERTAINTY</span> to <span className="green">OPPORTUNITY</span></h4>
                                                 <Content>Get the most out of your lands! We offre continuous help and assistance to boost your farming journey.</Content>
                                                 <ButtonWrapper>
-                                                    <NavLink to={this.token ? "/dashboard/home" : "/auth/login"}>
+                                                    <NavLink to={token ? "/dashboard/home" : "/auth/login"}>
                                                         <Button>
                                                             &nbsp; &nbsp; &nbsp; &nbsp;  Get Started &nbsp; &nbsp;  &nbsp; &nbsp;
                                                         </Button>
@@ -128,7 +98,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                             </ContentSection>
                             <Flex height={'10vh'} width={'100%'}></Flex>
                             <ContentSection id="what">
-                                <Fade direction="left" triggerOnce={true} {...(this.props as CustomFadeProps)}>
+                                <Fade direction="left" triggerOnce={true} >
                                     <StyledRow
                                         justify="space-between"
                                         align="middle"
@@ -148,7 +118,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                                 </Fade>
                             </ContentSection>
                             <ContentSection id="easy">
-                                <Fade direction="right" triggerOnce={true} {...(this.props as CustomFadeProps)}>
+                                <Fade direction="right" triggerOnce={true} >
                                     <StyledRow
                                         justify="space-between"
                                         align="middle"
@@ -168,7 +138,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                                 </Fade>
                             </ContentSection>
                             <ContentSection id="firstkind">
-                                <Fade direction="left" triggerOnce={true} {...(this.props as CustomFadeProps)}>
+                                <Fade direction="left" triggerOnce={true} >
                                     <StyledRow
                                         justify="space-between"
                                         align="middle"
@@ -188,7 +158,7 @@ class LandingPage extends Component<{}, LandingPageState> {
                                 </Fade>
                             </ContentSection>
                             <ContentSection id="track">
-                                <Fade direction="right" triggerOnce={true} {...(this.props as CustomFadeProps)}>
+                                <Fade direction="right" triggerOnce={true}>
                                     <StyledRow
                                         justify="space-between"
                                         align="middle"
@@ -214,6 +184,4 @@ class LandingPage extends Component<{}, LandingPageState> {
             </>
         );
     }
-}
-
 export default LandingPage;
