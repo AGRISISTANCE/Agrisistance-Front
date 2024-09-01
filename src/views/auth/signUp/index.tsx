@@ -88,7 +88,7 @@ function SignUp() {
       catch (error: any) {
       // Handle the error based on the structure
       
-      setMessage(error.message || "An unexpected error occurred.");
+      setMessage("An unexpected error occurred, please confirm all inputs are correct.");
       setMessageColor("red");
     }
 

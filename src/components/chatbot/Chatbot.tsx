@@ -61,8 +61,7 @@ const ChatBot: React.FC = () => {
         const response = await apiCall('/model/chat-bot', {
           method: 'POST',
           data: { message: input },
-          requireAuth: true,
-        }, token);
+        });
 
         setMessages((prevMessages) => [
           ...prevMessages,

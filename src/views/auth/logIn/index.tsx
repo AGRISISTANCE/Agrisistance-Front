@@ -76,7 +76,7 @@ function LogIn() {
       }, 1000)
     }
     catch (error: any) {
-      setMessage(error.message || "Login failed. Please try again.");
+      setMessage("Login failed. Please confirm your credentials and try again.");
     }
   };
   

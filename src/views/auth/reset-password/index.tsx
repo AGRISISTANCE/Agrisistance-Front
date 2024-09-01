@@ -28,9 +28,7 @@ import illustration from "../../../assets/img/auth/auth.png";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 
-import { setToken } from '../../../redux/tokenSlice';
 import { apiCall } from "../../../services/api";
-import { useDispatch } from 'react-redux';
 
 function ResetPassword() {
     const textColor = useColorModeValue("navy.700", "white");
@@ -49,16 +47,13 @@ function ResetPassword() {
 
     const handleClick = () => setShow(!show);
 
-    const dispatch = useDispatch();
-
-    const resetPassword = async () => {
+    const handleResetPassword = async () => {
         try {
             if (confirmPassword === password) {
-                const credentials = {
-                    newPassword: password,
-                };
+                const credentials = { newPassword: password };
+
                 const response = await apiCall(`/auth/reset-password/${token}`, {
-                    method: 'PUT', // Use PUT as required
+                    method: 'PUT',
                     data: credentials,
                 });
 
@@ -70,7 +65,7 @@ function ResetPassword() {
                 setMessage("Confirm password should be the same as the password");
             }
         } catch (error: any) {
-            setMessage(error.message || "Password reset failed. Please try again.");
+            setMessage("Password reset failed. Please confirm your inputs and try again.");
         }
     };
     return (
@@ -176,7 +171,7 @@ function ResetPassword() {
                             w='100%'
                             h='50'
                             mb='24px'
-                            onClick={ResetPassword}
+                            onClick={handleResetPassword}
                             disabled={!confirmPassword !== !password}
                         >
                             Reset Password

@@ -25,7 +25,7 @@ const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
           <PostCard
             key={post.postID}
             author={{
-              profilePicture: post.images[0], // Assuming the first image is the profile picture
+              profilePicture: post.image, // Assuming the first image is the profile picture
               name: post.authorName,
               country: post.authorCountry,
               phoneNumber: post.authorPhoneNumber,
@@ -34,7 +34,7 @@ const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
               category: post.type,
               title: post.Title,
               description: post.Description,
-              image: post.images[0], // Assuming the first image is the main content image
+              image: post.image, // Assuming the first image is the main content image
               date: post.postDate,
             }}
           />

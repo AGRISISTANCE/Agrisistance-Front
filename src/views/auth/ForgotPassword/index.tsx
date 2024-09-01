@@ -51,7 +51,7 @@ function ForgotPassword() {
             setShowCodeAlert(true)
         }
         catch (error: any) {
-            setMessage(error.message || "password reset failed. Please try again.");
+            setMessage("password reset failed. Please confirm your email and try again.");
         }
     };
     const [showCodeAlert, setShowCodeAlert] = React.useState(false);

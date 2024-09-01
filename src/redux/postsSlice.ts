@@ -5,14 +5,16 @@ interface Post {
   Title: string;
   type: 'opportunitiesAndPartnership' | 'businessPromotion' | 'resourcesAndProducts';
   Description: string;
-  images: string[];
+  image: string;
   authorId: string; // userID
   authorName: string;
   authorPhoneNumber: string;
   authorCountry: string;
+  authorPicture: string;
   postDate: string;
   active: boolean; // true for active, false for archived
 }
+
 
 // Flag to toggle between dummy and real data
 const USE_DUMMY_DATA = false;
@@ -23,11 +25,12 @@ const initialDummyPosts: Post[] = [
     Title: 'Innovative Farming Techniques',
     type: 'opportunitiesAndPartnership',
     Description: 'Explore new techniques to boost crop yield and sustainability.',
-    images: ['farming1.jpg', 'farming2.jpg'],
+    image: 'farming1.jpg',
     authorId: 'c94fe502-79a0-4a6d-a533-9b72a28459ab',
     authorName: 'John Doe',
     authorPhoneNumber: '+1234567890',
     authorCountry: 'USA',
+    authorPicture:'',
     postDate: '2024-08-30',
     active: true,
   },
@@ -36,11 +39,12 @@ const initialDummyPosts: Post[] = [
     Title: 'New Business Opportunities',
     type: 'businessPromotion',
     Description: 'Join us to explore exciting new business ventures.',
-    images: ['business1.jpg', 'business2.jpg'],
+    image: 'business1.jpg',
     authorId: 'user2',
     authorName: 'Jane Smith',
     authorPhoneNumber: '+0987654321',
     authorCountry: 'Canada',
+    authorPicture:'',
     postDate: '2024-08-29',
     active: true,
   },
@@ -49,11 +53,12 @@ const initialDummyPosts: Post[] = [
     Title: 'Agricultural Resources Available',
     type: 'resourcesAndProducts',
     Description: 'Access high-quality resources for agricultural productivity.',
-    images: ['resources1.jpg', 'resources2.jpg'],
+    image: 'resources1.jpg',
     authorId: 'user3',
     authorName: 'Emily Johnson',
     authorPhoneNumber: '+1122334455',
     authorCountry: 'UK',
+    authorPicture:'',
     postDate: '2024-08-28',
     active: false,
   },
@@ -62,11 +67,12 @@ const initialDummyPosts: Post[] = [
     Title: 'Agricultural Resources Available',
     type: 'resourcesAndProducts',
     Description: 'Access high-quality resources for agricultural productivity.',
-    images: ['resources1.jpg', 'resources2.jpg'],
+    image: 'resources1.jpg',
     authorId: 'c94fe502-79a0-4a6d-a533-9b72a28459ab',
     authorName: 'Idriss fellah',
     authorPhoneNumber: '+1122334455',
     authorCountry: 'UK',
+    authorPicture:'',
     postDate: '2024-08-28',
     active: false,
   },
@@ -75,11 +81,12 @@ const initialDummyPosts: Post[] = [
     Title: 'Agricultural Resources Available',
     type: 'resourcesAndProducts',
     Description: 'Access high-quality resources for agricultural productivity.',
-    images: ['resources1.jpg', 'resources2.jpg'],
+    image: 'resources1.jpg',
     authorId: 'c94fe502-79a0-4a6d-a533-9b72a28459ab',
     authorName: 'Idriss fellah',
     authorPhoneNumber: '+1122334455',
     authorCountry: 'UK',
+    authorPicture:'',
     postDate: '2024-08-28',
     active: false,
   },
