@@ -154,14 +154,23 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         },
         token
       );
+
   
-      const landId = addLandResponse.data.landId;
-      console.log('Land added successfully:', addLandResponse.message);
-  
+      // if (addLandResponse && addLandResponse.land_id) {
+        const landId = addLandResponse.land_id;
+        console.log('Land added successfully:', addLandResponse.message);
+        console.log('New land created ID:', landId);
+
+
+
+        console.log('Request payload:', {
+          land_id: landId
+        });
+
       // Step 2: Generate Business Plan
       setProgressMessage('Generating business plan and predictions...');
       await apiCall(
-        '/api/model/generate-business-plan',
+        '/model/generate-business-plan',
         {
           method: 'POST',
           data: { land_id: landId },
@@ -174,7 +183,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       // Step 3: Get Land by ID
       setProgressMessage('Fetching updated land data...');
       const landResponse = await apiCall(
-        `/api/land/get-land/${landId}`,
+        `/land/get-land/${landId}`,
         {
           method: 'GET',
           requireAuth: true,
