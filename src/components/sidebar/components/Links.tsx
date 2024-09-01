@@ -35,9 +35,10 @@ export function SidebarLinks(props: { routes: RouteType[] }) {
 				route.path === '/signup' ||
 				route.path === '/login' ||
 				route.path === '/profile/email-updated-successfully' ||
+				route.path === '/email-verified-successfully' ||
 				route.path === '/profile/email-verified' ||
-				route.path === '/forgot-password' ||
-				route.path.startsWith('/reset-password');
+				route.path.startsWith('/reset-password') ||
+				route.path === '/forgot-password';
 		
 			if (
 				(route.layout === '/dashboard' || route.layout === '/auth' || route.layout === '/rtl') &&

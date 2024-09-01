@@ -36,19 +36,19 @@ const LandingPage: React.FC = () => {
 
     const makeGetRequests = async () => {
         try {
-            const response1 = await fetch('http://localhost:8081/');
+            const response1 = await fetch('http://127.0.0.1:8000/');
             if (!response1.ok) {
-                throw new Error(`Failed to fetch from localhost:8081. Status: ${response1.status}`);
+                throw new Error(`Failed to fetch from http://127.0.0.1:8000/. Status: ${response1.status}`);
             }
             const data1 = await response1.json();
-            console.log('Response from localhost:8081:', data1);
+            console.log('Response from http://127.0.0.1:8000:', data1);
 
-            const response2 = await fetch('http://localhost:8000/');
+            const response2 = await fetch('http://localhost:8081/');
             if (!response2.ok) {
-                throw new Error(`Failed to fetch from localhost:8000. Status: ${response2.status}`);
+                throw new Error(`Failed to fetch from http://localhost:8081/. Status: ${response2.status}`);
             }
             const data2 = await response2.json();
-            console.log('Response from localhost:8000:', data2);
+            console.log('Response from http://localhost:8081:', data2);
         } catch (error) {
             console.error('Error making GET requests:', error);
         }
@@ -57,6 +57,7 @@ const LandingPage: React.FC = () => {
     useEffect(() => {
         makeGetRequests();
     }, []); // Empty dependency array ensures this runs only once after the initial render.
+
 
     return(
             <>

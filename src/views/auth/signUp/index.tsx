@@ -44,7 +44,7 @@ function SignUp() {
   const [country, setCountry] = useState("Select your Country");
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("");
-  const [selectedCountryCode, setSelectedCountryCode] = useState<string>('+1');
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string>('+213');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

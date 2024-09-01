@@ -1,6 +1,6 @@
 
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +19,8 @@ import {
     Text,
     useColorModeValue,
 } from "@chakra-ui/react";
+
+
 // Custom components
 import DefaultAuth from "../../../layouts/auth/Default";
 // Assets
@@ -43,41 +45,34 @@ function ResetPassword() {
     const [message, setMessage] = React.useState("");
 
     const navigate = useNavigate();
+    const { token } = useParams<{ token: string }>(); // Extract the token from the URL
+
     const handleClick = () => setShow(!show);
 
     const dispatch = useDispatch();
 
-    const ResetPassword = async () => {
+    const resetPassword = async () => {
         try {
-            const credentials = {
-                confirmPassword: confirmPassword,
-                password: password,
-            };
             if (confirmPassword === password) {
-                const response = await apiCall('/api/auth/reset-password/188a6d98-394d-4bd5-b92f-e90caa1eb5c4', {
-                    method: 'POST',
+                const credentials = {
+                    newPassword: password,
+                };
+                const response = await apiCall(`/auth/reset-password/${token}`, {
+                    method: 'PUT', // Use PUT as required
                     data: credentials,
                 });
 
-                // Store token in Redux
-                dispatch(setToken(response.token));
-
-                console.log(response.msg); // Logged in successfully !
-                console.log("your token: ", response.token)
-                setMessage("Password changed! Redirecting...");
+                setMessage("Password changed successfully! Redirecting...");
                 setTimeout(() => {
-                    navigate("/auth/login"); // Redirect to dashboard on successful login
-                }, 1000)
+                    navigate("/auth/login"); // Redirect to login on successful reset
+                }, 1000);
+            } else {
+                setMessage("Confirm password should be the same as the password");
             }
-            else{
-                setMessage("Confirm password should be the same as the password")
-            }
-        }
-        catch (error: any) {
-            setMessage(error.message || "Login failed. Please try again.");
+        } catch (error: any) {
+            setMessage(error.message || "Password reset failed. Please try again.");
         }
     };
-
     return (
         <DefaultAuth illustrationBackground={illustration} image={illustration}>
             <Flex

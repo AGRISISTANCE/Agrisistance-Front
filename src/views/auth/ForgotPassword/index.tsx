@@ -26,9 +26,7 @@ import DefaultAuth from "../../../layouts/auth/Default";
 // Assets
 import illustration from "../../../assets/img/auth/auth.png";
 
-import { setToken } from '../../../redux/tokenSlice';
 import { apiCall } from "../../../services/api";
-import { useDispatch } from 'react-redux';
 
 function ForgotPassword() {
     const textColor = useColorModeValue("navy.700", "white");
@@ -37,38 +35,23 @@ function ForgotPassword() {
     const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
     const brandStars = useColorModeValue("brand.500", "brand.400");
 
-    const [show, setShow] = React.useState(false);
     const [email, setEmail] = React.useState("");
     const [message, setMessage] = React.useState("");
 
-    const navigate = useNavigate();
-    const handleClick = () => setShow(!show);
-
-    const dispatch = useDispatch();
-
-    const loginUser = async () => {
+    const sendVerificationCode = async () => {
         try {
             const credentials = {
-                email: email,
+                eMail: email,
             };
 
-            const response = await apiCall('/auth/login', {
+            const response = await apiCall('/auth/forgot-password', {
                 method: 'POST',
                 data: credentials,
             });
-
-            // Store token in Redux
-            dispatch(setToken(response.token));
-
-            console.log(response.msg); // Logged in successfully !
-            console.log("your token: ", response.token)
-            setMessage("Login successful! Redirecting...");
-            setTimeout(() => {
-                navigate("/dashboard/home"); // Redirect to dashboard on successful login
-            }, 1000)
+            setShowCodeAlert(true)
         }
         catch (error: any) {
-            setMessage(error.message || "Login failed. Please try again.");
+            setMessage(error.message || "password reset failed. Please try again.");
         }
     };
     const [showCodeAlert, setShowCodeAlert] = React.useState(false);
@@ -143,7 +126,7 @@ function ForgotPassword() {
                             w='100%'
                             h='50'
                             mb='24px'
-                            onClick={loginUser}
+                            onClick={sendVerificationCode}
                             disabled={!email}
                         >
                             Send verification code

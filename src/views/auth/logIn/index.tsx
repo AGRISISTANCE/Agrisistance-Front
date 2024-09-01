@@ -66,12 +66,12 @@ function LogIn() {
       });
 
       // Store token in Redux
-      dispatch(setToken(response.token));
 
       console.log(response.msg); // Logged in successfully !
       console.log("your token: ", response.token)
       setMessage("Login successful! Redirecting...");
       setTimeout(() => {
+        dispatch(setToken(response.token));
         navigate("/dashboard/home"); // Redirect to dashboard on successful login
       }, 1000)
     }
@@ -79,14 +79,7 @@ function LogIn() {
       setMessage(error.message || "Login failed. Please try again.");
     }
   };
-  const [showPasswordResetAlert, setShowPasswordResetAlert] = React.useState(false);
   
-
-  const handlePasswordReset = async () => {
-    // Simulate password reset logic
-    // If successful, show the password reset modal
-    setShowPasswordResetAlert(true);
-  };
 
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
@@ -237,27 +230,6 @@ function LogIn() {
             </NavLink>
           </Text>
         </Flex>
-        
-
-      {/* Password Reset Alert */}
-      {showPasswordResetAlert && (
-        <Alert status="success">
-          <AlertIcon />
-          <Box>
-            <AlertTitle>Password Reset!</AlertTitle>
-            <AlertDescription>
-              Your password has been reset successfully. Please log in with your new password.
-            </AlertDescription>
-          </Box>
-          <CloseButton
-            alignSelf="flex-start"
-            position="relative"
-            right={-1}
-            top={-1}
-            onClick={() => setShowPasswordResetAlert(false)}
-          />
-        </Alert>
-      )}  
       </Flex>
 
     </DefaultAuth >
