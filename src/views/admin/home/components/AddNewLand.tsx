@@ -22,6 +22,10 @@ import animationData from "../../../../assets/img/dashboards/cropanimated.json";
 import Lottie from "react-lottie-player";
 import { apiCall } from "../../../../services/api";
 import { RootState } from "../../../../redux/store";
+
+import { selectLand, removeLand, setInitialLands, LandInfo, setSelectedLand } from '../../../../redux/landsSlice'; // Ensure this import is correct
+
+
 interface AddNewLandProps {
   initialStep?: number;
 }
@@ -58,19 +62,74 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
   const [progressMessage, setProgressMessage] = useState<string>("Starting...");
 
   const token = useSelector((state: RootState) => state.token.token); // Get the token from the state
+
+  const mapLandDataToSelectedLand = (landData: any): LandInfo => {
+    return {
+      landId: landData.land[0].land_id,
+      owner: landData.land[0].user_id,
+      landName: landData.land[0].land_name,
+      latitude: landData.land[0].latitude,
+      longitude: landData.land[0].longitude,
+      landSize: landData.land[0].land_size,
+      budgetForLand: landData.finance[0]?.investment_amount || 0,
+      oxygen_level: landData.land[0].oxygen_level,
+      nitrogen: landData.land[0].nitrogen,
+      potassium: landData.land[0].potassium,
+      phosphorus: landData.land[0].phosphorus,
+      humidity: landData.weather[0]?.humidity || 0,
+      ph_level: landData.land[0].ph_level,
+      LandBusinessPlan: landData.business_plan.map((plan: any) => ({
+        title: 'Executive Summary', // or any appropriate title
+        description: plan.executive_summary,
+      })),
+      crops: landData.crops.map((crop: any) => ({
+        CropName: crop.crop_name,
+        CropImage: '', // Implement this function as needed getCropImage(crop.crop_name)
+        recommendationPercentage: '', // Implement logic as needed calculateRecommendationPercentage(crop)
+        cropSize: crop.crop_area,
+        expectedMoneyRevenue: crop.expected_money_return,
+        expectedWeightRevenue: crop.expected_wight_return,
+        cropCost: crop.crop_investment,
+        cropProfit: crop.expected_money_return - crop.crop_investment,
+      })),
+      waterSufficecy: landData.crop_maintenance[0]?.water_sufficienty || 0,
+      sunlight: landData.weather[0]?.sunlight || 0,
+      pestisedesLevel: landData.crop_maintenance[0]?.pesticide_level || 0,
+      landUse: landData.land_statistics[0]?.land_use || 0,
+      humanCoverage: landData.land_statistics[0]?.human_coverage || 0,
+      waterAvaliability: landData.land_statistics[0]?.water_availability || 0,
+      distributionOptimality: landData.land_statistics[0]?.distribution_optimality || 0,
+      suggestedImprovementSoil: landData.suggested_improvements?.soil || [],
+      suggestedImprovementCrop: landData.suggested_improvements?.crop || [],
+    };
+  };
+  
+
+
   const handleAddLand = async () => {
-    if (
-      landName &&
-      latitude &&
-      longitude &&
-      landSize &&
-      budget &&
-      phLevel &&
-      phosphorus &&
-      potassium &&
-      oxygenLevel &&
-      nitrogen
-    ) {
+    try {
+      // Initialize loading state
+      setShowProgress(true);
+      setProgressMessage('Starting...');
+  
+      // Validate required fields
+      if (
+        !landName ||
+        !latitude ||
+        !longitude ||
+        !landSize ||
+        !budget ||
+        !phLevel ||
+        !phosphorus ||
+        !potassium ||
+        !oxygenLevel ||
+        !nitrogen
+      ) {
+        setProgressMessage('Please fill in all required fields.');
+        setShowProgress(false);
+        return;
+      }
+  
       const newLand = {
         land_name: landName,
         latitude: Number(latitude),
@@ -84,25 +143,75 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         ph_level: Number(phLevel),
       };
   
-      try {
-        const response = await apiCall('/land/add-land', {
+      // Step 1: Add Land
+      setProgressMessage('Creating your new land...');
+      const addLandResponse = await apiCall(
+        '/land/add-land',
+        {
           method: 'POST',
-          data: newLand, // Send the newLand object in the request body
-          requireAuth: true, // Indicate that this call requires authentication
-        }, token);
+          data: newLand,
+          requireAuth: true,
+        },
+        token
+      );
   
-        console.log('Land added successfully:', response.message);
-        console.log('New land ID:', response.land_id);
-        // Optionally handle further actions after land is added successfully
-      } catch (error) {
-        console.error('Failed to add land:', error);
-        // Handle error as necessary, e.g., show an error message to the user
-      }
-    } else {
-      console.error('All land details must be provided.');
-      // Optionally display a warning to the user that all fields are required
+      const landId = addLandResponse.data.landId;
+      console.log('Land added successfully:', addLandResponse.message);
+  
+      // Step 2: Generate Business Plan
+      setProgressMessage('Generating business plan and predictions...');
+      await apiCall(
+        '/api/model/generate-business-plan',
+        {
+          method: 'POST',
+          data: { land_id: landId },
+          requireAuth: true,
+        },
+        token
+      );
+      console.log('Business plan and predictions generated successfully for land:', landId);
+  
+      // Step 3: Get Land by ID
+      setProgressMessage('Fetching updated land data...');
+      const landResponse = await apiCall(
+        `/api/land/get-land/${landId}`,
+        {
+          method: 'GET',
+          requireAuth: true,
+        },
+        token
+      );
+  
+      // Step 4: Map data to selectedLand
+      const landData = landResponse.data;
+      const selectedLand = mapLandDataToSelectedLand(landData);
+  
+      // Dispatch the action to update the selected land in the Redux store
+      dispatch(setSelectedLand(selectedLand));
+      console.log('Selected land updated in Redux store.');
+  
+      // Step 5: Finish loading
+      setProgressMessage('Completed!');
+      setTimeout(() => {
+        setShowProgress(false);
+        onClose(); // Close any modals if necessary
+        // Optionally navigate to another page or reset form fields here
+      }, 1000);
+    } catch (error) {
+      console.error('Error during the land creation and mapping process:', error);
+      setProgressMessage('An error occurred. Please try again.');
+      // Optionally, keep the loading indicator and allow the user to retry
+      setTimeout(() => {
+        setShowProgress(false);
+      }, 2000);
     }
-  };
+    }
+    
+    
+    const handleFinish = () => {
+      handleAddLand();
+    };
+
 
 
   const handleNext = () => setStep(step + 1);
@@ -115,28 +224,13 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
     }
   }, [initialStep]);
 
-  const handleFinish = () => {
-    handleAddLand();
-    handleNext();
-    setShowProgress(true);
-    setProgressMessage("Starting...");
-    setTimeout(() => {
-      setProgressMessage("Getting predictions...");
-      setTimeout(() => {
-        setProgressMessage("Completed!");
-        setTimeout(() => {
-          setShowProgress(false);
-          onClose();
-          navigate("/dashboard/yourland");
-        }, 1000);
-      }, 2000);
-    }, 1000);
-  };
+
 
   const openModal = (content: string) => {
     setModalContent(content);
     onOpen();
   };
+
 
   return (
     <Flex
@@ -678,56 +772,56 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                 <FaArrowLeft /> Previous
               </Button>
               <Button
-                bg={"#2acc32"}
-                color={"#fff"}
-                display={"flex"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                p={"10px 20px"}
-                fontSize={"20px"}
-                fontWeight={"bold"}
-                gap={"20px"}
-                borderRadius={"10px"}
+                bg="#2acc32"
+                color="#fff"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                p="10px 20px"
+                fontSize="20px"
+                fontWeight="bold"
+                gap="20px"
+                borderRadius="10px"
                 onClick={handleFinish}
-                width={"150px"}
+                width="150px"
+                isDisabled={showProgress} // Disable button during processing
               >
                 Finish
               </Button>
             </Flex>
           </Flex>
-        )}
-      </form>
-      {showProgress && (
-        <Flex
-          direction={"column"}
-          align={"center"}
-          justify={"center"}
-          position={"fixed"}
-          top={"50%"}
-          left={"50%"}
-          transform={"translate(-50%, -50%)"}
-          p={"20px"}
-          bg={"#fff"}
-          borderRadius={"10px"}
-          shadow={"md"}
-          zIndex={1000} // Ensure it's above the blur overlay
-          maxWidth={"60%"} // Limit the maximum width to 90% of the parent container
-          maxHeight={"60%"} // Limit the maximum height to 90% of the parent container
-          width={"auto"} // Adjust width based on content
-          height={"auto"} // Adjust height based on content
-        >
-          <Lottie
-            animationData={animationData}
-            play
-            loop
-            style={{ width: "100%", maxWidth: "300px", height: "auto" }}
-          />
-
-          <Text my={4} fontSize={20} fontWeight={"bold"}>
-            {progressMessage}
-          </Text>
-          <Progress size="md" isIndeterminate />
-        </Flex>
+            )}
+          </form>
+            {showProgress && (
+            <Flex
+              direction="column"
+              align="center"
+              justify="center"
+              position="fixed"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              p="20px"
+              bg="#fff"
+              borderRadius="10px"
+              shadow="md"
+              zIndex={1000}
+              maxWidth="60%"
+              maxHeight="60%"
+              width="auto"
+              height="auto"
+            >
+              <Lottie
+                animationData={animationData}
+                play
+                loop
+                style={{ width: '100%', maxWidth: '300px', height: 'auto' }}
+              />
+              <Text my={4} fontSize={20} fontWeight="bold">
+                {progressMessage}
+              </Text>
+              <Progress size="md" isIndeterminate />
+            </Flex>
       )}
     </Flex>
   );
