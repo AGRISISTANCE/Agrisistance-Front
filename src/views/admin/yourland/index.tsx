@@ -149,7 +149,7 @@ const Yourland: React.FC = () => {
 				oxygen_level: soil.oxygen,
 				nitrogen: soil.nitrogen, // azote
 				humidity: soil.humidity,
-				budget: selectedLand.budgetForLand,
+				budget: budget,
 			};
 	
 			try {
@@ -203,13 +203,6 @@ const Yourland: React.FC = () => {
 			}
 		}
 	};
-
-
-
-
-
-
-
 
 	const handleCancel = () => {
 		setShowPopup(false);
@@ -286,10 +279,7 @@ const Yourland: React.FC = () => {
 		: [];
 
 	
-	
-
-	
-	//! setting Crop maintainance
+	//! setting Crop maintainance & budget & business plan
 	useEffect(() => {
 		if (selectedLand) {
 			setCrop({
@@ -309,8 +299,6 @@ const Yourland: React.FC = () => {
 			setBusinessPlan(null);
 		}
 	}, [selectedLand]);
-
-
 
 	
 	//! Setting land statistics
@@ -364,6 +352,7 @@ const Yourland: React.FC = () => {
 	const soilSuggestions = selectedLand?.suggestedImprovementSoil || [];
 	const cropSuggestions = selectedLand?.suggestedImprovementCrop || [];
 
+	//! Utility functions
 	const soilRanges = {
 		oxygen: { unit: '%', min: 0, max: 100 },
 		nitrogen: { unit: 'kg/ha', min: 0, max: 300 }, // example range for nitrogen
@@ -741,7 +730,7 @@ const Yourland: React.FC = () => {
 								message="Please provide the necessary information."
 								inputs={[
 									{ label: 'Budget in dollars', value: budget ?? '', onChange: setBudget }
-								]}
+								  ]}
 								onConfirm={handleSubmit}
 								onCancel={handleCancel}
 								isConfirmPhase={isConfirmPhase}
@@ -760,12 +749,6 @@ const Yourland: React.FC = () => {
 								</Flex>
 								<Button
 									onClick={openPopupWithInputs}
-								//disabled={budget === null}
-								// style={{
-								// 	background: budget ? '#c5c0b6' : '#2acc32',  // Gray color when disabled
-								// 	color: budget ? '#6c757d' : '#fff',          // Slightly muted gray text color when disabled
-								// 	cursor: budget ? 'not-allowed' : 'pointer',  // Change cursor style when disabled
-								// }}
 								>
 									Modify
 								</Button>
