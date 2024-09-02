@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-const BASE_URL = 'http://localhost:8081/api';
-// const BASE_URL = 'https://agrisistance-server.onrender.com/api';
+// const BASE_URL = 'http://localhost:8081/api';
+const BASE_URL = 'https://agrisistance-server.onrender.com/api';
 
 interface ApiOptions extends AxiosRequestConfig {
   requireAuth?: boolean; // Optional flag to indicate if the call requires authentication

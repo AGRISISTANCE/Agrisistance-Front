@@ -55,6 +55,7 @@ function LogIn() {
 
   const loginUser = async () => {
     try {
+      setMessage("The request may take some time, please wait...");
       const credentials = {
         email: email,
         password: password,
@@ -209,7 +210,7 @@ function LogIn() {
               Log In
             </Button>
             {message && (
-              <Text color={message.includes("success") ? "green.500" : "red.500"} mb="24px">
+              <Text color={message.includes("success")  ? "green.500" : "red.500"} mb="24px">
                 {message}
               </Text>
             )}

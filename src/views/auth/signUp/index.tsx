@@ -62,6 +62,9 @@ function SignUp() {
 
   const registerUser = async () => {
     console.log("selected country code:", selectedCountryCode)
+    setMessageColor("green");
+    setMessage("The request may take some time, please wait...");
+
       try{
         const userData = {
           firstName: firstName,

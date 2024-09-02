@@ -34,68 +34,68 @@ export default function Land({
   const token = useSelector((state: RootState) => state.token.token);
   
   const handleSelect = () => {
-    //! uncommented because of dummy land data
-    dispatch(selectLand(landId));
+    //! Uncommented when using dummy land data
+    // dispatch(selectLand(landId));
 
     
-    //!Commented because of dummy land data
-    // const loadData = async () => {
-    //   try {
-    //     const data = await apiCall(`/land/get-land/${landId}`, { requireAuth: true }, token);
+    //! Commented when using dummy land data
+    const loadData = async () => {
+      try {
+        const data = await apiCall(`/land/get-land/${landId}`, { requireAuth: true }, token);
 
-    //       if (data) {
-    //         const landInfo: LandInfo = {
-    //           landId: data.land[0]?.land_id || '',
-    //           owner: data.land[0]?.user_id || '',
-    //           landName: data.land[0]?.land_name || '',
-    //           latitude: data.land[0]?.latitude || 0,
-    //           longitude: data.land[0]?.longitude || 0,
-    //           landSize: data.land[0]?.land_size || 0,
-    //           budgetForLand: data.finance[0]?.investment_amount || 0,
-    //           oxygen_level: data.land[0]?.oxygen_level || 0,
-    //           nitrogen: data.land[0]?.nitrogen || 0,
-    //           potassium: data.land[0]?.potassium || 0,
-    //           phosphorus: data.land[0]?.phosphorus || 0,
-    //           humidity: parseFloat(data.land[0]?.humidity) || 0,
-    //           ph_level: data.land[0]?.ph_level || 0,
-    //           LandBusinessPlan: [
-    //             {
-    //               title: 'Crop Rotation',
-    //               description: 'Implement crop rotation to maintain soil fertility and manage pests.'
-    //             }
-    //           ], // dummy data for now, Assuming you have a way to get this data
-    //           crops: data.crops.map((crop: any) => ({
-    //             CropName: crop.crop_name,
-    //             CropImage: '', // You may need to map this if available
-    //             recommendationPercentage: 0, // Placeholder
-    //             cropSize: crop.crop_area,
-    //             expectedMoneyRevenue: crop.expected_money_return,
-    //             expectedWeightRevenue: crop.expected_wight_return,
-    //             cropCost: crop.crop_investment,
-    //             cropProfit: crop.expected_money_return - crop.crop_investment,
-    //           })),
-    //           waterSufficecy: data.crop_maintenance[0]?.water_sufficienty || 0,
-    //           sunlight: data.weather[0]?.sunlight || 0,
-    //           pestisedesLevel: data.crop_maintenance[0]?.pesticide_level || 0,
-    //           landUse: data.land_statistics[0]?.land_use || 0,
-    //           humanCoverage: data.land_statistics[0]?.human_coverage || 0,
-    //           waterAvaliability: data.land_statistics[0]?.water_availability || 0,
-    //           distributionOptimality: data.land_statistics[0]?.distribution_optimality || 0,
-    //           suggestedImprovementSoil: ['Add compost', 'Reduce tillage'], // dummy data Placeholder
-    //           suggestedImprovementCrop: ['Use cover crops', 'Adjust planting density'], // dummy data Placeholder
-    //         };
+          if (data) {
+            const landInfo: LandInfo = {
+              landId: data.land[0]?.land_id || '',
+              owner: data.land[0]?.user_id || '',
+              landName: data.land[0]?.land_name || '',
+              latitude: data.land[0]?.latitude || 0,
+              longitude: data.land[0]?.longitude || 0,
+              landSize: data.land[0]?.land_size || 0,
+              budgetForLand: data.finance[0]?.investment_amount || 0,
+              oxygen_level: data.land[0]?.oxygen_level || 0,
+              nitrogen: data.land[0]?.nitrogen || 0,
+              potassium: data.land[0]?.potassium || 0,
+              phosphorus: data.land[0]?.phosphorus || 0,
+              humidity: parseFloat(data.land[0]?.humidity) || 0,
+              ph_level: data.land[0]?.ph_level || 0,
+              LandBusinessPlan: [
+                {
+                  title: 'Crop Rotation',
+                  description: 'Implement crop rotation to maintain soil fertility and manage pests.'
+                }
+              ], // dummy data for now, Assuming you have a way to get this data
+              crops: data.crops.map((crop: any) => ({
+                CropName: crop.crop_name,
+                CropImage: '', // You may need to map this if available
+                recommendationPercentage: 0, // Placeholder
+                cropSize: crop.crop_area,
+                expectedMoneyRevenue: crop.expected_money_return,
+                expectedWeightRevenue: crop.expected_wight_return,
+                cropCost: crop.crop_investment,
+                cropProfit: crop.expected_money_return - crop.crop_investment,
+              })),
+              waterSufficecy: data.crop_maintenance[0]?.water_sufficienty || 0,
+              sunlight: data.weather[0]?.sunlight || 0,
+              pestisedesLevel: data.crop_maintenance[0]?.pesticide_level || 0,
+              landUse: data.land_statistics[0]?.land_use || 0,
+              humanCoverage: data.land_statistics[0]?.human_coverage || 0,
+              waterAvaliability: data.land_statistics[0]?.water_availability || 0,
+              distributionOptimality: data.land_statistics[0]?.distribution_optimality || 0,
+              suggestedImprovementSoil: ['Add compost', 'Reduce tillage'], // dummy data Placeholder
+              suggestedImprovementCrop: ['Use cover crops', 'Adjust planting density'], // dummy data Placeholder
+            };
 
-    //         // dispatch(setInitialLands([landInfo]));
-    //         dispatch(setSelectedLand(landInfo));
-    //       }
-    //     } catch (error) {
-    //       console.error('Error loading data:', error);
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   };
+            // dispatch(setInitialLands([landInfo]));
+            dispatch(setSelectedLand(landInfo));
+          }
+        } catch (error) {
+          console.error('Error loading data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-      // loadData();
+      loadData();
 
   };
 

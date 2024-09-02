@@ -45,16 +45,16 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [landName, setLandName] = useState("");
-  const [latitude, setLatitude] = useState<number | "">("");
-  const [longitude, setLongitude] = useState<number | "">("");
+  const [latitude, setLatitude] = useState<string | "">("");
+  const [longitude, setLongitude] = useState<string | "">("");
   const [landSize, setLandSize] = useState<number | "">("");
   const [budget, setBudget] = useState<number | "">("");
-  const [phLevel, setPhLevel] = useState<number | "">("");
+  const [phLevel, setPhLevel] = useState<string | "">("");
   const [phosphorus, setPhosphorus] = useState<number | "">("");
   const [potassium, setPotassium] = useState<number | "">("");
   const [oxygenLevel, setOxygenLevel] = useState<number | "">("");
   const [nitrogen, setNitrogen] = useState<number | "">("");
-  const [azote, setAzote] = useState<number | "">("");
+
 
   const [step, setStep] = useState<number>(initialStep);
   const [modalContent, setModalContent] = useState<string>("");
@@ -130,20 +130,22 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         return;
       }
   
-      const newLand = {
-        land_name: landName,
-        latitude: Number(latitude),
-        longitude: Number(longitude),
-        land_size: Number(landSize),
-        budget: Number(budget),
-        oxygen_level: Number(oxygenLevel),
-        nitrogen: Number(nitrogen),
-        potassium: Number(potassium),
-        phosphorus: Number(phosphorus),
-        ph_level: Number(phLevel),
-      };
+        const newLand = {
+          land_name: landName,
+          latitude: isNaN(Number(latitude)) ? null : Number(latitude),
+          longitude: isNaN(Number(longitude)) ? null : Number(longitude),
+          land_size: isNaN(Number(landSize)) ? null : Number(landSize),
+          budget: isNaN(Number(budget)) ? null : Number(budget),
+          oxygen_level: isNaN(Number(oxygenLevel)) ? null : Number(oxygenLevel),
+          nitrogen: isNaN(Number(nitrogen)) ? null : Number(nitrogen),
+          potassium: isNaN(Number(potassium)) ? null : Number(potassium),
+          phosphorus: isNaN(Number(phosphorus)) ? null : Number(phosphorus),
+          ph_level: isNaN(Number(phLevel)) ? null : Number(phLevel),
+        };
   
-      // Step 1: Add Land
+
+      console.log("creating new land with data: ", newLand)
+      // Step 1: Add Land 
       setProgressMessage('Creating your new land...');
       const addLandResponse = await apiCall(
         '/land/add-land',
@@ -163,41 +165,42 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
 
 
 
-        console.log('Request payload:', {
+        console.log('Request payload for generating business plan: ', {
           land_id: landId
         });
 
-      // // Step 2: Generate Business Plan
-      // setProgressMessage('Generating business plan and predictions...');
-      // await apiCall(
-      //   '/model/generate-business-plan',
-      //   {
-      //     method: 'POST',
-      //     data: { land_id: landId },
-      //     requireAuth: true,
-      //   },
-      //   token
-      // );
-      // console.log('Business plan and predictions generated successfully for land:', landId);
+      // Step 2: Generate Business Plan
+      setProgressMessage('Generating business plan and predictions...');
+      await apiCall(
+        '/model/generate-business-plan',
+        {
+          method: 'POST',
+          data: { land_id: landId },
+          requireAuth: true,
+        },
+        token
+      );
+      console.log('Business plan and predictions generated successfully for land:', landId);
   
-      // // Step 3: Get Land by ID
-      // setProgressMessage('Fetching updated land data...');
-      // const landResponse = await apiCall(
-      //   `/land/get-land/${landId}`,
-      //   {
-      //     method: 'GET',
-      //     requireAuth: true,
-      //   },
-      //   token
-      // );
+
+      // Step 3: Get Land by ID
+      setProgressMessage('Fetching updated land data...');
+      const landResponse = await apiCall(
+        `/land/get-land/${landId}`,
+        {
+          method: 'GET',
+          requireAuth: true,
+        },
+        token
+      );
   
-      // // Step 4: Map data to selectedLand
-      // const landData = landResponse.data;
-      // const selectedLand = mapLandDataToSelectedLand(landData);
-  
-      // // Dispatch the action to update the selected land in the Redux store
-      // dispatch(setSelectedLand(selectedLand));
-      // console.log('Selected land updated in Redux store.');
+      console.log("data getted from get landById: ", landId," : ", landResponse)
+      const selectedLand = mapLandDataToSelectedLand(landResponse);
+      console.log("data after being mapped: ", selectedLand)
+      
+      // Dispatch the action to update the selected land in the Redux store
+      dispatch(setSelectedLand(selectedLand));
+      console.log('Selected land updated in Redux store with: ', selectedLand);
   
       // Step 5: Finish loading
       setProgressMessage('Completed!');
@@ -205,7 +208,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         setShowProgress(false);
         onClose(); // Close any modals if necessary
         // Optionally navigate to another page or reset form fields here
-        // navigate("/dashboard/yourland");
+        navigate("/dashboard/yourland");
       }, 2000);
     } catch (error) {
       console.error('Error during the land creation and mapping process:', error);
@@ -341,7 +344,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                 type="text"
                 placeholder="Enter latitude"
                 value={latitude}
-                onChange={(e) => setLatitude(Number(e.target.value) || "")}
+                onChange={(e) => setLatitude(e.target.value || "")}
                 style={{
                   borderRadius: "0px",
                   width: "562px",
@@ -361,7 +364,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                 type="text"
                 placeholder="Enter longitude"
                 value={longitude}
-                onChange={(e) => setLongitude(Number(e.target.value) || "")}
+                onChange={(e) => setLongitude(e.target.value || "")}
                 style={{
                   borderRadius: "0px",
                   width: "562px",
@@ -735,7 +738,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   type="text"
                   placeholder="Enter ph Level"
                   value={phLevel}
-                  onChange={(e) => setPhLevel(Number(e.target.value) || "")}
+                  onChange={(e) => setPhLevel(e.target.value || "")}
                   style={{
                     borderRadius: "0px",
                     width: "562px",

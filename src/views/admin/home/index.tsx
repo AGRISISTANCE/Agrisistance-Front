@@ -25,9 +25,7 @@ export default function Home() {
   };
 
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
-
-  //Setting user info from backend to redux store
-  //! todo: set all lands from backend to redux store, (later set all posts and content in your network section)
+  console.log("user token: ", token)
   // fetching lands data:
   const fetchLands = async () => {
     try {
@@ -63,9 +61,9 @@ export default function Home() {
         suggestedImprovementCrop: [] as string[], // Explicitly typing the array
       }));
 
-      //! Commented because i am using dummy lands
-      // dispatch(setInitialLands(mappedLands));
-      // console.log("inital lands setted successfully", response )
+      //! Commented when using dummy lands
+      dispatch(setInitialLands(mappedLands));
+      console.log("inital lands setted successfully", response )
       
     } catch (error) {
       console.error('Failed to fetch lands:', error);
