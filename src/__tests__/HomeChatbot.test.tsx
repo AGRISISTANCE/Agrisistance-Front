@@ -1,7 +1,13 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import Main from "../App"; // Adjust the import path as necessary
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import Main from "../App"; // Ensure this is the correct path
+
+// Create a mock store
+const mockStore = configureStore([]);
+
 beforeAll(() => {
   Object.defineProperty(HTMLMediaElement.prototype, "play", {
     configurable: true,
@@ -10,10 +16,20 @@ beforeAll(() => {
 });
 
 test("renders chatbot button on Home page and opens chatbot on click", async () => {
+  // Create an initial state for the store
+  const initialState = {
+    token: { token: "mockToken" }, // Adjust based on your actual state structure
+  };
+
+  // Create the store with the initial state
+  const store = mockStore(initialState);
+
   render(
-    <MemoryRouter initialEntries={["/"]}>
-      <Main />
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={["/"]}>
+        <Main />
+      </MemoryRouter>
+    </Provider>
   );
 
   // Ensure the chatbot button exists using aria-label
@@ -24,9 +40,10 @@ test("renders chatbot button on Home page and opens chatbot on click", async () 
   fireEvent.click(chatbotButton);
 
   // Verify the chatbot box is now open
-  // You may need to use a different query, such as className or role
-  const chatbotBox = screen.getByText(
-    /Hello farmer, how can I help you today?/i
-  );
-  expect(chatbotBox).toBeInTheDocument();
+  await waitFor(() => {
+    const chatbotBox = screen.getByText(
+      /Hello farmer, how can I help you today?/i
+    );
+    expect(chatbotBox).toBeInTheDocument();
+  });
 });
