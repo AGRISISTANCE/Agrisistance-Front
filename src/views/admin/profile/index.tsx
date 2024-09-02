@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert, AlertDescription, AlertTitle, CloseButton, Flex, AlertIcon, useDisclosure } from '@chakra-ui/react';
+import { Alert, AlertDescription, Input, InputGroup, InputRightElement,  AlertTitle, CloseButton, Flex, AlertIcon, useDisclosure, Icon } from '@chakra-ui/react';
 import { EditOutlined } from '@ant-design/icons';
 import { updateUser } from '../../../redux/userSlice';
 import { useLocation } from 'react-router-dom';
+import { RiEyeCloseLine } from 'react-icons/ri';
+import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import { RootState } from '../../../redux/store';
+import { apiCall } from '../../../services/api';
+
 
 const UserProfile: React.FC = () => {
   const user = useSelector((state: any) => state.user);
-  const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.token.token);
 
   const location = useLocation();
-  const emailUpdated = location.state?.emailUpdated;
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [showModal, setShowModal] = useState(false);
+  const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    if (emailUpdated) {
-      setShowModal(true);
-      onOpen();
-    }
-  }, [emailUpdated, onOpen]);
+  const handleClick = () => setShow(!show);
+
+  const [show1, setShow1] = useState(false);
+
+  const handleClick1 = () => setShow(!show1);
+
+  
 
   const [isEditing, setIsEditing] = useState({
     firstName: false,
@@ -31,12 +35,74 @@ const UserProfile: React.FC = () => {
   const [formData, setFormData] = useState({
     firstName: user.firstName,
     lastName: user.lastName,
-    email: user.email,
     phoneNumber: user.phoneNumber,
+    email: user.email,
+    country: user.country,
+    currentPassword: '',
+    newPassword: ''
   });
-  const handleChangePassword = () => {
-    {/* TODO: */ }
-  }
+  
+
+  const handleUserInfoChanges = async () => {
+    try {
+      await apiCall('/profile/edit-profile', {
+        method: 'PUT',
+        requireAuth: true,
+        data: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phoneNumber: formData.phoneNumber,
+          country: user.country, // Assuming user.country is available
+        },
+      }, token);
+
+      setShowInformationUpdate(true);
+      setIsEditing({
+        firstName: false,
+        lastName: false,
+        phoneNumber: false,
+        email: false,
+      });
+      console.log("form data after handleUserInfoChanges: ", formData);
+    } catch (error) {
+      console.error('Failed to update user information', error);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    try {
+      await apiCall('/profile/update-password', {
+        method: 'PUT',
+        requireAuth: true,
+        data: {
+          oldPassword: formData.currentPassword,
+          newPassword: formData.newPassword,
+        },
+      }, token);
+
+      setShowPasswordUpdate(true);
+      console.log("form data after password: ", formData);
+    } catch (error) {
+      console.error('Failed to update password', error);
+    }
+  };
+
+  const handleChangeEmail = async () => {
+    try {
+      await apiCall('/profile/update-email', {
+        method: 'PUT',
+        requireAuth: true,
+        data: {
+          eMail: formData.email,
+        },
+      }, token);
+
+      setShowSuccessAlert(true);
+      console.log("form data after email change: ", formData);
+    } catch (error) {
+      console.error('Failed to update email', error);
+    }
+  };
 
   const handleEditToggle = (field: keyof typeof isEditing) => {
     setIsEditing((prev) => ({
@@ -52,70 +118,14 @@ const UserProfile: React.FC = () => {
     }));
   };
 
-  const handleSaveChanges = () => {
-    dispatch(updateUser(formData));
-    setShowInformationUpdate(true);
-    setIsEditing({
-      firstName: false,
-      lastName: false,
-      email: false,
-      phoneNumber: false,
-    });
-  };
+
 
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showInformationUpdate, setShowInformationUpdate] = useState(false);
+  const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
 
-  const handleChangeEmail = async () => {
-    try {
-      const response = await fetch('/api/send-verification-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: formData.email }),
-      });
+  
 
-      if (response.ok) {
-        setShowSuccessAlert(true);
-      } else {
-        // Handle error (e.g., show an error message within the UI)
-      }
-    } catch (error) {
-      console.error('Error sending verification email:', error);
-      // Handle error (e.g., show an error message within the UI)
-    }
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get('token');
-
-    if (token) {
-      const verifyEmail = async () => {
-        try {
-          const response = await fetch('/api/verify-email', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ token }),
-          });
-
-          if (response.ok) {
-            setShowSuccessAlert(true);
-          } else {
-            alert('Failed to verify email. The link may have expired.');
-          }
-        } catch (error) {
-          console.error('Error verifying email:', error);
-          alert('An error occurred. Please try again.');
-        }
-      };
-
-      verifyEmail();
-    }
-  },);
 
   return (
     <Flex
@@ -133,7 +143,18 @@ const UserProfile: React.FC = () => {
         background="#fff"
         padding="40px"
         gap="20px"
-      >
+        >{showInformationUpdate && (
+          <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
+            <AlertIcon boxSize="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              Information updated successfully
+            </AlertTitle>
+            <AlertDescription maxWidth="sm">
+              Your information have been recorded.
+            </AlertDescription>
+            <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowInformationUpdate(false)} />
+          </Alert>
+        )}
         <form
           style={{
             width: '100%',
@@ -144,6 +165,7 @@ const UserProfile: React.FC = () => {
             alignItems: 'center',
           }}
         >
+          {/* //! mapping user info */}
           {['firstName', 'lastName', 'phoneNumber'].map((field) => (
             <div
               key={field}
@@ -175,9 +197,22 @@ const UserProfile: React.FC = () => {
               />
             </div>
           ))}
-          <button className="btn-save" type="button" onClick={handleSaveChanges}>
+          <button className="btn-save" type="button" onClick={handleUserInfoChanges}>
             Save changes
           </button>
+          {/* //! Email */}
+          {showSuccessAlert && (
+        <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            Email Verification Sent!
+          </AlertTitle>
+          <AlertDescription maxWidth="sm">
+            We've sent a verification link to your new email address. Please check your email to complete the process.
+          </AlertDescription>
+          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowSuccessAlert(false)} />
+        </Alert>
+      )}
           <div
             key={'email'}
             style={{
@@ -210,81 +245,66 @@ const UserProfile: React.FC = () => {
           <button className="btn-save" type="button" onClick={handleChangeEmail}>
             Change email
           </button>
-          <div
-            key={'password'}
-            style={{
-              display: 'flex',
-              width: '80%',
-              gap: '20px',
-              border: `1px solid ${!isEditing['password' as keyof typeof isEditing] ? '#78747A' : '#2ACC32'}`,
-              borderRadius: '8px',
-              padding: '0 10px 0 4px',
-            }}
-          >
-            <input
-              style={{
-                border: 'none',
-                outline: 'none',
-                boxShadow: 'none',
-              }}
-              type="password"
-              value={formData['password' as keyof typeof formData]}
-              onChange={(e) => handleInputChange('password' as keyof typeof formData, e.target.value)}
-              placeholder='Enter a strong password'
+          {/* //! Password */}
+          {showPasswordUpdate && (
+        <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
+          <AlertIcon boxSize="40px" mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize="lg">
+            Password changed successfully!
+          </AlertTitle>
+          <AlertDescription maxWidth="sm">
+            Next time login with you new password
+          </AlertDescription>
+          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowPasswordUpdate(false)} />
+        </Alert>
+      )}
+          <InputGroup size="md" style={{
+            width: '80%',
+            border: `1px solid #78747A`,
+            borderRadius: '8px',
+          }}>
+            <Input
+              value={formData['currentPassword' as keyof typeof formData]}
+              onChange={(e) => handleInputChange('currentPassword' as keyof typeof formData, e.target.value)}
+              placeholder="Current password"
+              type={show ? "text" : "password"}
             />
-          </div>
-          <div
-            key={'confirmPassword'}
-            style={{
-              display: 'flex',
-              width: '80%',
-              gap: '20px',
-              border: `1px solid ${!isEditing['confirmPassword' as keyof typeof isEditing] ? '#78747A' : '#2ACC32'}`,
-              borderRadius: '8px',
-              padding: '0 10px 0 4px',
-            }}
-          >
-            <input
-              style={{
-                border: 'none',
-                outline: 'none',
-                boxShadow: 'none',
-              }}
-              type="password"
-              value={formData['confirmPassword' as keyof typeof formData]}
-              onChange={(e) => handleInputChange('confirmPassword' as keyof typeof formData, e.target.value)}
-              placeholder='Confirm password'
+            <InputRightElement>
+              <Icon
+                as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+                onClick={handleClick}
+                cursor="pointer"
+              />
+            </InputRightElement>
+          </InputGroup>
+
+          <InputGroup size="md" style={{
+            width: '80%',
+            border: `1px solid #78747A`,
+            borderRadius: '8px',
+          }}>
+            <Input
+              value={formData['newPassword' as keyof typeof formData]}
+              onChange={(e) => handleInputChange('newPassword' as keyof typeof formData, e.target.value)}
+              placeholder="New password"
+              type={show1 ? "text" : "password"}
             />
-          </div>
+            <InputRightElement>
+              <Icon
+                as={show1 ? RiEyeCloseLine : MdOutlineRemoveRedEye}
+                onClick={handleClick1}
+                cursor="pointer"
+              />
+            </InputRightElement>
+          </InputGroup>
+
           <button className="btn-save" type="button" onClick={handleChangePassword}>
             Change password
           </button>
         </form>
       </Flex>
-      {showSuccessAlert && (
-        <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
-          <AlertIcon boxSize="40px" mr={0} />
-          <AlertTitle mt={4} mb={1} fontSize="lg">
-            Email Verification Sent!
-          </AlertTitle>
-          <AlertDescription maxWidth="sm">
-            We've sent a verification link to your new email address. Please check your email to complete the process.
-          </AlertDescription>
-          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowSuccessAlert(false)} />
-        </Alert>
-      )}
-      {showInformationUpdate && (
-        <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
-          <AlertIcon boxSize="40px" mr={0} />
-          <AlertTitle mt={4} mb={1} fontSize="lg">
-            Information updated successfully
-          </AlertTitle>
-          <AlertDescription maxWidth="sm">
-            Your information have been recorded.
-          </AlertDescription>
-          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowInformationUpdate(false)} />
-        </Alert>
-      )}
+
+      
     </Flex>
   );
 };

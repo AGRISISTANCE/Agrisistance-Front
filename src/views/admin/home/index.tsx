@@ -43,13 +43,11 @@ export default function Home() {
         latitude: land.latitude,
         longitude: land.longitude,
         landSize: land.land_size,
-        //budgetForLand: response.budget[index]?.investment_amount || 0,
         budgetForLand: 0,
-        oxygen_level: land.oxygen_level,
+        oxygen_level: land.oxygen_level, //Or you can make those 0 bcz you dont need them
         nitrogen: land.nitrogen,
         potassium: land.potassium,
         phosphorus: land.phosphorus,
-       //humidity: land.humidity,
         humidity: 0,
         ph_level: land.ph_level,
         LandBusinessPlan: [] as LandBusinessPlan[], // Explicitly typing the array

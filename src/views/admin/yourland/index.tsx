@@ -227,11 +227,15 @@ const Yourland: React.FC = () => {
 	//! slider handlers
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
-		setSoil((prevSoil) => ({
-			...prevSoil,
-			[selectedSoil]: value,
-		}));
+		setSoil((prevSoil) => {
+			if (!prevSoil) return null; // Handle case where prevSoil might be null
+			return {
+				...prevSoil,
+				[selectedSoil]: value,
+			};
+		});
 	};
+
 
 	const handleCircularProgressClick = (soilType: keyof SoilType) => {
 		setSelectedSoil(soilType);
@@ -259,7 +263,7 @@ const Yourland: React.FC = () => {
 			setSoil(null)
 			setSliderValue(0); // Reset sliderValue to 0 if no land is selected
 		}
-	}, [selectedLand, selectedSoil]);
+	}, [selectedLand]);
 
 	//const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
 	const [sliderValue, setSliderValue] = useState<number>(0); // Set initial sliderValue
