@@ -88,15 +88,10 @@ function SignUp() {
       catch (error: any) {
       // Handle the error based on the structure
       
-      setMessage("An unexpected error occurred, please confirm all inputs are correct.");
+      setMessage("An unexpected error occurred, please confirm all inputs are correct. password should be at least 8 char with special characters and numbers");
       setMessageColor("red");
     }
-
-
   }
-      
-    
-  
 
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
@@ -182,7 +177,7 @@ function SignUp() {
               <Input
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
+                placeholder="Min 8 chars with numbers and special chars"
                 type={show ? "text" : "password"}
                 mb="24px"
               />

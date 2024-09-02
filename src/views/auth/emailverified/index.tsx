@@ -434,7 +434,7 @@ function LogIn() {
               <Input
                 isRequired={true}
                 fontSize='sm'
-                placeholder='Min. 8 characters'
+                placeholder='Your password'
                 mb='24px'
                 size='lg'
                 type={show ? "text" : "password"}

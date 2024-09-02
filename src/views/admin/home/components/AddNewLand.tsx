@@ -167,37 +167,37 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
           land_id: landId
         });
 
-      // Step 2: Generate Business Plan
-      setProgressMessage('Generating business plan and predictions...');
-      await apiCall(
-        '/model/generate-business-plan',
-        {
-          method: 'POST',
-          data: { land_id: landId },
-          requireAuth: true,
-        },
-        token
-      );
-      console.log('Business plan and predictions generated successfully for land:', landId);
+      // // Step 2: Generate Business Plan
+      // setProgressMessage('Generating business plan and predictions...');
+      // await apiCall(
+      //   '/model/generate-business-plan',
+      //   {
+      //     method: 'POST',
+      //     data: { land_id: landId },
+      //     requireAuth: true,
+      //   },
+      //   token
+      // );
+      // console.log('Business plan and predictions generated successfully for land:', landId);
   
-      // Step 3: Get Land by ID
-      setProgressMessage('Fetching updated land data...');
-      const landResponse = await apiCall(
-        `/land/get-land/${landId}`,
-        {
-          method: 'GET',
-          requireAuth: true,
-        },
-        token
-      );
+      // // Step 3: Get Land by ID
+      // setProgressMessage('Fetching updated land data...');
+      // const landResponse = await apiCall(
+      //   `/land/get-land/${landId}`,
+      //   {
+      //     method: 'GET',
+      //     requireAuth: true,
+      //   },
+      //   token
+      // );
   
-      // Step 4: Map data to selectedLand
-      const landData = landResponse.data;
-      const selectedLand = mapLandDataToSelectedLand(landData);
+      // // Step 4: Map data to selectedLand
+      // const landData = landResponse.data;
+      // const selectedLand = mapLandDataToSelectedLand(landData);
   
-      // Dispatch the action to update the selected land in the Redux store
-      dispatch(setSelectedLand(selectedLand));
-      console.log('Selected land updated in Redux store.');
+      // // Dispatch the action to update the selected land in the Redux store
+      // dispatch(setSelectedLand(selectedLand));
+      // console.log('Selected land updated in Redux store.');
   
       // Step 5: Finish loading
       setProgressMessage('Completed!');
@@ -205,7 +205,8 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         setShowProgress(false);
         onClose(); // Close any modals if necessary
         // Optionally navigate to another page or reset form fields here
-      }, 1000);
+        // navigate("/dashboard/yourland");
+      }, 2000);
     } catch (error) {
       console.error('Error during the land creation and mapping process:', error);
       setProgressMessage('An error occurred. Please try again.');

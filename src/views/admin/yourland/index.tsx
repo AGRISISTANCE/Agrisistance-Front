@@ -1,4 +1,3 @@
-
 import {
 	Flex, Text, Box, Progress, CircularProgress, CircularProgressLabel, Slider, SliderTrack, SliderFilledTrack, SliderThumb, SliderMark,
 	Tooltip,
@@ -21,6 +20,7 @@ import 'leaflet/dist/leaflet.css';
 import L from "leaflet";
 import Lottie from 'react-lottie-player';
 import animationData from "../../../assets/img/dashboards/cropanimated.json";
+import { apiCall } from 'services/api';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -98,39 +98,137 @@ const SetMapView: React.FC<{ center: [number, number]; zoom: number }> = ({ cent
 	map.setView(center, zoom);
 	return null;
 };
+
+//! Component starting
 const Yourland: React.FC = () => {
 
+	//! Loading redux state:
+	const user = useSelector((state: any) => state.user);
+	const dispatch = useDispatch();
+	const selectedLand = useSelector((state: RootState) => state.lands.selectedLand);
+	const token = useSelector((state: RootState) => state.token.token);
 
+
+	//! State declaration
 	const [selectedSoil, setSelectedSoil] = useState<keyof SoilType>('oxygen');
 	const [showTooltip, setShowTooltip] = useState<boolean>(false);
 	const [showProgress, setShowProgress] = useState<boolean>(false);
 	const [progressMessage, setProgressMessage] = useState<string>('Starting...');
+	const [cityCountry, setcityCountry] = useState<cityCountry | null>(null);
+
+	const [budget, setBudget] = useState<number | null>(selectedLand ? selectedLand.budgetForLand : null);
+	const [businessPlan, setBusinessPlan] = useState<LandBusinessPlan[] | null>(selectedLand ? selectedLand.LandBusinessPlan : null);
+	const [soil, setSoil] = useState<SoilType | null>(null);
+	const [crop, setCrop] = useState<CropType | null>(null);
+
+	
 	//! Related to the popup
 	const [showPopup, setShowPopup] = useState(false);
 	const [isConfirmPhase, setIsConfirmPhase] = useState(false);
-	const handleSubmit = () => {
+	// const handleSubmit = () => {
+	// 	if (!isConfirmPhase) {
+	// 		setIsConfirmPhase(true); // Switch to confirmation phase
+	// 	} else {
+	// 		setShowPopup(false);
+	// 		// Handle confirmation, e.g., redirect
+	// 		console.log("Confirmed! Navigating to new page.");
+	// 		if (isConfirmPhase) {
+	// 			setShowProgress(true);
+	// 			setProgressMessage('Starting...');
+	// 			setTimeout(() => {
+	// 				setProgressMessage('Getting prediction...');
+	// 				setTimeout(() => {
+	// 					setProgressMessage('Completed!');
+	// 					setTimeout(() => {
+	// 						setShowProgress(false);
+	// 						window.location.reload();
+	// 					}, 1000); // Duration for the completed message
+	// 				}, 2000); // Duration for the "Almost Done" message
+	// 			}, 1500);
+	// 		}
+	// 	}
+	// };
+	//! new handle submit:
+	const handleSubmit = async () => {
 		if (!isConfirmPhase) {
 			setIsConfirmPhase(true); // Switch to confirmation phase
 		} else {
 			setShowPopup(false);
-			// Handle confirmation, e.g., redirect
-			console.log("Confirmed! Navigating to new page.");
-			if (isConfirmPhase) {
+	
+			// Collect the slider values
+			const requestBody = {
+				latitude: selectedLand.latitude,
+				longitude: selectedLand.longitude,
+				land_size: selectedLand.landSize,
+				land_name: selectedLand.landName,
+				ph_level: soil.ph,
+				phosphorus: soil.phosphorus,
+				potassium: soil.potassium,
+				oxygen_level: soil.oxygen,
+				nitrogen: soil.nitrogen, // azote
+				humidity: soil.humidity,
+				budget: selectedLand.budgetForLand,
+			};
+	
+			try {
+				// Show "Starting..." message for 1 second
 				setShowProgress(true);
 				setProgressMessage('Starting...');
-				setTimeout(() => {
+	
+				setTimeout(async () => {
+					// Show "Getting prediction..." message while fetching the API
 					setProgressMessage('Getting prediction...');
-					setTimeout(() => {
-						setProgressMessage('Completed!');
+					
+					try {
+						const response = await apiCall(
+							`/land/update-land/${selectedLand.landId}`,
+							{
+								method: 'POST',
+								data: requestBody,
+								requireAuth: true,
+							},
+							token
+						);
+						
+						console.log("Land updated successfully:", response.data.message);
+						
+						// Show "Completed!" message for 1 second after successful API call
+						setTimeout(() => {
+							setProgressMessage('Completed!');
+							setTimeout(() => {
+								setShowProgress(false);
+								window.location.reload();
+							}, 1000);
+						}, 2000); // Keep "Getting prediction..." message for 2 seconds
+	
+					} catch (apiError) {
+						console.error("Failed to update land:", apiError);
+						// Show error message for 1 second
+						setProgressMessage('Error occurred!');
 						setTimeout(() => {
 							setShowProgress(false);
-							window.location.reload();
-						}, 1000); // Duration for the completed message
-					}, 2000); // Duration for the "Almost Done" message
-				}, 1500);
+						}, 1000);
+					}
+				}, 1000); // Show "Starting..." message for 1 second
+	
+			} catch (error) {
+				console.error("Unexpected error occurred:", error);
+				// Show error message for 1 second if any unexpected error occurs
+				setProgressMessage('Unexpected error!');
+				setTimeout(() => {
+					setShowProgress(false);
+				}, 1000);
 			}
 		}
 	};
+
+
+
+
+
+
+
+
 	const handleCancel = () => {
 		setShowPopup(false);
 		setIsConfirmPhase(false);
@@ -146,8 +244,12 @@ const Yourland: React.FC = () => {
 		setShowPopup(true);
 	};
 
-	//! pop up state
+	const handleOpenPopup = () => {
+		setShowPopup(true);
+		setIsConfirmPhase(false); // Initial phase
+	};
 
+	//! slider handlers
 	const handleSliderChange = (value: number) => {
 		setSliderValue(value);
 		setSoil((prevSoil) => ({
@@ -162,32 +264,7 @@ const Yourland: React.FC = () => {
 	};
 
 
-	//! New for redux
-	const user = useSelector((state: any) => state.user);
-	const dispatch = useDispatch();
-	const [cityCountry, setcityCountry] = useState<cityCountry | null>(null);
-
-
-	const selectedLand = useSelector((state: RootState) => state.lands.selectedLand);
-
-
-	const [budget, setBudget] = useState<number | null>(selectedLand ? selectedLand.budgetForLand : null);
-	const [businessPlan, setBusinessPlan] = useState<LandBusinessPlan[] | null>(selectedLand ? selectedLand.LandBusinessPlan : null);
-
-	const revenue: RevenueItem[] = selectedLand
-		? selectedLand.crops.map((crop: Crop) => ({
-			CropName: crop.CropName,
-			area: crop.cropSize,
-			description: `${crop.CropName} is a valuable crop. It has a recommendation percentage of ${crop.recommendationPercentage}% and can generate a revenue of ${crop.expectedMoneyRevenue} with an expected weight of ${crop.expectedWeightRevenue}.`,
-			weight: crop.expectedWeightRevenue,
-			price: crop.expectedMoneyRevenue,
-			img: crop.CropImage,
-			progress: crop.recommendationPercentage,
-		}))
-		: [];
-
-	const [soil, setSoil] = useState<SoilType | null>(null);
-
+	//! Setting Soil maintainance
 	useEffect(() => {
 		if (selectedLand) {
 			const newSoil = {
@@ -212,8 +289,25 @@ const Yourland: React.FC = () => {
 	//const [sliderValue, setSliderValue] = useState<number>(soil[selectedSoil]);
 	const [sliderValue, setSliderValue] = useState<number>(0); // Set initial sliderValue
 
-	const [crop, setCrop] = useState<CropType | null>(null);
 
+	//! maaping predict revenue from state
+	const revenue: RevenueItem[] = selectedLand
+		? selectedLand.crops.map((crop: Crop) => ({
+			CropName: crop.CropName,
+			area: crop.cropSize,
+			description: `${crop.CropName} is a valuable crop. It has a recommendation percentage of ${crop.recommendationPercentage}% and can generate a revenue of ${crop.expectedMoneyRevenue} with an expected weight of ${crop.expectedWeightRevenue}.`,
+			weight: crop.expectedWeightRevenue,
+			price: crop.expectedMoneyRevenue,
+			img: crop.CropImage,
+			progress: crop.recommendationPercentage,
+		}))
+		: [];
+
+	
+	
+
+	
+	//! setting land statistics
 	useEffect(() => {
 		if (selectedLand) {
 			setCrop({
@@ -240,6 +334,8 @@ const Yourland: React.FC = () => {
 		size: null,
 	});
 
+	
+	//! Setting Crop maintainance
 	useEffect(() => {
 		if (selectedLand) {
 			setLandDetails({
@@ -256,7 +352,7 @@ const Yourland: React.FC = () => {
 		}
 	}, [selectedLand]);
 
-
+	//! Seting city and country from api
 	useEffect(() => {
 		if (landDetails.latitude && landDetails.longitude) {
 			const fetchCityFromCoordinates = async () => {
@@ -286,6 +382,7 @@ const Yourland: React.FC = () => {
 		}
 	}, [landDetails]);
 
+	//! Setting soil, crop suggestions
 	const soilSuggestions = selectedLand?.suggestedImprovementSoil || [];
 	const cropSuggestions = selectedLand?.suggestedImprovementCrop || [];
 
@@ -305,13 +402,13 @@ const Yourland: React.FC = () => {
 		return (soilValue / maxRange) * 100; // Scale to 0-100 for CircularProgress
 	};
 
-	const handleOpenPopup = () => {
-		setShowPopup(true);
-		setIsConfirmPhase(false); // Initial phase
-	};
 	const [activeSection, setActiveSection] = useState<string>('Predict Revenue');
 
 	const [test, setTEST] = useState(null)
+
+
+
+
 	//! Component rendering
 	const renderContent = () => {
 		switch (activeSection) {
@@ -381,9 +478,6 @@ const Yourland: React.FC = () => {
 								title="Modify Data"
 								message="Please provide the necessary information."
 								inputs={[
-									{ label: 'New Land Longitude', value: landDetails.longitude, onChange: setTEST },
-									{ label: 'New Land Latitude', value: landDetails.latitude, onChange: setTEST },
-									{ label: 'New Land Size in hectare', value: landDetails.size, onChange: setTEST },
 								]}
 								onConfirm={handleSubmit}
 								onCancel={handleCancel}
@@ -412,16 +506,6 @@ const Yourland: React.FC = () => {
 												padding={'15px'}
 												borderRadius={'20px'}
 											>
-												{/* <CircularProgress
-													color='#218225'
-													value={soil[key as keyof SoilType]}
-													size='90px'
-													trackColor='#BCCCBF'
-												>
-													<CircularProgressLabel fontWeight='semibold'>
-														<Text size={'sm'}>{soil[key as keyof SoilType]}<br />{soilRanges[key as keyof typeof soilRanges].unit}</Text>
-													</CircularProgressLabel>
-												</CircularProgress> */}
 												<CircularProgress
 													color='#218225'
 													value={getProgressValue(key as keyof SoilType)}
@@ -439,7 +523,6 @@ const Yourland: React.FC = () => {
 											</Flex>
 										))}
 								</Flex>
-
 								<Flex direction='column' align='center' gap='20px' padding='40px'>
 									<Text textAlign='center' fontWeight='bold' fontSize='3xl'>
 										Set Manually: {selectedSoil.charAt(0).toUpperCase() + selectedSoil.slice(1)} Level
@@ -478,38 +561,6 @@ const Yourland: React.FC = () => {
 											<SliderThumb />
 										</Tooltip>
 									</Slider>
-									{/* <Slider
-										id='slider'
-										defaultValue={soil ? soil[selectedSoil] : soilRanges[selectedSoil].min}
-										min={soilRanges[selectedSoil].min}
-										max={soilRanges[selectedSoil].max}
-										step={0.5}  // Allows half-point increments
-										colorScheme='green'
-										onChange={handleSliderChange}
-										onMouseEnter={() => setShowTooltip(true)}
-										onMouseLeave={() => setShowTooltip(false)}
-										width='400px'
-									>
-										{Array.from({ length: ((soilRanges[selectedSoil].max - soilRanges[selectedSoil].min) / 0.5) + 1 }, (_, i) => i * 0.5 + soilRanges[selectedSoil].min)
-											.map(value => (
-												<SliderMark key={value} value={value} mt='3' ml='-2.5' fontSize='sm'>
-													{value}
-												</SliderMark>
-											))}
-										<SliderTrack bg='green.200'>
-											<SliderFilledTrack />
-										</SliderTrack>
-										<Tooltip
-											hasArrow
-											bg='green.400'
-											color='white'
-											placement='top'
-											isOpen={showTooltip}
-											label={`${sliderValue}${soilRanges[selectedSoil].unit}`}
-										>
-											<SliderThumb />
-										</Tooltip>
-									</Slider> */}
 									<Button onClick={openConfirmationOnly}> Apply changes</Button>
 								</Flex>
 								<Flex>

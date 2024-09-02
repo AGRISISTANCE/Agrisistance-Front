@@ -65,8 +65,9 @@ export default function Home() {
         suggestedImprovementCrop: [] as string[], // Explicitly typing the array
       }));
 
-      dispatch(setInitialLands(mappedLands));
-      console.log("inital lands setted successfully", response )
+      //! Commented because i am using dummy lands
+      // dispatch(setInitialLands(mappedLands));
+      // console.log("inital lands setted successfully", response )
       
     } catch (error) {
       console.error('Failed to fetch lands:', error);

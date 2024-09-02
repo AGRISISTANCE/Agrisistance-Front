@@ -118,7 +118,7 @@ function ResetPassword() {
                             <Input
                                 isRequired={true}
                                 fontSize='sm'
-                                placeholder='Min. 8 characters'
+                                placeholder='Min 8 chars with numbers and special chars'
                                 mb='24px'
                                 size='lg'
                                 type={show ? "text" : "password"}
@@ -147,7 +147,7 @@ function ResetPassword() {
                             <Input
                                 isRequired={true}
                                 fontSize='sm'
-                                placeholder='Min. 8 characters'
+                                placeholder='Confirm your password'
                                 mb='24px'
                                 size='lg'
                                 type={show ? "text" : "password"}
