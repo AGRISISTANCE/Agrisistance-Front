@@ -15,12 +15,20 @@ import {
   Textarea,
   Select,
 } from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store';
+import { apiCall } from 'services/api';
 
 const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: any }> = ({ isOpen, onClose, post }) => {
+  const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
+  const dispatch = useDispatch();
+  
+  
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [image, setImage] = useState<File | null>(null);
+
 
   useEffect(() => {
     if (post) {
@@ -36,11 +44,55 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
     }
   }, [post]);
 
+  const createNewPost = async () => {
+    try {
+      const postData = {
+        title:title,
+        description:description,
+        category:category,
+        postDate:"", //here get current date and time
+        image:image
+      }
+      const posts = await apiCall('/create-new-post', {
+        method: 'POST',
+        data: postData,
+        requireAuth: true
+      },token);
+
+      // dispatch(); Set all posts here
+    } catch (error) {
+      console.error('Failed to create new post:', error);
+    }
+  };
+
+  const updatePost = async () => {
+    try {
+      const postData = {
+        title:title,
+        description:description,
+        category:category,
+        postDate:"", //here get current date and time
+        image:image
+      }
+      const posts = await apiCall('/update-post', {
+        method: 'POST',
+        data: postData,
+        requireAuth: true
+      },token);
+
+      // dispatch(); Set all posts here
+    } catch (error) {
+      console.error('Failed to update post:', error);
+    }
+  };
+
   const handleSubmit = () => {
     if (post) {
       console.log('Update Post:', { title, description, category, image });
+      createNewPost()
     } else {
       console.log('Create New Post:', { title, description, category, image });
+      updatePost()
     }
     onClose();
   };
