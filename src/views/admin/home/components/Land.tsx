@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Flex, Button, Text, useDisclosure } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectLand, removeLand, setInitialLands, LandInfo, setSelectedLand } from '../../../../redux/landsSlice'; // Ensure this import is correct
+import { selectLand, removeLand, setSelectedLand, LandInfo } from '../../../../redux/landsSlice'; // Ensure this import is correct
 import land from '../../../../assets/img/land/land';
 import { apiCall } from '../../../../services/api';
 import { RootState } from '../../../../redux/store';
-
+import ConfirmationPopup from '../../../../common/Popup/ConfirmationPopup'; // Adjust the path as necessary
 
 interface LandProps {
   landId: string;
@@ -26,27 +26,19 @@ export default function Land({
 }: LandProps) {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   const backgroundImage = name ? `url('${land.land1}')` : '#C4C4C4'; // Adjust image path if necessary
-  
-  
+
   const [loading, setLoading] = useState(true);
   const token = useSelector((state: RootState) => state.token.token);
-  
-  const handleSelect = () => {
-    //! Uncommented when using dummy land data
-    // dispatch(selectLand(landId));
 
-    
-    //! Commented when using dummy land data
+  const [showDeletePopup, setShowDeletePopup] = useState(false); // State for showing the confirmation popup
+
+  const handleSelect = () => {
     const loadData = async () => {
       try {
         const data = await apiCall(`/land/get-land/${landId}`, { requireAuth: true }, token);
-    
         if (data) {
-          // Calculate the total crop area for all crops
           const totalCropArea = data.crops.reduce((total: number, crop: any) => total + crop.crop_area, 0);
-              
           const landInfo: LandInfo = {
             landId: data.land[0]?.land_id || '',
             owner: data.land[0]?.user_id || '',
@@ -62,18 +54,18 @@ export default function Land({
             humidity: data.weather[0]?.humidity || 0,
             ph_level: data.land[0]?.ph_level || 0,
             LandBusinessPlan: data.business_plan.map((plan: any) => ({
-              title: 'Executive Summary', // or any appropriate title
+              title: 'Executive Summary',
               description: plan.executive_summary,
             })),
             crops: data.crops.map((crop: any) => {
               const recommendationPercentage = totalCropArea > 0 
                 ? (crop.crop_area / totalCropArea) * 100 
                 : 0;
-    
+
               return {
                 CropName: crop.crop_name,
-                CropImage: crop.crop_name, // Set the image name as the crop name
-                recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)), // Limit to 2 decimal places
+                CropImage: crop.crop_name,
+                recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)),
                 cropSize: crop.crop_area,
                 expectedMoneyRevenue: crop.expected_money_return,
                 expectedWeightRevenue: crop.expected_wight_return,
@@ -84,14 +76,13 @@ export default function Land({
             waterSufficecy: data.crop_maintenance[0]?.water_sufficienty || 0,
             sunlight: data.weather[0]?.sunlight || 0,
             pestisedesLevel: data.crop_maintenance[0]?.pesticide_level || 0,
-            landUse: (data.land_statistics[0]?.land_use * 100)|| 0,
+            landUse: (data.land_statistics[0]?.land_use * 100) || 0,
             humanCoverage: (data.land_statistics[0]?.human_coverage * 100) || 0,
             waterAvaliability: data.land_statistics[0]?.water_availability || 0,
             distributionOptimality: data.land_statistics[0]?.distribution_optimality || 0,
             suggestedImprovementSoil: data.suggested_improvements?.soil || [],
             suggestedImprovementCrop: data.suggested_improvements?.crop || [],
           };
-    
           dispatch(setSelectedLand(landInfo));
         }
       } catch (error) {
@@ -101,12 +92,38 @@ export default function Land({
       }
     };
 
-      loadData();
-
+    loadData();
   };
 
-  const handleDelete = () => {
-    dispatch(removeLand(landId));
+  const handleDelete = async () => {
+    try {
+      console.log('Attempting to delete land with ID:', landId);
+      const response = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
+      console.log('Delete response:', response);
+      
+      if (response.message === 'Land deleted successfully') {
+        // dispatch(removeLand(landId));
+        console.log('Land deleted successfully');
+        dispatch(setSelectedLand(null));
+      } else {
+        console.warn('Unexpected delete response:', response);
+      }
+    } catch (error) {
+      console.error('Error deleting land:', error);
+    }
+  };
+
+  const handleDeleteButtonClick = () => {
+    setShowDeletePopup(true); // Show the confirmation popup
+  };
+
+  const handleConfirmDelete = () => {
+    handleDelete(); // Perform the delete action
+    setShowDeletePopup(false); // Hide the confirmation popup
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeletePopup(false); // Hide the confirmation popup
   };
 
   const handleButtonClick = () => onOpen();
@@ -118,29 +135,41 @@ export default function Land({
   };
 
   return (
-    <Flex direction="column" width="288px" background="#fff" borderRadius="12px" boxShadow="10px 10px 10px -14px rgba(0,0,0,0.61)">
-      <Flex
-        height="180px"
-        width="100%"
-        background={backgroundImage}
-        backgroundSize="cover"
-        backgroundPosition="center"
-        borderRadius="12px 12px 0 0"
-      />
-      <Flex direction="row" padding="20px" justifyContent="space-between" alignItems="center">
-        {!isNew && (
-          <Flex direction="column" gap="10px">
-            <Text fontSize="25px" fontWeight="bold">{name}</Text>
-            <Text fontSize="17px">{coordinates[0]}, {coordinates[1]}</Text>
-          </Flex>
-        )}
-        {!select && (
-          <Flex direction="column" gap="10px">
-            <Button colorScheme="green" borderRadius="20px" height="40px" fontSize="18px" onClick={handleSelect}>Select</Button>
-            <Button colorScheme="gray" borderRadius="20px" height="40px" fontSize="18px" onClick={handleDelete}>Delete</Button>
-          </Flex>
-        )}
+    <>
+      <Flex direction="column" width="288px" background="#fff" borderRadius="12px" boxShadow="10px 10px 10px -14px rgba(0,0,0,0.61)">
+        <Flex
+          height="180px"
+          width="100%"
+          background={backgroundImage}
+          backgroundSize="cover"
+          backgroundPosition="center"
+          borderRadius="12px 12px 0 0"
+        />
+        <Flex direction="row" padding="20px" justifyContent="space-between" alignItems="center">
+          {!isNew && (
+            <Flex direction="column" gap="10px">
+              <Text fontSize="25px" fontWeight="bold">{name}</Text>
+              <Text fontSize="17px">{coordinates[0]}, {coordinates[1]}</Text>
+            </Flex>
+          )}
+          {!select && (
+            <Flex direction="column" gap="10px">
+              <Button colorScheme="green" borderRadius="20px" height="40px" fontSize="18px" onClick={handleSelect}>Select</Button>
+              <Button colorScheme="gray" borderRadius="20px" height="40px" fontSize="18px" onClick={handleDeleteButtonClick}>Delete</Button>
+            </Flex>
+          )}
+        </Flex>
       </Flex>
-    </Flex>
+
+      {/* Confirmation Popup for Deletion */}
+      <ConfirmationPopup
+        title="Confirm Delete"
+        message={`Are you sure you want to delete the land "${name}"? This action cannot be undone.`}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        isConfirmPhase={false} // Since this is a simple confirmation, you can keep it as false
+        showPopup={showDeletePopup}
+      />
+    </>
   );
 }

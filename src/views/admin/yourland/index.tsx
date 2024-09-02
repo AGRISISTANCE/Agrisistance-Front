@@ -13,7 +13,7 @@ import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { Crop } from '../../../redux/landsSlice';
+import { Crop, setSelectedLand } from '../../../redux/landsSlice';
 import axios from 'axios';
 import CropBarChart from './components/CropBarChart';
 import 'leaflet/dist/leaflet.css';
@@ -21,6 +21,7 @@ import L from "leaflet";
 import Lottie from 'react-lottie-player';
 import animationData from "../../../assets/img/dashboards/cropanimated.json";
 import { apiCall } from '../../../services/api';
+import { LandInfo } from '../../../redux/landsSlice'; // Ensure this import is correct
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -55,10 +56,7 @@ interface LandBusinessPlan {
 	description: string;
 }
 
-interface LandInfo {
-	budgetForLand: number | null;
-	LandBusinessPlan: LandBusinessPlan[] | null;
-}
+
 interface SuggestionItem {
 	text: string;
 	link: string;
@@ -135,6 +133,57 @@ const Yourland: React.FC = () => {
 		if (!isConfirmPhase) {
 			setIsConfirmPhase(true); // Switch to confirmation phase
 		} else {
+
+			const mapLandDataToSelectedLand = (landData: any): LandInfo => {
+				// Calculate the total crop area for all crops
+				const totalCropArea = landData.crops.reduce((total: number, crop: any) => total + crop.crop_area, 0);
+			  
+				return {
+				  landId: landData.land[0].land_id,
+				  owner: landData.land[0].user_id,
+				  landName: landData.land[0].land_name,
+				  latitude: landData.land[0].latitude,
+				  longitude: landData.land[0].longitude,
+				  landSize: landData.land[0].land_size,
+				  budgetForLand: landData.finance[0]?.investment_amount || 0,
+				  oxygen_level: landData.land[0].oxygen_level,
+				  nitrogen: landData.land[0].nitrogen,
+				  potassium: landData.land[0].potassium,
+				  phosphorus: landData.land[0].phosphorus,
+				  humidity: landData.weather[0]?.humidity || 0,
+				  ph_level: landData.land[0].ph_level,
+				  LandBusinessPlan: landData.business_plan.map((plan: any) => ({
+					title: 'Executive Summary', // or any appropriate title
+					description: plan.executive_summary,
+				  })),
+				  crops: landData.crops.map((crop: any) => {
+					const recommendationPercentage = totalCropArea > 0 
+					  ? (crop.crop_area / totalCropArea) * 100 
+					  : 0;
+			
+					return {
+					  CropName: crop.crop_name,
+					  CropImage: crop.crop_name, // Set the image name as the crop name
+					  recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)), // Limit to 2 decimal places
+					  cropSize: crop.crop_area,
+					  expectedMoneyRevenue: crop.expected_money_return,
+					  expectedWeightRevenue: crop.expected_wight_return,
+					  cropCost: crop.crop_investment,
+					  cropProfit: crop.expected_money_return - crop.crop_investment,
+					};
+				  }),
+				  waterSufficecy: landData.crop_maintenance[0]?.water_sufficienty || 0,
+				  sunlight: landData.weather[0]?.sunlight || 0,
+				  pestisedesLevel: landData.crop_maintenance[0]?.pesticide_level || 0,
+				  landUse: (landData.land_statistics[0]?.land_use * 100) || 0,
+				  humanCoverage: (landData.land_statistics[0]?.human_coverage * 100) || 0,
+				  waterAvaliability: landData.land_statistics[0]?.water_availability || 0,
+				  distributionOptimality: landData.land_statistics[0]?.distribution_optimality || 0,
+				  suggestedImprovementSoil: landData.suggested_improvements?.soil || [],
+				  suggestedImprovementCrop: landData.suggested_improvements?.crop || [],
+				};
+			  };
+
 			setShowPopup(false);
 	
 			// Collect the slider values
@@ -152,6 +201,8 @@ const Yourland: React.FC = () => {
 				budget: budget,
 			};
 	
+			console.log("you will be requesting changes to this new land: ", selectedLand ,". into this land :", requestBody)
+
 			try {
 				// Show "Starting..." message for 1 second
 				setShowProgress(true);
@@ -161,19 +212,41 @@ const Yourland: React.FC = () => {
 					// Show "Getting prediction..." message while fetching the API
 					setProgressMessage('Getting prediction...');
 					
+
+					//! Remove this once you confirm update land is working
 					try {
-						const response = await apiCall(
-							`/land/update-land/${selectedLand.landId}`,
-							{
-								method: 'POST',
-								data: requestBody,
-								requireAuth: true,
-							},
-							token
-						);
+					console.log("this is commented for now we will fix it very soon...")
+					// 	const response = await apiCall(
+					// 		`/land/update-land/${selectedLand.landId}`,
+					// 		{
+					// 			method: 'PUT',
+					// 			data: requestBody,
+					// 			requireAuth: true,
+					// 		},
+					// 		token
+					// 	);
+					// 	console.log("Land updated successfully:", response.data.message);
 						
-						console.log("Land updated successfully:", response.data.message);
 						
+					// 	setProgressMessage('Fetching updated land data...');
+					// 	//! Updating new land according to new business plan
+					// 	const landResponse = await apiCall(
+					// 		`/land/get-land/${selectedLand.landId}`,
+					// 		{
+					// 		method: 'GET',
+					// 		requireAuth: true,
+					// 		},
+					// 		token
+					// 	);
+					
+					// 	console.log("data getted from get landById after changes for: ", selectedLand.landId," : ", landResponse)
+					// 	const selectedLandMapped = mapLandDataToSelectedLand(landResponse);
+					// 	console.log("data after being mapped: ", selectedLandMapped)
+						
+					// 	// Dispatch the action to update the selected land in the Redux store
+					// 	dispatch(setSelectedLand(selectedLandMapped));
+					// 	console.log('Selected land updated in Redux store with: ', selectedLand);
+					
 						// Show "Completed!" message for 1 second after successful API call
 						setTimeout(() => {
 							setProgressMessage('Completed!');

@@ -114,13 +114,13 @@ const routes = [
     path: '/reset-password/*',
     component: <ResetPassword />,
   },
-  // {
-  //   name: 'Your Network',
-  //   layout: '/dashboard',
-  //   path: '/network',
-  //   icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
-  //   component: <Yournetwork />,
-  // }
+  {
+    name: 'Your Network',
+    layout: '/dashboard',
+    path: '/network',
+    icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
+    component: <Yournetwork />,
+  }
 ];
 
 
