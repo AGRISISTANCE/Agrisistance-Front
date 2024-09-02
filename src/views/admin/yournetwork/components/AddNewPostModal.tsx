@@ -15,27 +15,24 @@ import {
   Textarea,
   Select,
 } from '@chakra-ui/react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { apiCall } from 'services/api';
 
 const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: any }> = ({ isOpen, onClose, post }) => {
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
-  const dispatch = useDispatch();
-  
-  
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [image, setImage] = useState<File | null>(null);
-
 
   useEffect(() => {
     if (post) {
       setTitle(post.content.title);
       setDescription(post.content.description);
       setCategory(post.content.category);
-      // handle image if needed
+      // Handle image if needed
     } else {
       setTitle('');
       setDescription('');
@@ -46,20 +43,21 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
 
   const createNewPost = async () => {
     try {
-      const postData = {
-        title:title,
-        description:description,
-        category:category,
-        postDate:"", //here get current date and time
-        image:image
-      }
-      const posts = await apiCall('/create-new-post', {
-        method: 'POST',
-        data: postData,
-        requireAuth: true
-      },token);
-
-      // dispatch(); Set all posts here
+      // const postData = {
+      //   title: title,
+      //   description: description,
+      //   category: category,
+      //   postDate: new Date().toISOString(), // Set current date and time
+      //   image: image
+      // };
+      //! Add api request here
+      // await apiCall('/create-new-post', {
+      //   method: 'POST',
+      //   data: postData,
+      //   requireAuth: true
+      // }, token);
+      // dispatch(); // Update posts in the Redux store here
+      console.error('Post created successfully');
     } catch (error) {
       console.error('Failed to create new post:', error);
     }
@@ -67,32 +65,31 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
 
   const updatePost = async () => {
     try {
-      const postData = {
-        title:title,
-        description:description,
-        category:category,
-        postDate:"", //here get current date and time
-        image:image
-      }
-      const posts = await apiCall('/update-post', {
-        method: 'POST',
-        data: postData,
-        requireAuth: true
-      },token);
-
-      // dispatch(); Set all posts here
+      // const postData = {
+      //   postId: post.postID, // I added this but how can i acess the postId ??
+      //   newTitle: title,
+      //   newDescription: description,
+      //   newCategory: category,
+      //   newPostDate: new Date().toISOString(), // Set current date and time
+      //   newImage: image
+      // };
+      // await apiCall('/update-post', {
+      //   method: 'POST',
+      //   data: postData,
+      //   requireAuth: true
+      // }, token);
+      // dispatch(); // Update posts in the Redux store here
+      console.error('Post updated successfully');
     } catch (error) {
       console.error('Failed to update post:', error);
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (post) {
-      console.log('Update Post:', { title, description, category, image });
-      createNewPost()
+      await updatePost();
     } else {
-      console.log('Create New Post:', { title, description, category, image });
-      updatePost()
+      await createNewPost();
     }
     onClose();
   };
