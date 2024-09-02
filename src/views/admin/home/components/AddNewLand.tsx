@@ -64,6 +64,9 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
   const token = useSelector((state: RootState) => state.token.token); // Get the token from the state
 
   const mapLandDataToSelectedLand = (landData: any): LandInfo => {
+    // Calculate the total crop area for all crops
+    const totalCropArea = landData.crops.reduce((total: number, crop: any) => total + crop.crop_area, 0);
+  
     return {
       landId: landData.land[0].land_id,
       owner: landData.land[0].user_id,
@@ -82,29 +85,33 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         title: 'Executive Summary', // or any appropriate title
         description: plan.executive_summary,
       })),
-      crops: landData.crops.map((crop: any) => ({
-        CropName: crop.crop_name,
-        CropImage: '', // Implement this function as needed getCropImage(crop.crop_name)
-        recommendationPercentage: '', // Implement logic as needed calculateRecommendationPercentage(crop)
-        cropSize: crop.crop_area,
-        expectedMoneyRevenue: crop.expected_money_return,
-        expectedWeightRevenue: crop.expected_wight_return,
-        cropCost: crop.crop_investment,
-        cropProfit: crop.expected_money_return - crop.crop_investment,
-      })),
+      crops: landData.crops.map((crop: any) => {
+        const recommendationPercentage = totalCropArea > 0 
+          ? (crop.crop_area / totalCropArea) * 100 
+          : 0;
+
+        return {
+          CropName: crop.crop_name,
+          CropImage: crop.crop_name, // Set the image name as the crop name
+          recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)), // Limit to 2 decimal places
+          cropSize: crop.crop_area,
+          expectedMoneyRevenue: crop.expected_money_return,
+          expectedWeightRevenue: crop.expected_wight_return,
+          cropCost: crop.crop_investment,
+          cropProfit: crop.expected_money_return - crop.crop_investment,
+        };
+      }),
       waterSufficecy: landData.crop_maintenance[0]?.water_sufficienty || 0,
       sunlight: landData.weather[0]?.sunlight || 0,
       pestisedesLevel: landData.crop_maintenance[0]?.pesticide_level || 0,
-      landUse: landData.land_statistics[0]?.land_use || 0,
-      humanCoverage: landData.land_statistics[0]?.human_coverage || 0,
+      landUse: (landData.land_statistics[0]?.land_use * 100) || 0,
+      humanCoverage: (landData.land_statistics[0]?.human_coverage * 100) || 0,
       waterAvaliability: landData.land_statistics[0]?.water_availability || 0,
       distributionOptimality: landData.land_statistics[0]?.distribution_optimality || 0,
       suggestedImprovementSoil: landData.suggested_improvements?.soil || [],
       suggestedImprovementCrop: landData.suggested_improvements?.crop || [],
     };
   };
-  
-
 
   const handleAddLand = async () => {
     try {
