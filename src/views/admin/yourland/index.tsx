@@ -12,7 +12,7 @@ import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from 'redux/store';
+import { RootState } from '../../../redux/store';
 import { Crop } from '../../../redux/landsSlice';
 import axios from 'axios';
 import CropBarChart from './components/CropBarChart';
@@ -20,7 +20,7 @@ import 'leaflet/dist/leaflet.css';
 import L from "leaflet";
 import Lottie from 'react-lottie-player';
 import animationData from "../../../assets/img/dashboards/cropanimated.json";
-import { apiCall } from 'services/api';
+import { apiCall } from '../../../services/api';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -115,39 +115,21 @@ const Yourland: React.FC = () => {
 	const [showProgress, setShowProgress] = useState<boolean>(false);
 	const [progressMessage, setProgressMessage] = useState<string>('Starting...');
 	const [cityCountry, setcityCountry] = useState<cityCountry | null>(null);
-
 	const [budget, setBudget] = useState<number | null>(selectedLand ? selectedLand.budgetForLand : null);
 	const [businessPlan, setBusinessPlan] = useState<LandBusinessPlan[] | null>(selectedLand ? selectedLand.LandBusinessPlan : null);
 	const [soil, setSoil] = useState<SoilType | null>(null);
 	const [crop, setCrop] = useState<CropType | null>(null);
-
+	const [landDetails, setLandDetails] = useState<LandDetails>({
+		longitude: null,
+		latitude: null,
+		size: null,
+	});
 	
 	//! Related to the popup
 	const [showPopup, setShowPopup] = useState(false);
 	const [isConfirmPhase, setIsConfirmPhase] = useState(false);
-	// const handleSubmit = () => {
-	// 	if (!isConfirmPhase) {
-	// 		setIsConfirmPhase(true); // Switch to confirmation phase
-	// 	} else {
-	// 		setShowPopup(false);
-	// 		// Handle confirmation, e.g., redirect
-	// 		console.log("Confirmed! Navigating to new page.");
-	// 		if (isConfirmPhase) {
-	// 			setShowProgress(true);
-	// 			setProgressMessage('Starting...');
-	// 			setTimeout(() => {
-	// 				setProgressMessage('Getting prediction...');
-	// 				setTimeout(() => {
-	// 					setProgressMessage('Completed!');
-	// 					setTimeout(() => {
-	// 						setShowProgress(false);
-	// 						window.location.reload();
-	// 					}, 1000); // Duration for the completed message
-	// 				}, 2000); // Duration for the "Almost Done" message
-	// 			}, 1500);
-	// 		}
-	// 	}
-	// };
+
+
 	//! new handle submit:
 	const handleSubmit = async () => {
 		if (!isConfirmPhase) {
@@ -157,9 +139,9 @@ const Yourland: React.FC = () => {
 	
 			// Collect the slider values
 			const requestBody = {
-				latitude: selectedLand.latitude,
-				longitude: selectedLand.longitude,
-				land_size: selectedLand.landSize,
+				latitude: landDetails.latitude,
+				longitude: landDetails.longitude,
+				land_size: landDetails.size,
 				land_name: selectedLand.landName,
 				ph_level: soil.ph,
 				phosphorus: soil.phosphorus,
@@ -307,7 +289,7 @@ const Yourland: React.FC = () => {
 	
 
 	
-	//! setting land statistics
+	//! setting Crop maintainance
 	useEffect(() => {
 		if (selectedLand) {
 			setCrop({
@@ -328,14 +310,10 @@ const Yourland: React.FC = () => {
 		}
 	}, [selectedLand]);
 
-	const [landDetails, setLandDetails] = useState<LandDetails>({
-		longitude: null,
-		latitude: null,
-		size: null,
-	});
+
 
 	
-	//! Setting Crop maintainance
+	//! Setting land statistics
 	useEffect(() => {
 		if (selectedLand) {
 			setLandDetails({
@@ -404,8 +382,12 @@ const Yourland: React.FC = () => {
 
 	const [activeSection, setActiveSection] = useState<string>('Predict Revenue');
 
-	const [test, setTEST] = useState(null)
-
+	const PopPupTrackLandStatis = (field: keyof LandDetails) => (newValue: number) => {
+		setLandDetails(prevState => ({
+		  ...prevState,
+		  [field]: newValue
+		}));
+	  };
 
 
 
@@ -650,10 +632,10 @@ const Yourland: React.FC = () => {
 								title="Modify Data"
 								message="Please provide the necessary information."
 								inputs={[
-									{ label: 'New Land Longitude', value: landDetails.longitude, onChange: setTEST },
-									{ label: 'New Land Latitude', value: landDetails.latitude, onChange: setTEST },
-									{ label: 'New Land Size in hectare', value: landDetails.size, onChange: setTEST },
-								]}
+									{ label: 'New Land Longitude', value: landDetails.longitude, onChange: PopPupTrackLandStatis('longitude') },
+									{ label: 'New Land Latitude', value: landDetails.latitude, onChange: PopPupTrackLandStatis('latitude') },
+									{ label: 'New Land Size in hectare', value: landDetails.size, onChange: PopPupTrackLandStatis('size') },
+								  ]}
 								onConfirm={handleSubmit}
 								onCancel={handleCancel}
 								isConfirmPhase={isConfirmPhase}
