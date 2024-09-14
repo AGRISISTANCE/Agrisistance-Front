@@ -116,7 +116,7 @@ export default function Home() {
         <Profile/>
         </div>
         <Flex direction="column" gap="10px" align="center">
-          <Text color="#218225" textAlign="center" fontWeight="bold" fontSize="30px">
+          <Text color="#2ACC32" textAlign="center" fontWeight="bold" fontSize="30px">
             Selected Land
           </Text>
           {!selectedLand ? (
@@ -131,12 +131,12 @@ export default function Home() {
           )}
         </Flex>
       </Flex>
-      <Text color="#218225" fontWeight="bold" fontSize="30px" ml="20px">
+      <Text color="#2ACC32" fontWeight="bold" fontSize="30px" ml="20px">
         Other Lands:
       </Text>
       <Flex wrap="wrap" gap="40px" padding="40px">
       <Flex direction="column">
-            <Button onClick={handleButtonClick} fontSize="25px">+ Add New Land</Button>
+            <Button onClick={handleButtonClick} fontSize="25px" >+ Add New Land</Button>
             {isOpen && (
               <Box
                 className="modal-overlay"

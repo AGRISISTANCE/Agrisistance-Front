@@ -115,6 +115,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
   };
 
   const handleAddLand = async () => {
+    let landId; // Declare landId here to make it accessible in both try and catch blocks
     try {
       // Initialize loading state
       setShowProgress(true);
@@ -179,17 +180,17 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         });
 
       // Step 2: Generate Business Plan
-      setProgressMessage('Generating business plan and predictions...');
-      await apiCall(
-        '/model/generate-business-plan',
-        {
-          method: 'POST',
-          data: { land_id: landId },
-          requireAuth: true,
-        },
-        token
-      );
-      console.log('Business plan and predictions generated successfully for land:', landId);
+      // setProgressMessage('Generating business plan and predictions...');
+      // await apiCall(
+      //   '/model/generate-business-plan',
+      //   {
+      //     method: 'POST',
+      //     data: { land_id: landId },
+      //     requireAuth: true,
+      //   },
+      //   token
+      // );
+      // console.log('Business plan and predictions generated successfully for land:', landId);
 
       // Step 3: Get Land by ID
       setProgressMessage('Fetching updated land data...');
@@ -223,6 +224,22 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       console.error('Error during the land creation and mapping process:', error);
       setProgressMessage('An error occurred. Please try again.');
       
+      //! Deleting land after fail
+      console.log('Attempting to delete land with ID:', landId);
+      setProgressMessage('Deleting the created land.');
+      const response = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
+      console.log('Delete response:', response);
+      
+      if (response.message === 'Land deleted successfully') {
+        // dispatch(removeLand(landId));
+        setProgressMessage('land deleted successfully, rediricting...');
+        console.log('Land deleted successfully');
+      } else {
+        console.warn('Unexpected delete response:', response);
+      }
+
+
+
       // Optionally, keep the loading indicator and allow the user to retry
       setTimeout(() => {
         setShowProgress(false);

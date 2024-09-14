@@ -6,6 +6,7 @@ import land from '../../../../assets/img/land/land';
 import { apiCall } from '../../../../services/api';
 import { RootState } from '../../../../redux/store';
 import ConfirmationPopup from '../../../../common/Popup/ConfirmationPopup'; // Adjust the path as necessary
+import { Navigate, useNavigate } from 'react-router-dom';
 
 interface LandProps {
   landId: string;
@@ -32,6 +33,7 @@ export default function Land({
   const token = useSelector((state: RootState) => state.token.token);
 
   const [showDeletePopup, setShowDeletePopup] = useState(false); // State for showing the confirmation popup
+  const navigate = useNavigate();
 
   const handleSelect = () => {
     const loadData = async () => {
@@ -105,6 +107,7 @@ export default function Land({
         // dispatch(removeLand(landId));
         console.log('Land deleted successfully');
         dispatch(setSelectedLand(null));
+        navigate('/dashboard/home')
       } else {
         console.warn('Unexpected delete response:', response);
       }
@@ -154,7 +157,17 @@ export default function Land({
           )}
           {!select && (
             <Flex direction="column" gap="10px">
-              <Button colorScheme="green" borderRadius="20px" height="40px" fontSize="18px" onClick={handleSelect}>Select</Button>
+              <Button
+                bg="#2ACC32" // Set the background color
+                color="white" // Set text color to white for better contrast
+                borderRadius="20px"
+                height="40px"
+                fontSize="18px"
+                _hover={{ bg: '#28B32F' }} // Optionally, add a hover effect with a slightly different shade
+                onClick={handleSelect}
+              >
+                Select
+              </Button>
               <Button colorScheme="gray" borderRadius="20px" height="40px" fontSize="18px" onClick={handleDeleteButtonClick}>Delete</Button>
             </Flex>
           )}
@@ -167,7 +180,7 @@ export default function Land({
         message={`Are you sure you want to delete the land "${name}"? This action cannot be undone.`}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
-        isConfirmPhase={false} // Since this is a simple confirmation, you can keep it as false
+        isConfirmPhase={true} // Since this is a simple confirmation, you can keep it as false
         showPopup={showDeletePopup}
       />
     </>
