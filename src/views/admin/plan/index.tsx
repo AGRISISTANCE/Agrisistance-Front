@@ -84,7 +84,7 @@ export default function Plan() {
                 </Flex>
                 <Flex width={'950px'} bgColor={'#d0f7c5'} padding={'20px'} borderRadius={'xl'}>
                     {monthPlan.map((plan) => (  
-                        <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} key={plan.id} width={'30.33%'} padding={'10px'} borderWidth={'1px'} borderRadius={'md'} margin={'10px'}>
+                        <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} key={plan.id} width={'30.33%'} padding={'10px'} borderColor={'white'} borderWidth={'2px'} borderRadius={'md'} margin={'10px'}>
                             <Flex direction={'column'}>
                                 <Text fontSize={'3xl'} fontWeight={'bold'} padding={'10px'}>${plan.price} <span style={{ color: '#848199', fontWeight: 'normal', fontSize: '20px' }}>/month</span></Text>
                                 <Text fontSize={'2xl'} fontWeight={'semibold'} padding={'5px 10px'}>{plan.title}</Text>

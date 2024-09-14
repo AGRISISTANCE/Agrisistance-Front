@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Flex, Img, Text, useDisclosure } from '@chakra-ui/react';
 import Profile from './components/Profile';
 import avatars from '../../../assets/img/avatars/avatars';
 import Land from './components/Land';
@@ -12,7 +12,6 @@ import AddNewLand from './components/AddNewLand';
 import { apiCall } from '../../../services/api';
 import { setUser } from '../../../redux/userSlice'; // Adjust the path as necessary
 import { setInitialLands } from '../../../redux/landsSlice';
-
 
 export default function Home() {
   const lands = useSelector((state: RootState) => state.lands.lands);
@@ -113,7 +112,6 @@ export default function Home() {
       >
         <div>
         <Profile/>
-        {/* <Button onClick={fetchLands}>Fetch lands</Button> */}
         </div>
         <Flex direction="column" gap="10px" align="center">
           <Text color="#218225" textAlign="center" fontWeight="bold" fontSize="30px">
@@ -156,14 +154,19 @@ export default function Home() {
                   <Button
                     onClick={onClose}
                     position="absolute"
-                    top="-20px"
-                    right="-40px"
-                    colorScheme="none"
-                    border="2px"
+                    top="20px"
+                    right="20px" // Adjusted this to make it closer to the edge
+                    backgroundColor="#000" // Set background color if needed
                     color="#fff"
-                    padding="10px"
+                    padding="0"
                     borderRadius="50%"
+                    width="40px" // Set width and height to make it a perfect circle
+                    height="40px"
                     fontSize="30px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    border="none" // Remove border if not needed, or style it
                   >
                     <IoIosClose />
                   </Button>

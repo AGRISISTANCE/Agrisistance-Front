@@ -700,7 +700,7 @@ const Yourland: React.FC = () => {
 									{ label: 'New Land Longitude', value: landDetails.longitude, onChange: PopPupTrackLandStatis('longitude') },
 									{ label: 'New Land Latitude', value: landDetails.latitude, onChange: PopPupTrackLandStatis('latitude') },
 									{ label: 'New Land Size in hectare', value: landDetails.size, onChange: PopPupTrackLandStatis('size') },
-								  ]}
+								]}
 								onConfirm={handleSubmit}
 								onCancel={handleCancel}
 								isConfirmPhase={isConfirmPhase}

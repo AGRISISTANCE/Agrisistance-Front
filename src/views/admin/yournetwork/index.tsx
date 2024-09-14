@@ -1,16 +1,18 @@
 // components/Network.tsx
-import React, { useEffect } from 'react';
-import { Box, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Box, Tabs, TabList, TabPanels, Tab, TabPanel, Flex, Text } from '@chakra-ui/react';
 import AllPosts from './components/AllPosts';
 import MyPosts from './components/MyPosts';
 import { apiCall } from '../../../services/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 
+
 const Network: React.FC = () => {
 
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
   const dispatch = useDispatch();
+  const [activeSection, setActiveSection] = useState('All Posts');
 
 
 
@@ -32,38 +34,43 @@ const Network: React.FC = () => {
   // }, [dispatch, token]);
 
 
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'All Posts':
+        return <AllPosts />;
+      case 'Business Promotion':
+        return <AllPosts category='businessPromotion' />;
+      case 'Opportunities and Partnerships':
+        return <AllPosts category='opportunitiesAndPartnership' />;
+      case 'Products and Resources':
+        return <AllPosts category='resourcesAndProducts' />;
+      case 'My Posts':
+        return <MyPosts />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Box p={5}>
-      <Tabs variant="soft-rounded" colorScheme="teal">
-        <TabList>
-          <Tab>All Posts</Tab>
-          <Tab>Business Promotion</Tab>
-          <Tab>Opportunities and Partnerships</Tab>
-          <Tab>Products and Resources</Tab>
-          <Tab>My Posts</Tab>
-        </TabList>
-
-        <TabPanels>
-          <TabPanel>
-            <AllPosts />
-          </TabPanel>
-          <TabPanel>
-            <AllPosts category='businessPromotion' />
-          </TabPanel>
-          <TabPanel>
-            <AllPosts category='opportunitiesAndPartnership' />
-          </TabPanel>
-          <TabPanel>
-            <AllPosts category='resourcesAndProducts' />
-          </TabPanel>
-          <TabPanel>
-            <MyPosts />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+      <Flex gap='40px' mb={4}>
+        {['All Posts', 'Business Promotion', 'Opportunities and Partnerships', 'Products and Resources', 'My Posts'].map(section => (
+          <Text
+            key={section}
+            onClick={() => setActiveSection(section)}
+            cursor="pointer"
+            color={activeSection === section ? 'black' : 'gray.500'}
+            textDecoration={activeSection === section ? 'underline' : 'none'}
+            mb={2}
+          >
+            {section}
+          </Text>
+        ))}
+      </Flex>
+      <Box>
+        {renderContent()}
+      </Box>
     </Box>
   );
-};
-
+}
 export default Network;
-
