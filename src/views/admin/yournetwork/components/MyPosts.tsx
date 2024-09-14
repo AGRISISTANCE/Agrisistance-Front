@@ -132,7 +132,7 @@ const MyPosts: React.FC = () => {
         />
       ))}
 
-      <Button colorScheme="teal" mt={4} onClick={() => openModal()}>
+      <Button bgColor="#2ACC32" _hover={{ bgColor: "#239B43" }} color="white" mt={4} onClick={() => openModal()}>
         + Add New Post
       </Button>
 
