@@ -1,3 +1,8 @@
+//Importing temporal pictures
+import farmer from './farmer.jpg'
+import land from './land.jpg'
+import tool from './tool.jpg'
+
 // components/PostCard.tsx
 import React from 'react';
 import { Box, Text, Image, Flex, Button, Divider } from '@chakra-ui/react';

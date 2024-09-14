@@ -6,6 +6,7 @@ import MyPosts from './components/MyPosts';
 import { apiCall } from '../../../services/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import { persistor } from '../../../redux/store';
 
 
 const Network: React.FC = () => {
@@ -14,6 +15,11 @@ const Network: React.FC = () => {
   const dispatch = useDispatch();
   const [activeSection, setActiveSection] = useState('All Posts');
 
+  //! DONT TOUCH! Added just to solve some problem
+  // useEffect(() => {
+  //   // Purge persisted state on component mount
+  //   persistor.purge();
+  // }, []);
 
 
   //Get all posts from backend
