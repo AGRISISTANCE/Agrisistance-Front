@@ -23,7 +23,7 @@ return (
     width="82%"
     height="82px"
     backgroundColor="white"
-    zIndex="1000"
+    zIndex="5"
     px={16}
     >
     <Flex

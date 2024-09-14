@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Center, Flex, Text, Button, Box } from "@chakra-ui/react";
 import logo from '../../../assets/img/icons/newlogogreen.png';
 import { FaCheckCircle } from "react-icons/fa";
+import Navbar from "../navbar/navbar";
 
 const monthPlan = [
     {
@@ -49,8 +50,10 @@ export default function Plan() {
             setPlanType('yearly');
         else setPlanType('monthly')
     }
-    return (
-        <Flex width={'100%'} direction={'column'}>
+    return (<>
+        <Navbar />
+
+        <Flex mt={8} width={'100%'} direction={'column'}>
             <Flex width={'100%'} direction={'column'} align={'center'} padding={'40px'} gap={'40px'}>
                 <Flex gap={'122px'} align={'center'}>
                     <Flex direction={'column'} gap={'30px'}>
@@ -101,5 +104,5 @@ export default function Plan() {
                 </Flex>
             </Flex >
         </Flex >
-    );
+    </>);
 }

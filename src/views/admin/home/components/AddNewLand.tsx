@@ -19,6 +19,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; // Removed the `Form` import
 import { useDispatch, useSelector } from "react-redux";
 import animationData from "../../../../assets/img/dashboards/cropanimated.json";
+import erroranimated from "../../../../assets/img/dashboards/erroranimated.json";
 import Lottie from "react-lottie-player";
 import { apiCall } from "../../../../services/api";
 import { RootState } from "../../../../redux/store";
@@ -54,7 +55,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
   const [potassium, setPotassium] = useState<number | "">("");
   const [oxygenLevel, setOxygenLevel] = useState<number | "">("");
   const [nitrogen, setNitrogen] = useState<number | "">("");
-
+  const [hasError, setHasError] = useState(false);
 
   const [step, setStep] = useState<number>(initialStep);
   const [modalContent, setModalContent] = useState<string>("");
@@ -118,7 +119,8 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       // Initialize loading state
       setShowProgress(true);
       setProgressMessage('Starting...');
-  
+      setHasError(false);
+
       // Validate required fields
       if (
         !landName ||
@@ -132,7 +134,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         !oxygenLevel ||
         !nitrogen
       ) {
-        setProgressMessage('Please fill in all required fields.');
+        alert('Please fill in all required fields.');
         setShowProgress(false);
         return;
       }
@@ -176,7 +178,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
           land_id: landId
         });
 
-      // Step 2: Generate Business Plan
+      Step 2: Generate Business Plan
       setProgressMessage('Generating business plan and predictions...');
       await apiCall(
         '/model/generate-business-plan',
@@ -188,7 +190,6 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         token
       );
       console.log('Business plan and predictions generated successfully for land:', landId);
-  
 
       // Step 3: Get Land by ID
       setProgressMessage('Fetching updated land data...');
@@ -218,12 +219,15 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         navigate("/dashboard/yourland");
       }, 2000);
     } catch (error) {
+      setHasError(true)
       console.error('Error during the land creation and mapping process:', error);
       setProgressMessage('An error occurred. Please try again.');
+      
       // Optionally, keep the loading indicator and allow the user to retry
       setTimeout(() => {
         setShowProgress(false);
-      }, 2000);
+        navigate("/dashboard/home");
+      }, 2500);
     }
     }
     
@@ -254,7 +258,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
 
   return (
     <Flex
-      zIndex={3}
+      zIndex={10}
       direction={"column"}
       backgroundImage={asset.image}
       backgroundSize={"cover"}
@@ -588,21 +592,24 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
           >
             <Flex
               backgroundColor={"#218225"}
-              padding={"20px"}
+              padding={"10px"}
               borderRadius={"50px"}
             >
-              <Text color={"white"} fontWeight={"semibold"} fontSize={"30px"}>
+              <Text color={"white"} fontWeight={"semibold"} fontSize={"20px"}>
                 Entre those details about your soil:
               </Text>
             </Flex>
             <Flex
               direction={"row"}
               align={"center"}
-              gap={"5px"} // Increased gap to separate form elements clearly
+              gap={"3px"} // Increased gap to separate form elements clearly
               wrap={"wrap"}
               justify={"center"} // Optional: Centers the rows horizontally
             >
               <Flex direction={"column"} align={"center"} gap={"10px"}>
+                <div>
+                  
+                </div>
                 <label
                   style={{
                     color: "#fff",
@@ -620,7 +627,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   style={{
                     borderRadius: "0px",
                     width: "562px",
-                    height: "40px",
+                    height: "30px",
                     background: "#fff",
                     color: "#000",
                   }}
@@ -653,7 +660,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   style={{
                     borderRadius: "0px",
                     width: "562px",
-                    height: "40px",
+                    height: "30px",
                     background: "#fff",
                     color: "#000",
                   }}
@@ -685,7 +692,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   style={{
                     borderRadius: "0px",
                     width: "562px",
-                    height: "40px",
+                    height: "30px",
                     background: "#fff",
                     color: "#000",
                   }}
@@ -717,7 +724,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   style={{
                     borderRadius: "0px",
                     width: "562px",
-                    height: "40px",
+                    height: "30px",
                     background: "#fff",
                     color: "#000",
                   }}
@@ -749,7 +756,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   style={{
                     borderRadius: "0px",
                     width: "562px",
-                    height: "40px",
+                    height: "30px",
                     background: "#fff",
                     color: "#000",
                   }}
@@ -774,7 +781,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                                 }}
                             />
                         </Flex> */}
-            <Flex gap={"20px"}>
+            <Flex gap={"20px"} my={2}>
               <Button
                 bg={"#2acc32"}
                 color={"#fff"}
@@ -832,7 +839,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
               height="auto"
             >
               <Lottie
-                animationData={animationData}
+                animationData={hasError ? erroranimated : animationData}
                 play
                 loop
                 style={{ width: '100%', maxWidth: '300px', height: 'auto' }}
