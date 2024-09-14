@@ -178,7 +178,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
           land_id: landId
         });
 
-      Step 2: Generate Business Plan
+      // Step 2: Generate Business Plan
       setProgressMessage('Generating business plan and predictions...');
       await apiCall(
         '/model/generate-business-plan',
