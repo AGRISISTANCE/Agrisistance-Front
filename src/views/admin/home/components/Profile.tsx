@@ -8,12 +8,9 @@ import { useSelector } from 'react-redux';
 
 
 export default function Profile(props: {
-  avatar: string;
-  name: string;
-  days: string;
-  suggestions: string;
+
 }) {
-    const { avatar, name, days, suggestions, ...rest } = props;
+
     
     const user = useSelector((state: any) => state.user) as UserInfo;
     
@@ -22,7 +19,7 @@ export default function Profile(props: {
     // const textColorSecondary = 'gray.400';
     const borderColor = useColorModeValue('white !important', '#111C44 !important');
     return (
-        <Card mb={{ base: '0px', lg: '20px' }} alignItems='center' {...rest} width='552px' height='fit-content' padding='20px'>
+        <Card mb={{ base: '0px', lg: '20px' }} alignItems='center' width='552px' height='fit-content' padding='20px'>
             <Flex
                 height='100%'
                 width='100%'

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
 import { Center, Flex, Text, Button, Box } from "@chakra-ui/react";
 import logo from '../../../assets/img/icons/newlogogreen.png';
 import { FaCheckCircle } from "react-icons/fa";
@@ -52,20 +51,7 @@ export default function Plan() {
     }
     return (
         <Flex width={'100%'} direction={'column'}>
-            <Flex width={'100%'} justify={'space-between'} padding={'20px'}>
-                <a href="/">
-                    <Flex width='100%' align={'center'}>
-                        <img src={logo} alt="Logo" width={'30px'} height={'30px'} />
-                        <Text fontSize={'4xl'} marginLeft={'10px'}>grisistance</Text>
-                    </Flex>
-                </a>
-                <AdminNavbarLinks
-                    //onOpen={() => { /* Handler function here */ }}
-                    secondary={false}
-                    //fixed={true}
-                />
-            </Flex>
-            <Flex width={'100%'} direction={'column'} align={'center'} background={'#A2EF8C'} padding={'40px'} gap={'40px'}>
+            <Flex width={'100%'} direction={'column'} align={'center'} padding={'40px'} gap={'40px'}>
                 <Flex gap={'122px'} align={'center'}>
                     <Flex direction={'column'} gap={'30px'}>
                         <Text fontSize={'4xl'}>Plans & Pricing</Text>

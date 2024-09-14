@@ -10,7 +10,6 @@ import { Button } from '../../../common/Button/index'
 import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
-import AdminNavbarLinks from '../Navbar/NavbarLinksAdmin';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { Crop, setSelectedLand } from '../../../redux/landsSlice';
@@ -843,12 +842,6 @@ const Yourland: React.FC = () => {
 
 	return (
 		<Flex direction="column" p={4}>
-			{/* <AdminNavbar secondary={true} fixed={true}  onOpen={AdminNavbar}/> */}
-			<AdminNavbarLinks
-				//onOpen={AdminNavbarLinks}
-				secondary={false}
-			//fixed={true}
-			/>
 			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{cityCountry ? `${cityCountry.city}, ${cityCountry.country}` : 'No location available'}</Text>
 			<Flex gap='40px' mb={4}>
 				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (

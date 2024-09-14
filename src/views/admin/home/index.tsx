@@ -71,7 +71,7 @@ export default function Home() {
   };
   useEffect(() => {
     fetchLands();
-  }, [dispatch, token]);
+  }, []);
 
   // fetching user data!
   useEffect(() => {
@@ -112,8 +112,8 @@ export default function Home() {
         gap="50px"
       >
         <div>
-        <Profile avatar={avatars.avatar1} days="20" name="James Belfort" suggestions="1" />
-        <Button onClick={fetchLands}>Fetch lands</Button>
+        <Profile/>
+        {/* <Button onClick={fetchLands}>Fetch lands</Button> */}
         </div>
         <Flex direction="column" gap="10px" align="center">
           <Text color="#218225" textAlign="center" fontWeight="bold" fontSize="30px">
