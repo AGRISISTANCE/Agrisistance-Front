@@ -12,6 +12,7 @@ import AddNewLand from './components/AddNewLand';
 import { apiCall } from '../../../services/api';
 import { setUser } from '../../../redux/userSlice'; // Adjust the path as necessary
 import { setInitialLands } from '../../../redux/landsSlice';
+import Navbar from '../navbar/navbar';
 
 export default function Home() {
   const lands = useSelector((state: RootState) => state.lands.lands);
@@ -101,6 +102,7 @@ export default function Home() {
   //
   return (
     <Flex direction="column" height="100vh">
+      <Navbar />
       <Flex
         align="center"
         justify="center"
