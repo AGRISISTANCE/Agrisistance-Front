@@ -21,6 +21,7 @@ import Lottie from 'react-lottie-player';
 import animationData from "../../../assets/img/dashboards/cropanimated.json";
 import { apiCall } from '../../../services/api';
 import { LandInfo } from '../../../redux/landsSlice'; // Ensure this import is correct
+import Navbar from '../navbar/navbar';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -840,9 +841,10 @@ const Yourland: React.FC = () => {
 		}
 	};
 
-	return (
-		<Flex direction="column" p={4}>
-			<Text mb={4} fontSize='3xl' fontWeight='semibold'>{cityCountry ? `${cityCountry.city}, ${cityCountry.country}` : 'No location available'}</Text>
+	return (<>
+		<Navbar />
+		<Flex mt={16} direction="column" p={4}>
+			<Text  mb={4} fontSize='3xl' fontWeight='semibold'>{cityCountry ? `${cityCountry.city}, ${cityCountry.country}` : 'No location available'}</Text>
 			<Flex gap='40px' mb={4}>
 				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (
 					<Text
@@ -905,7 +907,7 @@ const Yourland: React.FC = () => {
 				)}
 
 			</Box>
-		</Flex>
+		</Flex></>
 	);
 }
 export default Yourland;

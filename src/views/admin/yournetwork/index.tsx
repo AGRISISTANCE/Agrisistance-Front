@@ -7,6 +7,7 @@ import { apiCall } from '../../../services/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { persistor } from '../../../redux/store';
+import Navbar from '../navbar/navbar';
 
 
 const Network: React.FC = () => {
@@ -58,7 +59,9 @@ const Network: React.FC = () => {
   };
 
   return (
-    <Box p={5}>
+    <>
+    <Navbar/>
+    <Box mt={16} p={5}>
       <Flex gap='40px' mb={4}>
         {['All Posts', 'Business Promotion', 'Opportunities and Partnerships', 'Products and Resources', 'My Posts'].map(section => (
           <Text
@@ -77,6 +80,7 @@ const Network: React.FC = () => {
         {renderContent()}
       </Box>
     </Box>
+    </>
   );
 }
 export default Network;
