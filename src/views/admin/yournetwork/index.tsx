@@ -5,28 +5,31 @@ import AllPosts from './components/AllPosts';
 import MyPosts from './components/MyPosts';
 import { apiCall } from '../../../services/api';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
+import { RootState } from '../../../redux/store';
 
 const Network: React.FC = () => {
 
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
   const dispatch = useDispatch();
 
-  //Get all posts from backend
-  useEffect(() => {
-    const fetchAllPosts = async () => {
-      try {
-        const posts = await apiCall('/profile/get-profile', {
-          method: 'GET',
-        });
 
-        // dispatch(); Set all posts here
-      } catch (error) {
-        console.error('Failed to fetch user profile:', error);
-      }
-    };
-    fetchAllPosts();
-  }, [dispatch, token]);
+
+  //Get all posts from backend
+  //! Commented to get dummy posted (remove when using real backend)
+  // useEffect(() => {
+  //   const fetchAllPosts = async () => {
+  //     try {
+  //       const posts = await apiCall('/profile/get-profile', {
+  //         method: 'GET',
+  //       });
+
+  //       // dispatch(); Set all posts here
+  //     } catch (error) {
+  //       console.error('Failed to fetch user profile:', error);
+  //     }
+  //   };
+  //   fetchAllPosts();
+  // }, [dispatch, token]);
 
 
   return (

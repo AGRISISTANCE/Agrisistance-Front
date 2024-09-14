@@ -5,7 +5,7 @@ import farmerImage from './farmer.jpg';
 import toolImage from './tool.jpg';
 import landImage from './land.jpg';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../../redux/store'; // Adjust the import based on your store setup
+import { RootState } from '../../../../redux/store'; 
 
 interface AllPostsProps {
   category?: string;
@@ -13,6 +13,7 @@ interface AllPostsProps {
 
 const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
   const posts = useSelector((state: RootState) => state.posts);
+
 
   // Check posts here
   console.log('Current Posts State:', posts);
@@ -32,8 +33,8 @@ const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
             }}
             content={{
               category: post.type,
-              title: post.Title,
-              description: post.Description,
+              title: post.title,
+              description: post.description,
               image: post.image, // Assuming the first image is the main content image
               date: post.postDate,
             }}

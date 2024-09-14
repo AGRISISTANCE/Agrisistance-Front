@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Post {
   postID: string;
-  Title: string;
+  title: string;
   type: 'opportunitiesAndPartnership' | 'businessPromotion' | 'resourcesAndProducts';
-  Description: string;
+  description: string;
   image: string;
   authorId: string; // userID
   authorName: string;
@@ -17,14 +17,14 @@ interface Post {
 
 
 // Flag to toggle between dummy and real data
-const USE_DUMMY_DATA = false;
+const USE_DUMMY_DATA = true;
 
 const initialDummyPosts: Post[] = [
   {
     postID: '1',
-    Title: 'Innovative Farming Techniques',
+    title: 'Innovative Farming Techniques',
     type: 'opportunitiesAndPartnership',
-    Description: 'Explore new techniques to boost crop yield and sustainability.',
+    description: 'Explore new techniques to boost crop yield and sustainability.',
     image: 'farming1.jpg',
     authorId: 'c94fe502-79a0-4a6d-a533-9b72a28459ab',
     authorName: 'John Doe',
@@ -36,9 +36,9 @@ const initialDummyPosts: Post[] = [
   },
   {
     postID: '2',
-    Title: 'New Business Opportunities',
+    title: 'New Business Opportunities',
     type: 'businessPromotion',
-    Description: 'Join us to explore exciting new business ventures.',
+    description: 'Join us to explore exciting new business ventures.',
     image: 'business1.jpg',
     authorId: 'user2',
     authorName: 'Jane Smith',
@@ -50,9 +50,9 @@ const initialDummyPosts: Post[] = [
   },
   {
     postID: '3',
-    Title: 'Agricultural Resources Available',
+    title: 'Agricultural Resources Available',
     type: 'resourcesAndProducts',
-    Description: 'Access high-quality resources for agricultural productivity.',
+    description: 'Access high-quality resources for agricultural productivity.',
     image: 'resources1.jpg',
     authorId: 'user3',
     authorName: 'Emily Johnson',
@@ -64,9 +64,9 @@ const initialDummyPosts: Post[] = [
   },
   {
     postID: '4',
-    Title: 'Agricultural Resources Available',
+    title: 'Agricultural Resources Available',
     type: 'resourcesAndProducts',
-    Description: 'Access high-quality resources for agricultural productivity.',
+    description: 'Access high-quality resources for agricultural productivity.',
     image: 'resources1.jpg',
     authorId: 'c94fe502-79a0-4a6d-a533-9b72a28459ab',
     authorName: 'Idriss fellah',
@@ -78,9 +78,9 @@ const initialDummyPosts: Post[] = [
   },
   {
     postID: '5',
-    Title: 'Agricultural Resources Available',
+    title: 'Agricultural Resources Available',
     type: 'resourcesAndProducts',
-    Description: 'Access high-quality resources for agricultural productivity.',
+    description: 'Access high-quality resources for agricultural productivity.',
     image: 'resources1.jpg',
     authorId: 'c94fe502-79a0-4a6d-a533-9b72a28459ab',
     authorName: 'Idriss fellah',
@@ -91,7 +91,8 @@ const initialDummyPosts: Post[] = [
     active: false,
   },
 ];
-const initialState: Post[] = USE_DUMMY_DATA ? initialDummyPosts : [];
+// const initialState: Post[] = USE_DUMMY_DATA ? initialDummyPosts : [];
+const initialState: Post[] = initialDummyPosts;
 
 const postsSlice = createSlice({
   name: 'posts',

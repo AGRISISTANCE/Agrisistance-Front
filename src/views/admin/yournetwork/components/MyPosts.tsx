@@ -94,8 +94,8 @@ const MyPosts: React.FC = () => {
           }}
           content={{
             category: post.type,
-            title: post.Title,
-            description: post.Description,
+            title: post.title,
+            description: post.description,
             image: post.image,
             date: post.postDate,
           }}
@@ -119,8 +119,8 @@ const MyPosts: React.FC = () => {
           }}
           content={{
             category: post.type,
-            title: post.Title,
-            description: post.Description,
+            title: post.title,
+            description: post.description,
             image: post.image,
             date: post.postDate,
           }}
