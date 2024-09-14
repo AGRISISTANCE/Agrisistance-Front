@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
@@ -43,19 +43,47 @@ function LogIn() {
   const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const brandStars = useColorModeValue("brand.500", "brand.400");
 
-  const [show, setShow] = React.useState(false);
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [message, setMessage] = React.useState("");
+  const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageColor, setMessageColor] = useState(""); // Optional: to color the message
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const handleClick = () => setShow(!show);
-
   const dispatch = useDispatch();
 
+  const handleClick = () => setShow(!show);
+
+  // Helper function to validate email format
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const loginUser = async () => {
+    // Clear previous messages
+    setMessage("");
+
+    // Client-side validation
+    if (!email || !password) {
+      setMessage("Please fill in both email and password.");
+      setMessageColor("red");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setMessage("Please enter a valid email address.");
+      setMessageColor("red");
+      return;
+    }
+
+    // Proceed with login if inputs are valid
+    setLoading(true);
+    setMessage("The request may take some time, please wait...");
+    setMessageColor("green");
+
     try {
-      setMessage("The request may take some time, please wait...");
       const credentials = {
         email: email,
         password: password,
@@ -67,17 +95,21 @@ function LogIn() {
       });
 
       // Store token in Redux
+      console.log(response.msg); // Logged in successfully!
+      console.log("your token: ", response.token);
 
-      console.log(response.msg); // Logged in successfully !
-      console.log("your token: ", response.token)
       setMessage("Login successful! Redirecting...");
+      setMessageColor("green");
+
       setTimeout(() => {
         dispatch(setToken(response.token));
         navigate("/dashboard/home"); // Redirect to dashboard on successful login
-      }, 1000)
-    }
-    catch (error: any) {
+      }, 1000);
+    } catch (error: any) {
       setMessage("Login failed. Please confirm your credentials and try again.");
+      setMessageColor("red");
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -140,7 +172,7 @@ function LogIn() {
               fontWeight='500'
               size='lg'
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setEmail(e.target.value)}
             />
             <FormLabel
               ms='4px'
@@ -160,7 +192,7 @@ function LogIn() {
                 type={show ? "text" : "password"}
                 variant='auth'
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setPassword(e.target.value)}
               />
               <InputRightElement display='flex' alignItems='center' mt='4px'>
                 <Icon

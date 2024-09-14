@@ -46,6 +46,7 @@ function SignUp() {
   const [messageColor, setMessageColor] = useState("");
   const [selectedCountryCode, setSelectedCountryCode] = useState<string>('+213');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [loading, setLoading] = useState(false);
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCountryCode(e.target.value);
@@ -60,41 +61,82 @@ function SignUp() {
 
   const handleClick = () => setShow(!show);
 
-  const registerUser = async () => {
-    console.log("selected country code:", selectedCountryCode)
-    setMessageColor("green");
-    setMessage("The request may take some time, please wait...");
+  // Helper function to validate email format
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
-      try{
-        const userData = {
-          firstName: firstName,
-          lastName: lastName,
-          country: country,
-          phoneNumber: `${selectedCountryCode}${phoneNumber}`,
-          eMail: email,
-          password: password,
-        };
-      
-        const response = await apiCall('/auth/register', {
-          method: 'POST',
-          data: userData,
-        });
-        if (response.message) {
-          setMessage(response.message);
-          setMessageColor("green");
-        } else {
-          setMessage("Registration successful!");
-          setMessageColor("green");
-        }
-      }
-      // Check if the response contains the message
-      catch (error: any) {
-      // Handle the error based on the structure
-      
-      setMessage("An unexpected error occurred, please confirm all inputs are correct. password should be at least 8 char with special characters and numbers");
+  // Helper function to validate password strength
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const registerUser = async () => {
+    // Clear any previous messages
+    setMessage("");
+
+    // Client-side validation
+    if (!firstName || !lastName || !email || !password || !phoneNumber || country === "Select your Country") {
+      setMessage("Please fill in all required fields.");
       setMessageColor("red");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setMessage("Please enter a valid email address.");
+      setMessageColor("red");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setMessage("Password must be at least 8 characters long and include numbers and special characters.");
+      setMessageColor("red");
+      return;
+    }
+
+    setLoading(true);
+    setMessageColor("green");
+    setMessage("Processing your registration. This may take a few moments, please wait...");
+
+    try {
+      const userData = {
+        firstName,
+        lastName,
+        country,
+        phoneNumber: `${selectedCountryCode}${phoneNumber}`,
+        eMail: email,
+        password,
+      };
+      
+      const response = await apiCall('/auth/register', {
+        method: 'POST',
+        data: userData,
+      });
+
+      if (response.message) {
+        setMessage(response.message);
+        setMessageColor("green");
+      } else {
+        setMessage("Registration successful!");
+        setMessageColor("green");
+      }
+    } catch (error: any) {
+      // Differentiating between different types of errors
+      if (error.response && error.response.data) {
+        setMessage(error.response.data.message || "Something went wrong, please try again.");
+      } else if (error.request) {
+        setMessage("Network error: Unable to reach the server. Please check your internet connection.");
+      } else {
+        setMessage("An unexpected error occurred. Please try again later.");
+      }
+      setMessageColor("red");
+    } finally {
+      setLoading(false);
     }
   }
+
 
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
@@ -132,11 +174,11 @@ function SignUp() {
         >
           <FormControl>
             <FormLabel color="navy.700">First Name</FormLabel>
-            <Input value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First Name" mb="24px" />
+            <Input value={firstName} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setFirstName(e.target.value)} placeholder="First Name" mb="24px" />
             <FormLabel color="navy.700">Last Name</FormLabel>
-            <Input value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" mb="24px" />
+            <Input value={lastName} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setLastName(e.target.value)} placeholder="Last Name" mb="24px" />
             <FormLabel color="navy.700">Email</FormLabel>
-            <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" mb="24px" />
+            <Input value={email} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setEmail(e.target.value)} placeholder="Email" mb="24px" />
             <FormLabel color="navy.700">Country</FormLabel>
             <Box mb={4}>
               <Menu>
@@ -179,7 +221,7 @@ function SignUp() {
             <InputGroup size="md">
               <Input
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setPassword(e.target.value)}
                 placeholder="Min 8 chars with numbers and special chars"
                 type={show ? "text" : "password"}
                 mb="24px"

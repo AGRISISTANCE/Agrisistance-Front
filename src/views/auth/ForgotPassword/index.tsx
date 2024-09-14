@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
@@ -35,27 +35,66 @@ function ForgotPassword() {
     const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
     const brandStars = useColorModeValue("brand.500", "brand.400");
 
-    const [email, setEmail] = React.useState("");
-    const [message, setMessage] = React.useState("");
+    const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageColor, setMessageColor] = useState(""); // Optional: to color the message
+  const [loading, setLoading] = useState(false);
+  const [showCodeAlert, setShowCodeAlert] = useState(false);
 
-    const sendVerificationCode = async () => {
-        try {
-            const credentials = {
-                eMail: email,
-            };
+  // Helper function to validate email format
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
-            const response = await apiCall('/auth/forgot-password', {
-                method: 'POST',
-                data: credentials,
-            });
-            setShowCodeAlert(true)
-        }
-        catch (error: any) {
-            setMessage("password reset failed. Please confirm your email and try again.");
-        }
+  const sendVerificationCode = async () => {
+    // Clear previous messages
+    setMessage("");
+
+    // Client-side validation
+    if (!email) {
+      setMessage("Please enter your email address.");
+      setMessageColor("red");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setMessage("Please enter a valid email address.");
+      setMessageColor("red");
+      return;
+    }
+
+    // Proceed if input is valid
+    setLoading(true);
+    setMessage("Sending verification code. Please wait...");
+    setMessageColor("green");
+
+    try {
+    const credentials = {
+        eMail: email,
     };
-    const [showCodeAlert, setShowCodeAlert] = React.useState(false);
 
+    const response = await apiCall('/auth/forgot-password', {
+        method: 'POST',
+        data: credentials,
+    });
+
+    // Assuming the API returns a success message if the email exists
+    if (response.success) {
+        setMessage("Verification code sent! Please check your email.");
+        setMessageColor("green");
+        setShowCodeAlert(true);
+    } else {
+        setMessage(response.message || "An error occurred. Please try again.");
+        setMessageColor("red");
+    }
+    } catch (error: any) {
+    setMessage("Password reset failed. Please confirm your email and try again.");
+    setMessageColor("red");
+    } finally {
+    setLoading(false);
+    }
+};
 
 
 
@@ -117,7 +156,7 @@ function ForgotPassword() {
                             fontWeight='500'
                             size='lg'
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setEmail(e.target.value)}
                         />
                         <Button
                             fontSize='sm'

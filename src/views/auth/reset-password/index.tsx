@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 
 import { useNavigate } from "react-router-dom";
@@ -37,37 +37,77 @@ function ResetPassword() {
     const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
     const brandStars = useColorModeValue("brand.500", "brand.400");
 
-    const [show, setShow] = React.useState(false);
-    const [confirmPassword, setConfirmPassword] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [message, setMessage] = React.useState("");
+    const [show, setShow] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [messageColor, setMessageColor] = useState(""); // Optional: for message color
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
     const { token } = useParams<{ token: string }>(); // Extract the token from the URL
 
     const handleClick = () => setShow(!show);
 
+    // Helper function to validate password strength
+    const validatePassword = (password: string) => {
+        // Example: Password must be at least 8 characters long and include letters and numbers
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        return passwordRegex.test(password);
+    };
+
     const handleResetPassword = async () => {
+        // Clear previous messages
+        setMessage("");
+
+        // Client-side validation
+        if (!password || !confirmPassword) {
+        setMessage("Please enter both password fields.");
+        setMessageColor("red");
+        return;
+        }
+
+        if (!validatePassword(password)) {
+        setMessage("Password must be at least 8 characters long and include both letters and numbers.");
+        setMessageColor("red");
+        return;
+        }
+
+        if (password !== confirmPassword) {
+        setMessage("Confirm password should match the new password.");
+        setMessageColor("red");
+        return;
+        }
+
+        // Proceed with password reset if inputs are valid
+        setLoading(true);
+        setMessage("Processing your request. Please wait...");
+        setMessageColor("green");
+
         try {
-            if (confirmPassword === password) {
-                const credentials = { newPassword: password };
+        const credentials = { newPassword: password };
 
-                const response = await apiCall(`/auth/reset-password/${token}`, {
-                    method: 'PUT',
-                    data: credentials,
-                });
+        const response = await apiCall(`/auth/reset-password/${token}`, {
+            method: 'PUT',
+            data: credentials,
+        });
 
-                setMessage("Password changed successfully! Redirecting...");
-                setTimeout(() => {
-                    navigate("/auth/login"); // Redirect to login on successful reset
-                }, 1000);
-            } else {
-                setMessage("Confirm password should be the same as the password");
-            }
+        setMessage("Password changed successfully! Redirecting...");
+        setMessageColor("green");
+        setTimeout(() => {
+            navigate("/auth/login"); // Redirect to login on successful reset
+        }, 1000);
         } catch (error: any) {
-            setMessage("Password reset failed. Please confirm your inputs and try again.");
+        setMessage("Password reset failed. Please confirm your inputs and try again.");
+        setMessageColor("red");
+        } finally {
+        setLoading(false);
         }
     };
+
+
+
+
     return (
         <DefaultAuth illustrationBackground={illustration} image={illustration}>
             <Flex
@@ -124,7 +164,7 @@ function ResetPassword() {
                                 type={show ? "text" : "password"}
                                 variant='auth'
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setPassword(e.target.value)}
                             />
                             <InputRightElement display='flex' alignItems='center' mt='4px'>
                                 <Icon
@@ -153,7 +193,7 @@ function ResetPassword() {
                                 type={show ? "text" : "password"}
                                 variant='auth'
                                 value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setConfirmPassword(e.target.value)}
                             />
                             <InputRightElement display='flex' alignItems='center' mt='4px'>
                                 <Icon

@@ -29,7 +29,6 @@ import LandingPage from './views/Landing/landingPage';
 import Error from './views/404';
 import Plan from './views/admin/plan';
 import Yournetwork from './views/admin/yournetwork';
-import { layout } from '@chakra-ui/system';
 import EmailUpdatedSuccessfully from './views/admin/emailUpdatedSuccessfully';
 import EmailVerified from './views/auth/emailverified';
 import ForgetPassword from './views/auth/ForgotPassword';
