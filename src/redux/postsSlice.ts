@@ -15,9 +15,10 @@ interface Post {
   active: boolean; // true for active, false for archived
 }
 
+export type CategoryType = 'opportunitiesAndPartnership' | 'businessPromotion' | 'resourcesAndProducts';
 
 // Flag to toggle between dummy and real data
-const USE_DUMMY_DATA = true;
+const USE_DUMMY_DATA = false;
 
 const initialDummyPosts: Post[] = [
   {
@@ -91,13 +92,16 @@ const initialDummyPosts: Post[] = [
     active: false,
   },
 ];
-// const initialState: Post[] = USE_DUMMY_DATA ? initialDummyPosts : [];
-const initialState: Post[] = initialDummyPosts;
+const initialState: Post[] = USE_DUMMY_DATA ? initialDummyPosts : [];
+// const initialState: Post[] = initialDummyPosts;
 
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
+    setPosts: (state, action: PayloadAction<Post[]>) => {
+      return action.payload;
+    },
     addPost: (state, action: PayloadAction<Post>) => {
       state.push(action.payload);
     },
@@ -113,6 +117,6 @@ const postsSlice = createSlice({
   },
 });
 
-export const { addPost, updatePost, removePost } = postsSlice.actions;
+export const {setPosts, addPost, updatePost, removePost } = postsSlice.actions;
 export default postsSlice.reducer;
 

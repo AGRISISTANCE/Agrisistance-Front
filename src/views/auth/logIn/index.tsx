@@ -98,13 +98,15 @@ function LogIn() {
       console.log(response.msg); // Logged in successfully!
       console.log("your token: ", response.token);
 
-      setMessage("Login successful! Redirecting...");
       setMessageColor("green");
-      dispatch(setToken(response.token));
+      setMessage("Login successful! Redirecting...");
 
       setTimeout(() => {
+        dispatch(setToken(response.token));
         navigate("/dashboard/home"); // Redirect to dashboard on successful login
       }, 1000);
+
+      
     } catch (error: any) {
       setMessage("Login failed. Please confirm your credentials and try again.");
       setMessageColor("red");

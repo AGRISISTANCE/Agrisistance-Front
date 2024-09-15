@@ -15,17 +15,33 @@ import {
   Textarea,
   Select,
 } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
 import { apiCall } from 'services/api';
+import { addPost, updatePost, CategoryType } from '../../../../redux/postsSlice';
+
+
+
 
 const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: any }> = ({ isOpen, onClose, post }) => {
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
+  const dispatch = useDispatch();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState<CategoryType>('opportunitiesAndPartnership');
   const [image, setImage] = useState<File | null>(null);
+
+  // Convert image file to base64
+  const toBase64 = (file: File) => {
+    return new Promise<string | null>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(null);
+    });
+  };
+
 
   useEffect(() => {
     if (post) {
@@ -36,50 +52,93 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
     } else {
       setTitle('');
       setDescription('');
-      setCategory('');
+      setCategory('businessPromotion');
       setImage(null);
     }
   }, [post]);
 
   const createNewPost = async () => {
     try {
-      // const postData = {
+      // Convert image to base64 if there's an image
+      let base64Image = null;
+      if (image) {
+        base64Image = await toBase64(image);
+      }
+
+      const postData = {
+        post_title: title,
+        post_content: description,
+        post_image: base64Image,
+        post_type: category,
+      };
+
+      const response = await apiCall('/network/create-post', {
+        method: 'POST',
+        data: postData,
+        requireAuth: true,
+      }, token);
+
+      // Dispatch the new post to Redux store
+      // dispatch(addPost({
+      //   postID: response.post_id,
       //   title: title,
+      //   type: category,
       //   description: description,
-      //   category: category,
-      //   postDate: new Date().toISOString(), // Set current date and time
-      //   image: image
-      // };
-      //! Add api request here
-      // await apiCall('/create-new-post', {
-      //   method: 'POST',
-      //   data: postData,
-      //   requireAuth: true
-      // }, token);
-      // dispatch(); // Update posts in the Redux store here
-      console.error('Post created successfully');
-    } catch (error) {
-      console.error('Failed to create new post:', error);
-    }
-  };
+      //   image: base64Image,
+      //   authorId: '', // Assuming you get the author data from a different part of the state
+      //   authorName: '',
+      //   authorPhoneNumber: '',
+      //   authorCountry: '',
+      //   authorPicture: '',
+      //   postDate: new Date().toISOString(),
+      //   active: true,
+      // }));
+
+      console.log('Post created successfully');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      } catch (error) {
+        console.error('Failed to create new post:', error);
+      }
+    };
 
   const updatePost = async () => {
     try {
-      // const postData = {
-      //   postId: post.postID, // I added this but how can i acess the postId ??
-      //   newTitle: title,
-      //   newDescription: description,
-      //   newCategory: category,
-      //   newPostDate: new Date().toISOString(), // Set current date and time
-      //   newImage: image
-      // };
-      // await apiCall('/update-post', {
-      //   method: 'POST',
-      //   data: postData,
-      //   requireAuth: true
-      // }, token);
-      // dispatch(); // Update posts in the Redux store here
-      console.error('Post updated successfully');
+      let base64Image = null;
+      if (image) {
+        base64Image = await toBase64(image);
+      }
+
+      const postData = {
+        post_title: title,
+        post_content: description,
+        post_image: base64Image,
+        post_type: category,
+      };
+
+      const response = await apiCall(`/network/update-post/${post.postID}`, {
+        method: 'PUT',
+        data: postData,
+        requireAuth: true,
+      }, token);
+
+      // Update the post in Redux store
+    //   dispatch(updatePost({
+    //     index: post.index, // Assuming you know the index of the post in the Redux store
+    //     updates: {
+    //       title,
+    //       type: category,
+    //       description,
+    //       image: base64Image || '',
+    //     },
+    //   })
+    // );
+
+      console.log('Post updated successfully');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       console.error('Failed to update post:', error);
     }
@@ -113,7 +172,7 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
 
           <FormControl mt={4}>
             <FormLabel>Category</FormLabel>
-            <Select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <Select value={category} onChange={(e) => setCategory(e.target.value as CategoryType)}>
               <option value="Business Promotion">Business Promotion</option>
               <option value="Opportunities and Partnerships">Opportunities and Partnerships</option>
               <option value="Products and Resources">Products and Resources</option>
@@ -138,3 +197,4 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
 };
 
 export default AddNewPostModal;
+

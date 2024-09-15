@@ -14,7 +14,6 @@ const UserProfile: React.FC = () => {
   const user = useSelector((state: any) => state.user);
   const token = useSelector((state: RootState) => state.token.token);
 
-  const location = useLocation();
   const [show, setShow] = useState(false);
 
   const handleClick = () => setShow(!show);

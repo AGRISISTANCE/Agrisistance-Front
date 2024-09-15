@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { persistor } from '../../../redux/store';
 import Navbar from '../navbar/navbar';
+import { setPosts } from '../../../redux/postsSlice';
 
 
 const Network: React.FC = () => {
@@ -16,7 +17,7 @@ const Network: React.FC = () => {
   const dispatch = useDispatch();
   const [activeSection, setActiveSection] = useState('All Posts');
 
-  //! DONT TOUCH! Added just to solve some problem
+  // ! DONT TOUCH! Added just to solve some problem
   // useEffect(() => {
   //   // Purge persisted state on component mount
   //   persistor.purge();
@@ -25,20 +26,41 @@ const Network: React.FC = () => {
 
   //Get all posts from backend
   //! Commented to get dummy posted (remove when using real backend)
-  // useEffect(() => {
-  //   const fetchAllPosts = async () => {
-  //     try {
-  //       const posts = await apiCall('/profile/get-profile', {
-  //         method: 'GET',
-  //       });
+  useEffect(() => {
+    const fetchAllPosts = async () => {
+      try {
+        const posts = await apiCall('/network/get-all-posts', {
+          method: 'GET',
+          requireAuth: true,
+        }, token);
 
-  //       // dispatch(); Set all posts here
-  //     } catch (error) {
-  //       console.error('Failed to fetch user profile:', error);
-  //     }
-  //   };
-  //   fetchAllPosts();
-  // }, [dispatch, token]);
+        // Map the response to the Post interface
+        const mappedPosts = posts.map((post: any) => ({
+          postID: post.post_id,
+          title: post.post_title,
+          type: post.post_type,
+          description: post.post_content,
+          image: post.post_image || 'defaultImage', // Fallback image
+          authorId: post.user.user_id,
+          authorName: `${post.user.first_name} ${post.user.last_name}`,
+          authorPhoneNumber: post.user.phone_number,
+          authorCountry: post.user.country,
+          authorPicture: post.user.profile_picture || 'defaultProfilePicture', // Fallback profile picture
+          postDate: post.post_date,
+          active: post.is_active,
+        }));
+
+        // Dispatch the posts to Redux store
+        dispatch(setPosts(mappedPosts));
+      } catch (error) {
+        console.error('Failed to fetch all posts:', error);
+      }
+    };
+
+    if (token) { // Ensure the token is available before making the request
+      fetchAllPosts();
+    }
+  }, [dispatch, token]);
 
 
   const renderContent = () => {
@@ -84,3 +106,4 @@ const Network: React.FC = () => {
   );
 }
 export default Network;
+
