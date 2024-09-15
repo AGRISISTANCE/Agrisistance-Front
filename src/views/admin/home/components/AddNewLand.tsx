@@ -192,6 +192,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       // );
       // console.log('Business plan and predictions generated successfully for land:', landId);
 
+
       // Step 3: Get Land by ID
       setProgressMessage('Fetching updated land data...');
       const landResponse = await apiCall(
@@ -238,13 +239,11 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         console.warn('Unexpected delete response:', response);
       }
 
-
-
       // Optionally, keep the loading indicator and allow the user to retry
       setTimeout(() => {
         setShowProgress(false);
-        navigate("/dashboard/home");
-      }, 2500);
+        window.location.reload();
+      }, 2000);
     }
     }
     
@@ -861,6 +860,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                 loop
                 style={{ width: '100%', maxWidth: '300px', height: 'auto' }}
               />
+
               <Text my={4} fontSize={20} fontWeight="bold">
                 {progressMessage}
               </Text>

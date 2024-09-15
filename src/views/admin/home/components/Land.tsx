@@ -6,7 +6,8 @@ import land from '../../../../assets/img/land/land';
 import { apiCall } from '../../../../services/api';
 import { RootState } from '../../../../redux/store';
 import ConfirmationPopup from '../../../../common/Popup/ConfirmationPopup'; // Adjust the path as necessary
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 interface LandProps {
   landId: string;
@@ -107,12 +108,14 @@ export default function Land({
         // dispatch(removeLand(landId));
         console.log('Land deleted successfully');
         dispatch(setSelectedLand(null));
-        navigate('/dashboard/home')
+        window.location.reload();
       } else {
         console.warn('Unexpected delete response:', response);
+        window.location.reload();
       }
     } catch (error) {
       console.error('Error deleting land:', error);
+      alert("error when deleting land")
     }
   };
 
@@ -168,7 +171,9 @@ export default function Land({
               >
                 Select
               </Button>
-              <Button colorScheme="gray" borderRadius="20px" height="40px" fontSize="18px" onClick={handleDeleteButtonClick}>Delete</Button>
+              <Button colorScheme="gray" borderRadius="20px" height="40px" fontSize="18px" onClick={handleDeleteButtonClick}>
+                Delete
+              </Button>
             </Flex>
           )}
         </Flex>
