@@ -83,10 +83,10 @@ export default function Home() {
         }, token);
 
         dispatch(setUser({
-          firstName: profile.firstName,
-          lastName: profile.lastName,
-          email: profile.eMail,
-          phoneNumber: profile.phoneNumber,
+          firstName: profile.first_name,
+          lastName: profile.last_name,
+          email: profile.email,
+          phoneNumber: profile.phone_number,
           country: profile.country,
           userId: profile.user_id,
           profilePicture: profile.profile_picture,

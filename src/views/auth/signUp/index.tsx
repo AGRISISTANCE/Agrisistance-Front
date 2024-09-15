@@ -106,7 +106,7 @@ function SignUp() {
         lastName,
         country,
         phoneNumber: `${selectedCountryCode}${phoneNumber}`,
-        eMail: email,
+        email,
         password,
       };
       

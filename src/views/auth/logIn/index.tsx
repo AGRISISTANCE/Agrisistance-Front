@@ -100,9 +100,9 @@ function LogIn() {
 
       setMessage("Login successful! Redirecting...");
       setMessageColor("green");
+      dispatch(setToken(response.token));
 
       setTimeout(() => {
-        dispatch(setToken(response.token));
         navigate("/dashboard/home"); // Redirect to dashboard on successful login
       }, 1000);
     } catch (error: any) {

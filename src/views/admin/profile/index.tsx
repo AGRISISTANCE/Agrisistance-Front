@@ -21,7 +21,7 @@ const UserProfile: React.FC = () => {
 
   const [show1, setShow1] = useState(false);
 
-  const handleClick1 = () => setShow(!show1);
+  const handleClick1 = () => setShow1(!show1);
 
   
 
@@ -49,9 +49,9 @@ const UserProfile: React.FC = () => {
         method: 'PUT',
         requireAuth: true,
         data: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phoneNumber: formData.phoneNumber,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          phone_number: formData.phoneNumber,
           country: user.country, // Assuming user.country is available
         },
       }, token);

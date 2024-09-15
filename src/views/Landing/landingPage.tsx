@@ -5,7 +5,7 @@ import { Fade } from 'react-awesome-reveal';
 import { Col } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from 'redux/store';
+import { persistor, RootState } from '../../redux/store';
 import screen1 from './png/screen1.png';
 import screen2 from './png/screen2.png';
 import screen3 from './png/screen3.png';
@@ -57,6 +57,12 @@ const LandingPage: React.FC = () => {
     useEffect(() => {
         makeGetRequests();
     }, []); // Empty dependency array ensures this runs only once after the initial render.
+
+    //! DONT TOUCH! Added just to solve some problem
+    // useEffect(() => {
+    // // Purge persisted state on component mount
+    // persistor.purge();
+    // }, []);
 
 
     return(

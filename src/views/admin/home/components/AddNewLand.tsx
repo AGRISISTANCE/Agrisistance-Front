@@ -180,17 +180,17 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         });
 
       // Step 2: Generate Business Plan
-      // setProgressMessage('Generating business plan and predictions...');
-      // await apiCall(
-      //   '/model/generate-business-plan',
-      //   {
-      //     method: 'POST',
-      //     data: { land_id: landId },
-      //     requireAuth: true,
-      //   },
-      //   token
-      // );
-      // console.log('Business plan and predictions generated successfully for land:', landId);
+      setProgressMessage('Generating business plan and predictions...');
+      await apiCall(
+        '/model/generate-business-plan',
+        {
+          method: 'POST',
+          data: { land_id: landId },
+          requireAuth: true,
+        },
+        token
+      );
+      console.log('Business plan and predictions generated successfully for land:', landId);
 
 
       // Step 3: Get Land by ID

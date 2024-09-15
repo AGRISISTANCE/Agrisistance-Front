@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-const BASE_URL = 'http://localhost:8081/api';
+const BASE_URL = 'http://localhost:9090/api';
+// const BASE_URL = 'http://localhost:8081/api';
 // const BASE_URL = 'https://agrisistance-server.onrender.com/api';
 
 interface ApiOptions extends AxiosRequestConfig {
