@@ -66,84 +66,86 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
 
   const mapLandDataToSelectedLand = (landData: any): LandInfo => {
     // Calculate the total crop area for all crops
-    const totalCropArea = landData.crops.reduce((total: number, crop: any) => total + crop.crop_area, 0);
+    const totalCropArea = landData.crops.reduce((total: number, crop: any) => total + (crop.crop_area || 0), 0);
   
-    return {
-      landId: landData.land[0].land_id,
-      owner: landData.land[0].user_id,
-      landName: landData.land[0].land_name,
-      latitude: landData.land[0].latitude,
-      longitude: landData.land[0].longitude,
-      landSize: landData.land[0].land_size,
-      budgetForLand: landData.finance[0]?.investment_amount || 0,
-      oxygen_level: landData.land[0].oxygen_level,
-      nitrogen: landData.land[0].nitrogen,
-      potassium: landData.land[0].potassium,
-      phosphorus: landData.land[0].phosphorus,
-      humidity: landData.weather[0]?.humidity || 0,
-      ph_level: landData.land[0].ph_level,
-      LandBusinessPlan: landData.business_plan.map((plan: any) => ({
-        title: 'Executive Summary', // or any appropriate title
-        description: plan.executive_summary,
-      })),
-      crops: landData.crops.map((crop: any) => {
-        const recommendationPercentage = totalCropArea > 0 
-          ? (crop.crop_area / totalCropArea) * 100 
-          : 0;
+      return {
+        landId: landData.land.land_id,
+        owner: landData.land.user_id,
+        landName: landData.land.land_name,
+        latitude: landData.land.latitude,
+        longitude: landData.land.longitude,
+        landSize: landData.land.land_size,
+        budgetForLand: landData.finance[0]?.investment_amount || 0,
+        oxygen_level: landData.land.oxygen_level,
+        nitrogen: landData.land.nitrogen,
+        potassium: landData.land.potassium,
+        phosphorus: landData.land.phosphorus,
+        humidity: landData.weather[0]?.humidity || 0,
+        ph_level: landData.land.ph_level,
+        LandBusinessPlan: landData.business_plan.map((plan: any) => ({
+          title: 'Executive Summary', // or any appropriate title
+          description: plan.executive_summary || '', // Ensure this is a string
+        })),
+        crops: landData.crops.map((crop: any) => {
+          const recommendationPercentage = totalCropArea > 0 
+            ? (crop.crop_area / totalCropArea) * 100 
+            : 0;
 
-        return {
-          CropName: crop.crop_name,
-          CropImage: crop.crop_name, // Set the image name as the crop name
-          recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)), // Limit to 2 decimal places
-          cropSize: crop.crop_area,
-          expectedMoneyRevenue: crop.expected_money_return,
-          expectedWeightRevenue: crop.expected_wight_return,
-          cropCost: crop.crop_investment,
-          cropProfit: crop.expected_money_return - crop.crop_investment,
-        };
-      }),
-      waterSufficecy: landData.crop_maintenance[0]?.water_sufficienty || 0,
-      sunlight: landData.weather[0]?.sunlight || 0,
-      pestisedesLevel: landData.crop_maintenance[0]?.pesticide_level || 0,
-      landUse: (landData.land_statistics[0]?.land_use * 100) || 0,
-      humanCoverage: (landData.land_statistics[0]?.human_coverage * 100) || 0,
-      waterAvaliability: landData.land_statistics[0]?.water_availability || 0,
-      distributionOptimality: landData.land_statistics[0]?.distribution_optimality || 0,
-      suggestedImprovementSoil: landData.suggested_improvements?.soil || [],
-      suggestedImprovementCrop: landData.suggested_improvements?.crop || [],
-    };
+          return {
+            CropName: crop.crop_name || '', // Ensure default values
+            CropImage: crop.crop_name || '', // Ensure default values
+            recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)), // Limit to 2 decimal places
+            cropSize: crop.crop_area || 0,
+            expectedMoneyRevenue: crop.expected_money_return || 0,
+            expectedWeightRevenue: crop.expected_wight_return || 0,
+            cropCost: crop.crop_investment || 0,
+            cropProfit: (crop.expected_money_return || 0) - (crop.crop_investment || 0),
+          };
+        }),
+        waterSufficecy: landData.crop_maintenance[0]?.water_sufficienty || 0,
+        sunlight: landData.weather[0]?.sunlight || 0,
+        pestisedesLevel: landData.crop_maintenance[0]?.pesticide_level || 0,
+        landUse: (landData.land_statistics[0]?.land_use || 0) * 100,
+        humanCoverage: (landData.land_statistics[0]?.human_coverage || 0) * 100,
+        waterAvaliability: landData.land_statistics[0]?.water_availability || 0,
+        distributionOptimality: landData.land_statistics[0]?.distribution_optimality || 0,
+        suggestedImprovementSoil: landData.suggested_improvements?.soil || [],
+        suggestedImprovementCrop: landData.suggested_improvements?.crop || [],
+      };
   };
 
+
   const handleAddLand = async () => {
-    let landId: any; // Declare landId here to make it accessible in both try and catch blocks
-    try {
-      // Initialize loading state
+      let landId: any;  
+      try {
+        // Initialize loading state
       setShowProgress(true);
       setProgressMessage('Starting...');
       setHasError(false);
 
       // Validate required fields
       if (
-        !landName ||
-        !latitude ||
-        !longitude ||
-        !landSize ||
-        !budget ||
-        !phLevel ||
-        !phosphorus ||
-        !potassium ||
-        !oxygenLevel ||
-        !nitrogen
+          !landName ||
+          !latitude ||
+          !longitude ||
+          !landSize ||
+          !budget ||
+          !phLevel ||
+          !phosphorus ||
+          !potassium ||
+          !oxygenLevel ||
+          !nitrogen
       ) {
-        alert('Please fill in all required fields.');
-        setShowProgress(false);
-        return;
+          alert('Please fill in all required fields.');
+          setShowProgress(false);
+          return;
       }
-  
-        const newLand = {
+
+      // Prepare the land data
+      const newLand = {
           land_name: landName,
           latitude: isNaN(Number(latitude)) ? null : Number(latitude),
-          longitude: isNaN(Number(longitude)) ? null : Number(longitude),
+          longtitude: isNaN(Number(longitude)) ? null : Number(longitude),
           land_size: isNaN(Number(landSize)) ? null : Number(landSize),
           budget: isNaN(Number(budget)) ? null : Number(budget),
           oxygen_level: isNaN(Number(oxygenLevel)) ? null : Number(oxygenLevel),
@@ -151,44 +153,40 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
           potassium: isNaN(Number(potassium)) ? null : Number(potassium),
           phosphorus: isNaN(Number(phosphorus)) ? null : Number(phosphorus),
           ph_level: isNaN(Number(phLevel)) ? null : Number(phLevel),
-        };
-  
+      };
 
-      console.log("creating new land with data: ", newLand)
+      console.log("Creating new land with data: ", newLand);
+
       // Step 1: Add Land 
       setProgressMessage('Creating your new land...');
       const addLandResponse = await apiCall(
-        '/land/add-land',
-        {
-          method: 'POST',
-          data: newLand,
-          requireAuth: true,
-        },
-        token
+          '/land/add-land',
+          {
+              method: 'POST',
+              data: newLand,
+              requireAuth: true,
+          },
+          token
       );
 
   
-      // if (addLandResponse && addLandResponse.land_id) {
-        const landId = addLandResponse.land_id;
+      if (addLandResponse) {
+        landId = addLandResponse.land_id;
         console.log('Land added successfully:', addLandResponse.message);
-        console.log('New land created ID:', landId);
+    }
 
-        console.log('Request payload for generating business plan: ', {
-          land_id: landId
-        });
-
-      // Step 2: Generate Business Plan
-      setProgressMessage('Generating business plan and predictions...');
-      await apiCall(
-        '/model/generate-business-plan',
-        {
-          method: 'POST',
-          data: { land_id: landId },
-          requireAuth: true,
-        },
-        token
-      );
-      console.log('Business plan and predictions generated successfully for land:', landId);
+      // // Step 2: Generate Business Plan
+      // setProgressMessage('Generating business plan and predictions...');
+      // await apiCall(
+      //   '/model/generate-business-plan',
+      //   {
+      //     method: 'POST',
+      //     data: { land_id: landId },
+      //     requireAuth: true,
+      //   },
+      //   token
+      // );
+      // console.log('Business plan and predictions generated successfully for land:', landId);
 
 
       // Step 3: Get Land by ID
@@ -202,6 +200,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         token
       );
   
+      
       console.log("data getted from get landById: ", landId," : ", landResponse)
       const selectedLand = mapLandDataToSelectedLand(landResponse);
       console.log("data after being mapped: ", selectedLand)
@@ -210,6 +209,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       dispatch(setSelectedLand(selectedLand));
       console.log('Selected land updated in Redux store with: ', selectedLand);
   
+
       // Step 5: Finish loading
       setProgressMessage('Completed!');
       setTimeout(() => {
@@ -222,28 +222,32 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       console.error('Error during the land creation and mapping process:', error);
       setHasError(true)
       setProgressMessage('An error occurred. Please try again.');
-      setTimeout(async ()=> {
-
-        //! Deleting land after fail
-        console.log('Attempting to delete land with ID:', landId);
-        setProgressMessage('Deleting the created land.');
-        const response = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
-        console.log('Delete response:', response);
-        
-        if (response.message === 'Land deleted successfully') {
-          // dispatch(removeLand(landId));
-          setProgressMessage('land deleted successfully, rediricting...');
-          console.log('Land deleted successfully');
-        } else {
-          console.warn('Unexpected delete response:', response);
-        }
-
-        // Optionally, keep the loading indicator and allow the user to retry
-        setTimeout(() => {
-          setShowProgress(false);
-          window.location.reload();
-        }, 2000);
+      
+      setTimeout(()=>{
+        // window.location.reload(); //!this is commented just to keep logs
       },2000)
+      
+      //   //! Deleting land after fail
+      //   setTimeout(async ()=> {
+      //   console.log('Attempting to delete land with ID:', landId);
+      //   setProgressMessage('Deleting the created land.');
+      //   const response = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
+      //   console.log('Delete response:', response);
+        
+      //   if (response.message === 'Land deleted successfully') {
+      //     // dispatch(removeLand(landId));
+      //     setProgressMessage('land deleted successfully, rediricting...');
+      //     console.log('Land deleted successfully');
+      //   } else {
+      //     console.warn('Unexpected delete response:', response);
+      //   }
+
+      //   // Optionally, keep the loading indicator and allow the user to retry
+      //   setTimeout(() => {
+      //     setShowProgress(false);
+      //     window.location.reload();
+      //   }, 2000);
+      // },2000)
       
     }
   }

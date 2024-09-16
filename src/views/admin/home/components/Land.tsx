@@ -39,26 +39,32 @@ export default function Land({
   const handleSelect = () => {
     const loadData = async () => {
       try {
+        console.log("getting select land data...")
         const data = await apiCall(`/land/get-land/${landId}`, { requireAuth: true }, token);
+        console.log('selected land data getted successfully: ', data)
+
         if (data) {
-          const totalCropArea = data.crops.reduce((total: number, crop: any) => total + crop.crop_area, 0);
+          // Calculate total crop area for all crops
+          const totalCropArea = data.crops.reduce((total: number, crop: any) => total + (crop.crop_area || 0), 0);
+
+          // Map the API response to the LandInfo object
           const landInfo: LandInfo = {
-            landId: data.land[0]?.land_id || '',
-            owner: data.land[0]?.user_id || '',
-            landName: data.land[0]?.land_name || '',
-            latitude: data.land[0]?.latitude || 0,
-            longitude: data.land[0]?.longitude || 0,
-            landSize: data.land[0]?.land_size || 0,
+            landId: data.land.land_id || '',
+            owner: data.land.user_id || '',
+            landName: data.land.land_name || '',
+            latitude: data.land.latitude || 0,
+            longitude: data.land.longitude || 0,
+            landSize: data.land.land_size || 0,
             budgetForLand: data.finance[0]?.investment_amount || 0,
-            oxygen_level: data.land[0]?.oxygen_level || 0,
-            nitrogen: data.land[0]?.nitrogen || 0,
-            potassium: data.land[0]?.potassium || 0,
-            phosphorus: data.land[0]?.phosphorus || 0,
+            oxygen_level: data.land.oxygen_level || 0,
+            nitrogen: data.land.nitrogen || 0,
+            potassium: data.land.potassium || 0,
+            phosphorus: data.land.phosphorus || 0,
             humidity: data.weather[0]?.humidity || 0,
-            ph_level: data.land[0]?.ph_level || 0,
+            ph_level: data.land.ph_level || 0,
             LandBusinessPlan: data.business_plan.map((plan: any) => ({
               title: 'Executive Summary',
-              description: plan.executive_summary,
+              description: plan.executive_summary || '', // Ensure this is a string
             })),
             crops: data.crops.map((crop: any) => {
               const recommendationPercentage = totalCropArea > 0 
@@ -66,27 +72,30 @@ export default function Land({
                 : 0;
 
               return {
-                CropName: crop.crop_name,
-                CropImage: crop.crop_name,
-                recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)),
-                cropSize: crop.crop_area,
-                expectedMoneyRevenue: crop.expected_money_return,
-                expectedWeightRevenue: crop.expected_wight_return,
-                cropCost: crop.crop_investment,
-                cropProfit: crop.expected_money_return - crop.crop_investment,
+                CropName: crop.crop_name || '', // Ensure default values
+                CropImage: crop.crop_name || '', // Ensure default values
+                recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)), // Limit to 2 decimal places
+                cropSize: crop.crop_area || 0,
+                expectedMoneyRevenue: crop.expected_money_return || 0,
+                expectedWeightRevenue: crop.expected_wight_return || 0,
+                cropCost: crop.crop_investment || 0,
+                cropProfit: (crop.expected_money_return || 0) - (crop.crop_investment || 0),
               };
             }),
             waterSufficecy: data.crop_maintenance[0]?.water_sufficienty || 0,
             sunlight: data.weather[0]?.sunlight || 0,
             pestisedesLevel: data.crop_maintenance[0]?.pesticide_level || 0,
-            landUse: (data.land_statistics[0]?.land_use * 100) || 0,
-            humanCoverage: (data.land_statistics[0]?.human_coverage * 100) || 0,
+            landUse: (data.land_statistics[0]?.land_use || 0) * 100,
+            humanCoverage: (data.land_statistics[0]?.human_coverage || 0) * 100,
             waterAvaliability: data.land_statistics[0]?.water_availability || 0,
             distributionOptimality: data.land_statistics[0]?.distribution_optimality || 0,
             suggestedImprovementSoil: data.suggested_improvements?.soil || [],
             suggestedImprovementCrop: data.suggested_improvements?.crop || [],
           };
-          dispatch(setSelectedLand(landInfo));
+
+        // Dispatch the action to update the selected land in the Redux store
+        dispatch(setSelectedLand(landInfo));
+        console.log('Selected land updated in Redux store with: ', landInfo);
         }
       } catch (error) {
         console.error('Error loading data:', error);
