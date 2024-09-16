@@ -11,8 +11,23 @@ import { apiCall } from '../../../services/api';
 
 
 const UserProfile: React.FC = () => {
-  const user = useSelector((state: any) => state.user);
   const token = useSelector((state: RootState) => state.token.token);
+  const dispatch = useDispatch();
+  
+  // Get the user state from the Redux store
+  const user = useSelector((state: any) => state.user);
+
+  // Initialize formData with empty values
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    country: '',
+    currentPassword: '',
+    newPassword: '',
+  });
+
   const fetchUserProfile = async () => {
     try {
       const profile = await apiCall('/profile/get-profile', {
@@ -21,10 +36,10 @@ const UserProfile: React.FC = () => {
       }, token);
 
       dispatch(setUser({
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        email: profile.eMail,
-        phoneNumber: profile.phoneNumber,
+        firstName: profile.first_name,
+        lastName: profile.last_name,
+        email: profile.email,
+        phoneNumber: profile.phone_number,
         country: profile.country,
         userId: profile.user_id,
         profilePicture: profile.profile_picture,
@@ -34,9 +49,26 @@ const UserProfile: React.FC = () => {
       console.error('Failed to fetch user profile:', error);
     }
   };
-  useEffect(()=>{
-    fetchUserProfile()
-  },[])
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  // Update formData when user changes
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        email: user.email,
+        country: user.country,
+        currentPassword: '',
+        newPassword: '',
+      });
+    }
+  }, [user]); // Dependency on user
+
 
   const [show, setShow] = useState(false);
 
@@ -52,17 +84,6 @@ const UserProfile: React.FC = () => {
     email: false,
     phoneNumber: false,
   });
-
-  const [formData, setFormData] = useState({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    phoneNumber: user.phoneNumber,
-    email: user.email,
-    country: user.country,
-    currentPassword: '',
-    newPassword: ''
-  });
-  
 
   const handleUserInfoChanges = async () => {
     try {
@@ -343,7 +364,4 @@ const UserProfile: React.FC = () => {
 };
 
 export default UserProfile;
-function dispatch(arg0: any) {
-  throw new Error('Function not implemented.');
-}
 

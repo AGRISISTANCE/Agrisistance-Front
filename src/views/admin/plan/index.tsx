@@ -64,7 +64,7 @@ export default function Plan() {
                     </Flex>
                     <Flex background={'#d0f7c5'} height={'fit-content'} borderRadius={'3xl'}>
                         <Button
-                            backgroundColor={planType === "monthly" ? '#BB6BD9' : 'transparent'}
+                            backgroundColor={planType === "monthly" ? '#FFFFF' : 'transparent'}
                             color={'#000'}
                             borderRadius={'40px'}
                             padding={'10px 20px'}
@@ -74,7 +74,7 @@ export default function Plan() {
                             Monthly
                         </Button>
                         <Button
-                            backgroundColor={planType === "yearly" ? '#BB6BD9' : 'transparent'}
+                            backgroundColor={planType === "yearly" ? '#FFFFF' : 'transparent'}
                             color={'#000'}
                             borderRadius={'40px'}
                             padding={'10px 20px'}

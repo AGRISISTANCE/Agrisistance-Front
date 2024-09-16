@@ -223,10 +223,6 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       setHasError(true)
       setProgressMessage('An error occurred. Please try again.');
       
-      setTimeout(()=>{
-        // window.location.reload(); //!this is commented just to keep logs
-      },2000)
-      
       //   //! Deleting land after fail
       //   setTimeout(async ()=> {
       //   console.log('Attempting to delete land with ID:', landId);

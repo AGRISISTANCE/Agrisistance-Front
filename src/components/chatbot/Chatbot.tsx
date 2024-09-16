@@ -53,21 +53,35 @@ const ChatBot: React.FC = () => {
 
   const handleSendMessage = async () => {
     if (input.trim()) {
-      setMessages([...messages, { text: input, fromUser: true }]);
+      // Update messages with user's input
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: input, fromUser: true },
+      ]);
       setInput("");
       setLoading(true);
-
+  
       try {
         const response = await apiCall('/model/chat-bot', {
           method: 'POST',
           data: { message: input },
         });
-
+        
+        console.log("user asked: ", input);
+        console.log("chatbot responded: ", response);
+  
+        // Ensure the response structure is correct
+        const botMessage = response.result || "Default response";
+        
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: response.result, fromUser: false },
+          { text: botMessage, fromUser: false },
         ]);
+  
+        // Debug the state update
+        console.log("Updated messages: ", [...messages, { text: botMessage, fromUser: false }]);
       } catch (error) {
+        console.error("Error occurred: ", error);
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: 'An error occurred. Please try again.', fromUser: false },
@@ -77,6 +91,7 @@ const ChatBot: React.FC = () => {
       }
     }
   };
+  
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -116,6 +131,23 @@ const ChatBot: React.FC = () => {
               ✕
             </button>
           </div>
+          {/* <div className="chatbot-messages">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`chatbot-message ${msg.fromUser ? "user" : "bot"}`}
+              >
+                {msg.text}
+              </div>
+            ))}
+            {loading && (
+              <div className="chatbot-message bot loading">
+                <div className="loading-spinner"></div>
+                <span>...</span>
+              </div>
+            )}
+          </div> */}
+          
           <div className="chatbot-messages">
             {messages.map((msg, index) => (
               <div
@@ -132,6 +164,8 @@ const ChatBot: React.FC = () => {
               </div>
             )}
           </div>
+
+
           <div className="chatbot-input">
             <input
               type="text"
