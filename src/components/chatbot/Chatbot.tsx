@@ -51,6 +51,47 @@ const ChatBot: React.FC = () => {
     setInput(event.target.value);
   };
 
+  // const handleSendMessage = async () => {
+  //   if (input.trim()) {
+  //     // Update messages with user's input
+  //     setMessages((prevMessages) => [
+  //       ...prevMessages,
+  //       { text: input, fromUser: true },
+  //     ]);
+  //     setInput("");
+  //     setLoading(true);
+  
+  //     try {
+  //       const response = await apiCall('/model/chat-bot', {
+  //         method: 'POST',
+  //         data: { message: input },
+  //       });
+        
+  //       console.log("user asked: ", input);
+  //       console.log("chatbot responded: ", response);
+  
+  //       // Ensure the response structure is correct
+  //       const botMessage = response.result || "Default response";
+        
+  //       setMessages((prevMessages) => [
+  //         ...prevMessages,
+  //         { text: botMessage, fromUser: false },
+  //       ]);
+  
+  //       // Debug the state update
+  //       console.log("Updated messages: ", [...messages, { text: botMessage, fromUser: false }]);
+  //     } catch (error) {
+  //       console.error("Error occurred: ", error);
+  //       setMessages((prevMessages) => [
+  //         ...prevMessages,
+  //         { text: 'An error occurred. Please try again.', fromUser: false },
+  //       ]);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  // };
+  
   const handleSendMessage = async () => {
     if (input.trim()) {
       // Update messages with user's input
@@ -66,20 +107,23 @@ const ChatBot: React.FC = () => {
           method: 'POST',
           data: { message: input },
         });
-        
+  
         console.log("user asked: ", input);
         console.log("chatbot responded: ", response);
   
-        // Ensure the response structure is correct
-        const botMessage = response.result || "Default response";
+        // Directly use the response string as the bot's message
+        const botMessage = response; // The response is already a string
         
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { text: botMessage, fromUser: false },
-        ]);
+        // Update messages state with the chatbot's response
+        setMessages((prevMessages) => {
+          const updatedMessages = [
+            ...prevMessages,
+            { text: botMessage, fromUser: false },
+          ];
+          console.log("Updated messages: ", updatedMessages); // Log here to see the new state
+          return updatedMessages;
+        });
   
-        // Debug the state update
-        console.log("Updated messages: ", [...messages, { text: botMessage, fromUser: false }]);
       } catch (error) {
         console.error("Error occurred: ", error);
         setMessages((prevMessages) => [
