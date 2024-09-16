@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert, AlertDescription, Input, InputGroup, InputRightElement,  AlertTitle, CloseButton, Flex, AlertIcon, useDisclosure, Icon } from '@chakra-ui/react';
 import { EditOutlined } from '@ant-design/icons';
-import { updateUser } from '../../../redux/userSlice';
+import { setUser, updateUser } from '../../../redux/userSlice';
 import { useLocation } from 'react-router-dom';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
@@ -13,6 +13,34 @@ import { apiCall } from '../../../services/api';
 const UserProfile: React.FC = () => {
   const user = useSelector((state: any) => state.user);
   const token = useSelector((state: RootState) => state.token.token);
+  const fetchUserProfile = async () => {
+    try {
+      const profile = await apiCall('/profile/get-profile', {
+        method: 'GET',
+        requireAuth: true,
+      }, token);
+
+      dispatch(setUser({
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        email: profile.eMail,
+        phoneNumber: profile.phoneNumber,
+        country: profile.country,
+        userId: profile.user_id,
+        profilePicture: profile.profile_picture,
+        currentPlan: profile.subscription_type === 'Basic' ? 'Basic' : 'premium',
+      }));
+    } catch (error) {
+      console.error('Failed to fetch user profile:', error);
+    }
+  };
+  useEffect(()=>{
+    fetchUserProfile()
+  },[])
+
+  
+
+
 
   const [show, setShow] = useState(false);
 
@@ -56,6 +84,7 @@ const UserProfile: React.FC = () => {
       }, token);
 
       setShowInformationUpdate(true);
+
       setIsEditing({
         firstName: false,
         lastName: false,
@@ -63,6 +92,10 @@ const UserProfile: React.FC = () => {
         email: false,
       });
       console.log("form data after handleUserInfoChanges: ", formData);
+      setTimeout(()=>{
+        window.location.reload();
+      },1000)
+
     } catch (error) {
       console.error('Failed to update user information', error);
     }
@@ -81,6 +114,9 @@ const UserProfile: React.FC = () => {
 
       setShowPasswordUpdate(true);
       console.log("form data after password: ", formData);
+      setTimeout(()=>{
+        window.location.reload();
+      },1000)
     } catch (error) {
       console.error('Failed to update password', error);
     }
@@ -98,6 +134,9 @@ const UserProfile: React.FC = () => {
 
       setShowSuccessAlert(true);
       console.log("form data after email change: ", formData);
+      setTimeout(()=>{
+        window.location.reload();
+      },1000)
     } catch (error) {
       console.error('Failed to update email', error);
     }
@@ -310,3 +349,7 @@ const UserProfile: React.FC = () => {
 };
 
 export default UserProfile;
+function dispatch(arg0: any) {
+  throw new Error('Function not implemented.');
+}
+
