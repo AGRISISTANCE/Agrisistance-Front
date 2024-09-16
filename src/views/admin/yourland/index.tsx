@@ -3,7 +3,7 @@ import {
 	Tooltip,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import cropsData from './crops/img/crops';
+import cropsData from './utilImages/utilImages';
 //import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
 //import TotalSpent from '../default/components/TotalSpent';
@@ -22,7 +22,7 @@ import animationData from "../../../assets/img/dashboards/cropanimated.json";
 import { apiCall } from '../../../services/api';
 import { LandInfo } from '../../../redux/landsSlice'; // Ensure this import is correct
 import Navbar from '../navbar/navbar';
-import cropsPictures from './crops/crops_pictures.json';
+import crops from './crops/crops_pictures'; 
 
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -311,12 +311,10 @@ const Yourland: React.FC = () => {
 		});
 	};
 
-
 	const handleCircularProgressClick = (soilType: keyof SoilType) => {
 		setSelectedSoil(soilType);
 		setSliderValue(soil[soilType]);
 	};
-
 
 	//! Setting Soil maintainance
 	useEffect(() => {
@@ -348,8 +346,9 @@ const Yourland: React.FC = () => {
 	const revenue: RevenueItem[] = selectedLand
 		? selectedLand.crops.map((crop: Crop) => {
 			// Construct the image path
-			const cropImageName = (cropsPictures.pictures as Record<string, string>)[crop.CropName.toLowerCase()] || 'default-crop-image.jpg';
-			const cropImagePath = `/crops/pictures/${cropImageName}`;
+			const cropImageName = crop.CropName.toLowerCase().replace(/ /g, '_') as keyof typeof crops;
+			const cropImagePath = crops[cropImageName] || crops['default-crop-image'];
+
 
 			return {
 				CropName: crop.CropName,
