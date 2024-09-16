@@ -115,7 +115,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
   };
 
   const handleAddLand = async () => {
-    let landId; // Declare landId here to make it accessible in both try and catch blocks
+    let landId: any; // Declare landId here to make it accessible in both try and catch blocks
     try {
       // Initialize loading state
       setShowProgress(true);
@@ -173,8 +173,6 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         console.log('Land added successfully:', addLandResponse.message);
         console.log('New land created ID:', landId);
 
-
-
         console.log('Request payload for generating business plan: ', {
           land_id: landId
         });
@@ -221,38 +219,38 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         navigate("/dashboard/yourland");
       }, 2000);
     } catch (error) {
-      setHasError(true)
       console.error('Error during the land creation and mapping process:', error);
+      setHasError(true)
       setProgressMessage('An error occurred. Please try again.');
+      setTimeout(async ()=> {
+
+        //! Deleting land after fail
+        console.log('Attempting to delete land with ID:', landId);
+        setProgressMessage('Deleting the created land.');
+        const response = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
+        console.log('Delete response:', response);
+        
+        if (response.message === 'Land deleted successfully') {
+          // dispatch(removeLand(landId));
+          setProgressMessage('land deleted successfully, rediricting...');
+          console.log('Land deleted successfully');
+        } else {
+          console.warn('Unexpected delete response:', response);
+        }
+
+        // Optionally, keep the loading indicator and allow the user to retry
+        setTimeout(() => {
+          setShowProgress(false);
+          window.location.reload();
+        }, 2000);
+      },2000)
       
-      //! Deleting land after fail
-      console.log('Attempting to delete land with ID:', landId);
-      setProgressMessage('Deleting the created land.');
-      const response = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
-      console.log('Delete response:', response);
-      
-      if (response.message === 'Land deleted successfully') {
-        // dispatch(removeLand(landId));
-        setProgressMessage('land deleted successfully, rediricting...');
-        console.log('Land deleted successfully');
-      } else {
-        console.warn('Unexpected delete response:', response);
-      }
-
-      // Optionally, keep the loading indicator and allow the user to retry
-      setTimeout(() => {
-        setShowProgress(false);
-        window.location.reload();
-      }, 2000);
     }
-    }
-    
-    
-    const handleFinish = () => {
-      handleAddLand();
-    };
+  }
 
-
+  const handleFinish = () => {
+    handleAddLand();
+  };
 
   const handleNext = () => setStep(step + 1);
   const handlePrevious = () => setStep(step - 1);
@@ -263,7 +261,6 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       setShowProgress(true);
     }
   }, [initialStep]);
-
 
 
   const openModal = (content: string) => {
@@ -633,7 +630,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                     fontSize: "25px",
                   }}
                 >
-                  Oxygen Level
+                  Oxygen Level 
                 </label>
                 <Input
                   type="text"
@@ -655,7 +652,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   fontSize={"md"}
                   style={{ cursor: "pointer" }}
                 >
-                  Percentage of gas volume in the soil (%)
+                  Percentage of gas volume in the soil (%) (0 to 100)
                 </Text>
               </Flex>
               <Flex direction={"column"} align={"center"} gap={"10px"}>
@@ -687,7 +684,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   fontSize={"md"}
                   style={{ cursor: "pointer" }}
                 >
-                  Kg/ha (kilogramme per hectar)
+                  Kg/ha (kilogramme per hectar) (200 to 300)
                 </Text>
               </Flex>
               <Flex direction={"column"} align={"center"} gap={"10px"}>
@@ -719,7 +716,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   fontSize={"md"}
                   style={{ cursor: "pointer" }}
                 >
-                  Kg/ha (kilogramme per hectar)
+                  Kg/ha (kilogramme per hectar) (200 to 300)
                 </Text>
               </Flex>
               <Flex direction={"column"} align={"center"} gap={"10px"}>
@@ -751,7 +748,7 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
                   fontSize={"md"}
                   style={{ cursor: "pointer" }}
                 >
-                  Kg/ha (kilogramme per hectar)
+                  Kg/ha (kilogramme per hectar) (200 to 300)
                 </Text>
               </Flex>
               <Flex direction={"column"} align={"center"} gap={"10px"}>

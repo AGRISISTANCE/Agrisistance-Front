@@ -10,12 +10,13 @@ import { LandInfo } from '../../../redux/landsSlice'; // Import the LandInfo int
 import { IoIosClose } from 'react-icons/io';
 import AddNewLand from './components/AddNewLand';
 import { apiCall } from '../../../services/api';
-import { setUser } from '../../../redux/userSlice'; // Adjust the path as necessary
+import { setUser, UserInfo } from '../../../redux/userSlice'; // Adjust the path as necessary
 import { setInitialLands } from '../../../redux/landsSlice';
 import Navbar from '../navbar/navbar';
 
 export default function Home() {
   const lands = useSelector((state: RootState) => state.lands.lands);
+  const user = useSelector((state: any) => state.user) as UserInfo;
   const dispatch = useDispatch();
   const selectedLand = useSelector((state: RootState) => state.lands.selectedLand);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,51 +25,59 @@ export default function Home() {
     dispatch(selectLand(landId));
   };
 
+
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
   console.log("user token: ", token)
+  console.log("current lands: ", lands)
+
+
   // fetching lands data:
   const fetchLands = async () => {
     try {
-      const response = await apiCall('/land/your-lands', {
+      // Directly call apiCall and get the parsed data
+      const lands = await apiCall('/land/get-all-lands', {
         method: 'GET',
         requireAuth: true,
       }, token);
 
-      const mappedLands = response.result.map((land: any, index: number) => ({
+      console.log("API Response:", lands); // Log the response to confirm it's an array
+
+      const mappedLands = lands.map((land: any) => ({
         landId: land.land_id,
-        owner: land.user_id,
+        owner: user.userId,
         landName: land.land_name,
         latitude: land.latitude,
         longitude: land.longitude,
         landSize: land.land_size,
         budgetForLand: 0,
-        oxygen_level: land.oxygen_level, //Or you can make those 0 bcz you dont need them
-        nitrogen: land.nitrogen,
-        potassium: land.potassium,
-        phosphorus: land.phosphorus,
+        oxygen_level: 0,
+        nitrogen: 0,
+        potassium: 0,
+        phosphorus: 0,
         humidity: 0,
-        ph_level: land.ph_level,
-        LandBusinessPlan: [] as LandBusinessPlan[], // Explicitly typing the array
-        crops: [] as Crop[], // Explicitly typing the array
-        waterSufficecy: 0, // Placeholder, fetch from another API if available
-        sunlight: 0, // Placeholder, fetch from another API if available
-        pestisedesLevel: 0, // Placeholder, fetch from another API if available
-        landUse: 0, // Placeholder, fetch from another API if available
-        humanCoverage: 0, // Placeholder, fetch from another API if available
-        waterAvaliability: 0, // Placeholder, fetch from another API if available
-        distributionOptimality: 0, // Placeholder, fetch from another API if available
-        suggestedImprovementSoil: [] as string[], // Explicitly typing the array
-        suggestedImprovementCrop: [] as string[], // Explicitly typing the array
+        ph_level: 0,
+        LandBusinessPlan: [] as LandBusinessPlan[], 
+        crops: [] as Crop[], 
+        waterSufficecy: 0, 
+        sunlight: 0, 
+        pestisedesLevel: 0, 
+        landUse: 0, 
+        humanCoverage: 0, 
+        waterAvaliability: 0, 
+        distributionOptimality: 0, 
+        suggestedImprovementSoil: [] as string[], 
+        suggestedImprovementCrop: [] as string[], 
       }));
 
-      //! Commented when using dummy lands
       dispatch(setInitialLands(mappedLands));
-      console.log("inital lands setted successfully", response )
+      console.log("Initial lands set successfully", mappedLands);
       
     } catch (error) {
       console.error('Failed to fetch lands:', error);
     }
-  };
+};
+
+     
   useEffect(() => {
     fetchLands();
   }, []);
@@ -97,7 +106,7 @@ export default function Home() {
       }
     };
     fetchUserProfile();
-  }, [dispatch, token]);
+  }, []);
 
   //
   return (

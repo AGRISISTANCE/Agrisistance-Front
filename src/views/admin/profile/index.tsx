@@ -38,10 +38,6 @@ const UserProfile: React.FC = () => {
     fetchUserProfile()
   },[])
 
-  
-
-
-
   const [show, setShow] = useState(false);
 
   const handleClick = () => setShow(!show);
@@ -49,8 +45,6 @@ const UserProfile: React.FC = () => {
   const [show1, setShow1] = useState(false);
 
   const handleClick1 = () => setShow1(!show1);
-
-  
 
   const [isEditing, setIsEditing] = useState({
     firstName: false,

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
@@ -49,6 +48,8 @@ function LogIn() {
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState(""); // Optional: to color the message
   const [loading, setLoading] = useState(false);
+  const [showEmailVerificationAlert, setShowEmailVerificationAlert] = React.useState(true);
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -98,13 +99,15 @@ function LogIn() {
       console.log(response.msg); // Logged in successfully!
       console.log("your token: ", response.token);
 
-      setMessage("Login successful! Redirecting...");
       setMessageColor("green");
+      setMessage("Login successful! Redirecting...");
 
       setTimeout(() => {
         dispatch(setToken(response.token));
         navigate("/dashboard/home"); // Redirect to dashboard on successful login
       }, 1000);
+
+      
     } catch (error: any) {
       setMessage("Login failed. Please confirm your credentials and try again.");
       setMessageColor("red");
@@ -113,8 +116,7 @@ function LogIn() {
     }
   };
   
-  const [showEmailVerificationAlert, setShowEmailVerificationAlert] = React.useState(true);
-  
+
   return (
     <DefaultAuth illustrationBackground={illustration} image={illustration}>
       <Flex
