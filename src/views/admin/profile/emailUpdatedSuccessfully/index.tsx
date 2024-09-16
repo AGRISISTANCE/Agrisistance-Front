@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Alert, AlertDescription, Input, InputGroup, InputRightElement,  AlertTitle, CloseButton, Flex, AlertIcon, useDisclosure, Icon } from '@chakra-ui/react';
 import { EditOutlined } from '@ant-design/icons';
-import { setUser, updateUser } from '../../../redux/userSlice';
+import { setUser, updateUser } from '../../../../redux/userSlice';
 import { useLocation } from 'react-router-dom';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
-import { RootState } from '../../../redux/store';
-import { apiCall } from '../../../services/api';
+import { RootState } from '../../../../redux/store';
+import { apiCall } from '../../../../services/api';
 
 
 const EmailUpdatedSuccessfully: React.FC = () => {

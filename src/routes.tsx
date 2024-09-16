@@ -29,7 +29,7 @@ import LandingPage from './views/Landing/landingPage';
 import Error from './views/404';
 import Plan from './views/admin/plan';
 import Yournetwork from './views/admin/yournetwork';
-import EmailUpdatedSuccessfully from './views/admin/emailUpdatedSuccessfully';
+import EmailUpdatedSuccessfully from './views/admin/profile/emailUpdatedSuccessfully';
 import EmailVerified from './views/auth/emailverified';
 import ForgetPassword from './views/auth/ForgotPassword';
 import ResetPassword from './views/auth/reset-password';

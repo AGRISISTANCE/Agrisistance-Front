@@ -14,7 +14,7 @@ import Profile from './views/admin/profile';
 import ResetPassword from 'views/auth/reset-password';
 import ForgetPassword from 'views/auth/ForgotPassword';
 import Emailverified from 'views/auth/emailverified';
-import EmailUpdatedSuccessfully from 'views/admin/emailUpdatedSuccessfully';
+import EmailUpdatedSuccessfully from 'views/admin/profile/emailUpdatedSuccessfully';
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store'; // Adjust the import path as needed
 

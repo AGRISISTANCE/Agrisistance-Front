@@ -3,7 +3,7 @@ import {
 	Tooltip,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import cropsData from './img/crops';
+import cropsData from './crops/img/crops';
 //import land from '../../../assets/img/land/land';
 import { Button } from '../../../common/Button/index'
 //import TotalSpent from '../default/components/TotalSpent';
@@ -22,6 +22,8 @@ import animationData from "../../../assets/img/dashboards/cropanimated.json";
 import { apiCall } from '../../../services/api';
 import { LandInfo } from '../../../redux/landsSlice'; // Ensure this import is correct
 import Navbar from '../navbar/navbar';
+import cropsPictures from './crops/crops_pictures.json';
+
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -344,15 +346,21 @@ const Yourland: React.FC = () => {
 
 	//! maaping predict revenue from state
 	const revenue: RevenueItem[] = selectedLand
-		? selectedLand.crops.map((crop: Crop) => ({
-			CropName: crop.CropName,
-			area: crop.cropSize,
-			description: `${crop.CropName} is a valuable crop. It has a recommendation percentage of ${crop.recommendationPercentage}% and can generate a revenue of ${crop.expectedMoneyRevenue} with an expected weight of ${crop.expectedWeightRevenue}.`,
-			weight: crop.expectedWeightRevenue,
-			price: crop.expectedMoneyRevenue,
-			img: crop.CropImage,
-			progress: crop.recommendationPercentage,
-		}))
+		? selectedLand.crops.map((crop: Crop) => {
+			// Construct the image path
+			const cropImageName = (cropsPictures.pictures as Record<string, string>)[crop.CropName.toLowerCase()] || 'default-crop-image.jpg';
+			const cropImagePath = `/crops/pictures/${cropImageName}`;
+
+			return {
+				CropName: crop.CropName,
+				area: crop.cropSize,
+				description: `${crop.CropName} is a valuable crop. It has a recommendation percentage of ${crop.recommendationPercentage}% and can generate a revenue of ${crop.expectedMoneyRevenue} with an expected weight of ${crop.expectedWeightRevenue}.`,
+				weight: crop.expectedWeightRevenue,
+				price: crop.expectedMoneyRevenue,
+				img: cropImagePath,
+				progress: crop.recommendationPercentage,
+			};
+		})
 		: [];
 
 	
@@ -395,7 +403,7 @@ const Yourland: React.FC = () => {
 		}
 	}, [selectedLand]);
 
-	//! Seting city and country from api
+	//! Setting city and country from api
 	useEffect(() => {
 		if (landDetails.latitude && landDetails.longitude) {
 			const fetchCityFromCoordinates = async () => {
@@ -478,7 +486,8 @@ const Yourland: React.FC = () => {
 											<Flex align='center'>
 												{/* <img src={crops[item.img] || '/default-crop-image.png'} alt={item.CropName} style={{ width: '50px', height: 'auto', marginRight: '10px' }} /> */}
 												{/* ! Later the images will be handeled either accoring to cropName or by their state */}
-												<img src={'/default-crop-image.png'} alt={item.CropName} style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
+												{/* <img src={'/default-crop-image.png'} alt={item.CropName} style={{ width: '50px', height: 'auto', marginRight: '10px' }} /> */}
+												<img src={item.img} alt={item.CropName} style={{ width: '50px', height: 'auto', marginRight: '10px' }} />
 												<Flex direction='column'>
 													<Text fontWeight='bold'>{item.CropName}</Text>
 													<Text color='grey' fontSize={'lg'}>{item.area} m<sup>2</sup></Text>
