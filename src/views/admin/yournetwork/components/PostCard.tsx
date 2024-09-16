@@ -90,7 +90,7 @@ const PostCard: React.FC<PostCardProps> = ({
               <Image
                 src={content.image}
                 alt={content.title}
-                maxW="90%"
+                maxW="50%"
                 height="auto"
                 // objectFit="cover"
               />

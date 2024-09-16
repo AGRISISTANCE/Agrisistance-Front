@@ -1,10 +1,12 @@
-// components/MyPosts.tsx
+// src/views/admin/yournetwork/components/MyPosts.tsx
+
 import React, { useState } from 'react';
 import { Box, Button } from '@chakra-ui/react';
 import PostCard from './PostCard';
 import AddNewPostModal from './AddNewPostModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store'; // Adjust the import based on your store setup
+import defaultImages from './assets/defaultImages'; // Import default images
 import { apiCall } from 'services/api';
 import ConfirmationPopup from '../../../../common/Popup/ConfirmationPopup';
 
@@ -24,12 +26,12 @@ const MyPosts: React.FC = () => {
     setCurrentPost(post || null); // Set the post data or null for a new post
     setModalOpen(true);
   };
+
   const closeModal = () => setModalOpen(false);
 
   const activePosts = posts.filter(post => post.authorId === user.userId && post.active);
   const archivedPosts = posts.filter(post => post.authorId === user.userId && !post.active);
 
-  //! related to the popup
   const handleConfirm = async () => {
     if (currentPostId) {
       await confirmationAction();
@@ -51,15 +53,7 @@ const MyPosts: React.FC = () => {
   const archivePost = async (postID: string) => {
     try {
       console.log('Archived');
-      //! Add api request once beackend ready
-      // const posts = await apiCall('/profile/get-profile', {
-      //   method: 'POST',
-      //   data: {postId : postID},
-      //   requireAuth: true
-      // },token);
-      
-      // dispatch(); Set all posts here
-
+      // Add API request once backend is ready
     } catch (error) {
       console.error('Failed to archive post:', error);
     }
@@ -68,73 +62,104 @@ const MyPosts: React.FC = () => {
   const deletePost = async (postID: string) => {
     try {
       console.log('Deleted');
-      //! Add api request once beackend ready
-      // const posts = await apiCall('/profile/get-profile', {
-      //   method: 'POST',
-      //   data: {postId : postID},
-      //   requireAuth: true
-      // },token);
-      
-      // dispatch(); Set all posts here
+      // Add API request once backend is ready
     } catch (error) {
       console.error('Failed to delete post:', error);
     }
   };
 
+  const categoryImages: Record<string, string> = {
+    businessPromotion: defaultImages.business,
+    opportunitiesAndPartnership: defaultImages.partner,
+    resourcesAndProducts: defaultImages.products,
+  };
+
   return (
     <Box>
-      {activePosts.map(post => (
-        <PostCard
-          key={post.postID}
-          author={{
-            profilePicture: post.image,
-            name: post.authorName,
-            country: post.authorCountry,
-            phoneNumber: post.authorPhoneNumber,
-          }}
-          content={{
-            category: post.type,
-            title: post.title,
-            description: post.description,
-            image: post.image,
-            date: post.postDate,
-          }}
-          isMyPost
-          onModify={() => openModal(post)} // Pass the post data to the modal
-          onArchive={() => openConfirmationPopup('Are you sure you want to archive this post?', () => archivePost(post.postID), post.postID)}
-          onDelete={() => openConfirmationPopup('Are you sure you want to delete this post?', () => deletePost(post.postID), post.postID)}
-        />
-      ))}
+      <Button my={8} bgColor="#2ACC32" _hover={{ bgColor: "#239B43" }} color="white" mt={4} onClick={() => openModal()}>
+        + Add New Post
+      </Button>
+
+      {activePosts.map(post => {
+        // // Default image for posts based on category
+        // const postImage = defaultImages[post.type as keyof typeof defaultImages] || defaultImages.products;
+
+        // // Use default avatar if post.image is not available
+        // const profilePicture = post.image || defaultImages.avatar;
+        
+         // Get the default image for the post type
+        const postImage = categoryImages[post.type] || defaultImages.products;
+
+        // Use the default avatar if no author picture is provided
+        // const authorPicture = post.authorPicture ? post.authorPicture : defaultImages.avatar;
+        const authorPicture = defaultImages.avatar;
+
+
+        return (
+          <PostCard
+            key={post.postID}
+            author={{
+              profilePicture:authorPicture, // Use default avatar if post.image is not available
+              name: post.authorName,
+              country: post.authorCountry,
+              phoneNumber: post.authorPhoneNumber,
+            }}
+            content={{
+              category: post.type,
+              title: post.title,
+              description: post.description,
+              image: postImage, // Use default image based on post type
+              date: post.postDate,
+            }}
+            isMyPost
+            onModify={() => openModal(post)} // Pass the post data to the modal
+            onArchive={() => openConfirmationPopup('Are you sure you want to archive this post?', () => archivePost(post.postID), post.postID)}
+            onDelete={() => openConfirmationPopup('Are you sure you want to delete this post?', () => deletePost(post.postID), post.postID)}
+          />
+        );
+      })}
 
       <Box mt={6} mb={6} borderBottom="2px" borderColor="gray.200" />
 
-      {archivedPosts.map(post => (
-        <PostCard
-          key={post.postID}
-          author={{
-            profilePicture: post.image,
-            name: post.authorName,
-            country: post.authorCountry,
-            phoneNumber: post.authorPhoneNumber,
-          }}
-          content={{
-            category: post.type,
-            title: post.title,
-            description: post.description,
-            image: post.image,
-            date: post.postDate,
-          }}
-          isMyPost
-          isArchived
-          onModify={() => openModal(post)} // Pass the post data to the modal
-          onArchive={() => openConfirmationPopup('Are you sure you want to archive this post?', () => archivePost(post.postID), post.postID)}
-          onDelete={() => openConfirmationPopup('Are you sure you want to delete this post?', () => deletePost(post.postID), post.postID)}
-        />
-      ))}
+      {archivedPosts.map(post => {
 
-      <Button bgColor="#2ACC32" _hover={{ bgColor: "#239B43" }} color="white" mt={4} onClick={() => openModal()}>
-        + Add New Post
-      </Button>
+      // Get the default image for the post type
+      const postImage = categoryImages[post.type] || defaultImages.products;
+
+      // Use the default avatar if no author picture is provided
+      // const authorPicture = post.authorPicture ? post.authorPicture : defaultImages.avatar;
+      const authorPicture = defaultImages.avatar;
+
+        // // Default image for posts based on category
+        // const postImage = defaultImages[post.type as keyof typeof defaultImages] || defaultImages.products;
+
+        // // Use default avatar if post.image is not available
+        // const profilePicture = post.image || defaultImages.avatar;
+
+        return (
+          <PostCard
+            key={post.postID}
+            author={{
+              profilePicture: authorPicture, // Use default avatar if post.image is not available
+              name: post.authorName,
+              country: post.authorCountry,
+              phoneNumber: post.authorPhoneNumber,
+            }}
+            content={{
+              category: post.type,
+              title: post.title,
+              description: post.description,
+              image: postImage, // Use default image based on post type
+              date: post.postDate,
+            }}
+            isMyPost
+            isArchived
+            onModify={() => openModal(post)} // Pass the post data to the modal
+            onArchive={() => openConfirmationPopup('Are you sure you want to archive this post?', () => archivePost(post.postID), post.postID)}
+            onDelete={() => openConfirmationPopup('Are you sure you want to delete this post?', () => deletePost(post.postID), post.postID)}
+          />
+        );
+      })}
 
       <AddNewPostModal isOpen={isModalOpen} onClose={closeModal} post={currentPost} />
 

@@ -10,11 +10,6 @@ import Chatbot from './components/chatbot/Chatbot';
 import LandingPage from './views/Landing/landingPage';
 import Error from './views/404';
 import Plan from './views/admin/plan';
-import Profile from './views/admin/profile';
-import ResetPassword from 'views/auth/reset-password';
-import ForgetPassword from 'views/auth/ForgotPassword';
-import Emailverified from 'views/auth/emailverified';
-import EmailUpdatedSuccessfully from 'views/admin/profile/emailUpdatedSuccessfully';
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store'; // Adjust the import path as needed
 
