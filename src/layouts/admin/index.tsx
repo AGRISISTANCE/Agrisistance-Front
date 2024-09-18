@@ -1,30 +1,48 @@
 import React, { useEffect, useState } from 'react';
-// import Tour from 'reactour';
+import Tour from 'reactour';
 import { Box } from '@chakra-ui/react';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { SidebarContext } from '../../contexts/SidebarContext';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import routes from '../../routes';
+import images from './onboarding/images'; //import images for onboarding
 
-// Define onboarding steps
-// const steps: Step[] = [
-//   {
-//     target: '.profile-section', // Add this class to the Profile component wrapper
-//     content: 'This is your profile section where you can view and manage your profile details.',
-//   },
-//   {
-//     target: '.selected-land', // Add this class to the Selected Land section
-//     content: 'Here you can see the selected land details.',
-//   },
-//   {
-//     target: '.add-new-land', // Add this class to the "Add New Land" button
-//     content: 'Click here to add a new land to your profile.',
-//   },
-//   {
-//     target: '.other-lands', // Add this class to the Other Lands section
-//     content: 'These are the other lands you have.',
-//   },
-// ];
+const steps = [
+  {
+    selector: '.profile-section', // Target element class
+    content: (
+      <div>
+        <p>This is your profile section where you can view and manage your profile details.</p>
+      </div>
+    ),
+  },
+  {
+    selector: '.selected-land', // Target element class
+    content: (
+      <div>
+        <p>Here you can see the selected land details.</p>
+        <img src={images.selectedLand} alt="Selected Land" style={{ width: '100%' }} />
+      </div>
+    ),
+  },
+  {
+    selector: '.add-new-land', // Target element class
+    content: (
+      <div>
+        <p>Click here to add a new land to your profile.</p>
+      </div>
+    ),
+  },
+  {
+    selector: '.other-lands', // Target element class
+    content: (
+      <div>
+        <p>These are the other lands you have.</p>
+        <img src={images.otherLands} alt="Other Lands" style={{ width: '100%' }} />
+      </div>
+    ),
+  },
+];
 
 export default function Dashboard(props: { [x: string]: any }) {
   const { ...rest } = props;
@@ -35,14 +53,8 @@ export default function Dashboard(props: { [x: string]: any }) {
       setShowOnboarding(true);
     }, 500); // Adjust the delay as needed
   }, []);
-  useEffect(() => {
-    // Delay the onboarding start to ensure elements are in the DOM
-    const timer = setTimeout(() => {
-      setShowOnboarding(true);
-    }, 1000); // Adjust delay as necessary
 
-    return () => clearTimeout(timer);
-  }, []);
+
 
   const getRoute = () => {
     return window.location.pathname !== '/admin/full-screen-maps';
@@ -103,6 +115,15 @@ export default function Dashboard(props: { [x: string]: any }) {
 
           
         </Box>
+        {showOnboarding && (
+        <Tour
+          steps={steps}
+          isOpen={showOnboarding}
+          onRequestClose={() => setShowOnboarding(false)}
+          rounded={5} // Customize tooltip style
+          accentColor="#5cb85c" // Customize accent color
+        />
+      )}
       </SidebarContext.Provider>
     </Box>
   );
