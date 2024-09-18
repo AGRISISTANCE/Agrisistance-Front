@@ -12,7 +12,7 @@ export interface UserInfo {
 }
 
 // Flag to toggle between dummy and real data
-const USE_DUMMY_DATA = true;
+const USE_DUMMY_DATA = false;
 
 const dummyData: UserInfo = {
   firstName: 'Amel',

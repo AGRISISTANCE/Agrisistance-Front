@@ -32,40 +32,40 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
   const [category, setCategory] = useState<CategoryType>('opportunitiesAndPartnership');
   const [image, setImage] = useState<File | null>(null);
 
-  const resizeImage = (file: File) => {
-    return new Promise<Blob>((resolve, reject) => {
-      const img = document.createElement('img');
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        img.src = e.target.result;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            canvas.width = img.width / 2;  // Resize as needed
-            canvas.height = img.height / 2;
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            canvas.toBlob((blob) => {
-              if (blob) resolve(blob);
-              else reject('Failed to resize image');
-            }, 'image/jpeg');
-          }
-        };
-      };
-      reader.readAsDataURL(file);
-    });
-  };
+  // const resizeImage = (file: File) => {
+  //   return new Promise<Blob>((resolve, reject) => {
+  //     const img = document.createElement('img');
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       img.src = e.target.result;
+  //       img.onload = () => {
+  //         const canvas = document.createElement('canvas');
+  //         const ctx = canvas.getContext('2d');
+  //         if (ctx) {
+  //           canvas.width = img.width / 2;  // Resize as needed
+  //           canvas.height = img.height / 2;
+  //           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  //           canvas.toBlob((blob) => {
+  //             if (blob) resolve(blob);
+  //             else reject('Failed to resize image');
+  //           }, 'image/jpeg');
+  //         }
+  //       };
+  //     };
+  //     reader.readAsDataURL(file);
+  //   });
+  // };
   
-  const toBase64 = (file: File) => {
-    return resizeImage(file).then(blob => {
-      return new Promise<string | null>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = error => reject(null);
-      });
-    });
-  };
+  // const toBase64 = (file: File) => {
+  //   return resizeImage(file).then(blob => {
+  //     return new Promise<string | null>((resolve, reject) => {
+  //       const reader = new FileReader();
+  //       reader.readAsDataURL(blob);
+  //       reader.onload = () => resolve(reader.result as string);
+  //       reader.onerror = error => reject(null);
+  //     });
+  //   });
+  // };
 
 
   const getDefaultImageForCategory = (category: Category) => {
@@ -88,12 +88,12 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
 
   const createNewPost = async () => {
     try {
-      let base64Image = null;
-      if (image) {
-        base64Image = await toBase64(image);
-      }
+      // let base64Image = null;
+      // if (image) {
+      //   base64Image = await toBase64(image);
+      // }
       
-      console.log('Base64 image:', base64Image);
+      // console.log('Base64 image:', base64Image);
       
       const defaultImage = getDefaultImageForCategory(category);
       
@@ -142,10 +142,10 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
 
   const updatePost = async () => {
     try {
-      let base64Image = null;
-      if (image) {
-        base64Image = await toBase64(image);
-      }
+      // let base64Image = null;
+      // if (image) {
+      //   base64Image = await toBase64(image);
+      // }
 
       // const defaultImage = getDefaultImageForCategory(category);
         //! empty because too large not supported

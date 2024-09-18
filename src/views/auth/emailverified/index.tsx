@@ -89,32 +89,40 @@ function LogIn() {
         email: email,
         password: password,
       };
-
+    
       const response = await apiCall('/auth/login', {
         method: 'POST',
         data: credentials,
       });
-
-      // Store token in Redux
-      console.log(response.msg); // Logged in successfully!
-      console.log("your token: ", response.token);
-
-      setMessageColor("green");
-      setMessage("Login successful! Redirecting...");
-
-      setTimeout(() => {
-        dispatch(setToken(response.token));
-        navigate("/dashboard/home"); // Redirect to dashboard on successful login
-      }, 1000);
-
       
-    } catch (error: any) {
-      setMessage("Login failed. Please confirm your credentials and try again.");
-      setMessageColor("red");
+      if (response.token) {
+        // Store token in Redux
+        console.log(response.message); // Logged in successfully!
+        console.log("Your token: ", response.token);
+        setMessageColor("green");
+        setMessage("Login successful! Redirecting...");
+    
+        setTimeout(() => {
+          dispatch(setToken(response.token));
+          navigate("/dashboard/home"); // Redirect to dashboard on successful login
+        }, 1000);
+      } else {
+        setMessageColor("red");
+        setMessage(response.message);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setMessage("Login failed. Please confirm your credentials and try again.");
+        setMessageColor("red");
+      } else {
+        // Handle unexpected error types here
+        setMessage("An unexpected error occurred.");
+        setMessageColor("red");
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }
   
 
   return (

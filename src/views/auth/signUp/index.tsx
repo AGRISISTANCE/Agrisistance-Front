@@ -115,10 +115,14 @@ function SignUp() {
         data: userData,
       });
 
-      if (response.message) {
+      if (response.message = "E-mail already in use.") {
+        setMessageColor("red");
         setMessage(response.message);
+      }else if (response.message) {
         setMessageColor("green");
-      } else {
+        setMessage(response.message);
+      }
+      else {
         setMessage("Registration successful!");
         setMessageColor("green");
       }

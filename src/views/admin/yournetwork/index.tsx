@@ -25,7 +25,7 @@ const Network: React.FC = () => {
 
 
   //Get all posts from backend
-  //! Commented to get dummy posted (remove when using real backend)
+  //! COMMENT when using dummy data
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {

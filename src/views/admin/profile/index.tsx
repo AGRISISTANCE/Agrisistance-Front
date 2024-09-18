@@ -52,7 +52,7 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     //! Comment when using dummy data
-    // fetchUserProfile();
+    fetchUserProfile();
   }, []);
 
   // Update formData when user changes

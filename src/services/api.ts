@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 // const BASE_URL = 'https://agrisistance.up.railway.app/api';
-// const BASE_URL = 'https://agrisistance-api-gateway.up.railway.app/api';
-const BASE_URL = 'http://localhost:9090/api';
+const BASE_URL = 'https://agrisistance-api-gateway.up.railway.app/api';
+// const BASE_URL = 'http://localhost:9090/api';
 // const BASE_URL = 'http://localhost:8081/api';
 // const BASE_URL = 'https://agrisistance-server.onrender.com/api';
 

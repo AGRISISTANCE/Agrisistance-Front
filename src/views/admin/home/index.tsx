@@ -69,7 +69,7 @@ export default function Home() {
         suggestedImprovementSoil: [] as string[], 
         suggestedImprovementCrop: [] as string[], 
       }));
-      //! commentd because of dummie data
+      //! commentd when using dummy data
       // dispatch(setInitialLands(mappedLands));
       console.log("Initial lands set successfully", mappedLands);
       
@@ -79,9 +79,9 @@ export default function Home() {
 };
 
   //! comment when using dummy data
-  // useEffect(() => {
-  //   fetchLands();
-  // }, []);
+  useEffect(() => {
+    fetchLands();
+  }, []);
 
   // fetching user data!
   useEffect(() => {
@@ -107,7 +107,7 @@ export default function Home() {
       }
     };
     //! Comment when using dummy data
-    // fetchUserProfile();
+    fetchUserProfile();
   }, []);
 
 
