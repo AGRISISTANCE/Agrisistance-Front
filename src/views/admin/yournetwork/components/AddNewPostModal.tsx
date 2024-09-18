@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import {useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
-import { apiCall } from 'services/api';
+import { apiCall } from '../../../../services/api';
 import { addPost, updatePost, CategoryType } from '../../../../redux/postsSlice';
 import { defaultImages, authorImage, Category } from './assets/base64defaultImages';
 
