@@ -1,60 +1,97 @@
 import React, { useEffect, useState } from 'react';
 import Tour from 'reactour';
-import { Box } from '@chakra-ui/react';
+import { Box, Button } from '@chakra-ui/react';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { SidebarContext } from '../../contexts/SidebarContext';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import routes from '../../routes';
 import images from './onboarding/images'; //import images for onboarding
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const steps = [
-  {
-    selector: '.profile-section', // Target element class
-    content: (
-      <div>
-        <p>This is your profile section where you can view and manage your profile details.</p>
-      </div>
-    ),
-  },
-  {
-    selector: '.selected-land', // Target element class
-    content: (
-      <div>
-        <p>Here you can see the selected land details.</p>
-        <img src={images.selectedLand} alt="Selected Land" style={{ width: '100%' }} />
-      </div>
-    ),
-  },
-  {
-    selector: '.add-new-land', // Target element class
-    content: (
-      <div>
-        <p>Click here to add a new land to your profile.</p>
-      </div>
-    ),
-  },
-  {
-    selector: '.other-lands', // Target element class
-    content: (
-      <div>
-        <p>These are the other lands you have.</p>
-        <img src={images.otherLands} alt="Other Lands" style={{ width: '100%' }} />
-      </div>
-    ),
-  },
-];
+
+
+
 
 export default function Dashboard(props: { [x: string]: any }) {
   const { ...rest } = props;
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const steps = [
+    {
+      content: (
+        <div>
+        <p>👋 Welcome, Farmer! This is a quick tour to help you get familiar with the platform. 🚜🌾</p>
+        </div>
+      ),
+    },
+    {
+      selector: '.selected-land', // Target element class
+      content: (
+        <div>
+          <p>Here you can see the selected land details.</p>
+          <img src={images.selectedLand} alt="Selected Land" style={{ width: '100%' }} />
+
+        </div>
+      ),
+    },
+    {
+      selector: '', // Target element class
+      content: (
+        <div>
+          <p>Click here to add a new land to your profile.</p>
+        </div>
+      ),
+    },
+    {
+      selector: '', // Target element class
+      content: (
+        <div>
+          <p>These are the other lands you have.</p>
+          <img src={images.otherLands} alt="Other Lands" style={{ width: '100%' }} />
+
+        </div>
+      ),
+    },
+    {
+      selector: '.chatbot-toggle', // Target element class
+      content: (
+        <div>
+          <p>This is your chatbot "AgriHelper", he is a very kind guy! Feel free to ask him for help whenever you are stuck!</p>
+
+        </div>
+      ),
+    },
+    {
+      selector: '.sidebar', // Target element class
+      content: (
+        <div>
+          <p>This is the sidebar where you can navigate to other sections, and get to know them.</p>
+
+        </div>
+      ),
+    },
+    {
+      selector: '', // Target element class
+      content: (
+        <Button p={4} m={4} bg={'#2BCC33'} color={'white'} onClick={() => navigate('/dashboard/profile/onboarding')}>
+            Go to Profile Onboarding
+        </Button>
+      ),
+    },
+  ];
+
   useEffect(() => {
-    setTimeout(() => {
-      setShowOnboarding(true);
-    }, 500); // Adjust the delay as needed
-  }, []);
-
-
+    if (location.pathname === '/dashboard/home/onboarding') {
+      setTimeout(() => {
+        setShowOnboarding(true);
+      }, 500); // Adjust the delay as needed
+    } else {
+      setShowOnboarding(false);
+    }
+  }, [location.pathname]);
 
   const getRoute = () => {
     return window.location.pathname !== '/admin/full-screen-maps';

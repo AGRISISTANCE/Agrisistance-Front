@@ -104,7 +104,7 @@ function LogIn() {
     
         setTimeout(() => {
           dispatch(setToken(response.token));
-          navigate("/dashboard/home"); // Redirect to dashboard on successful login
+          navigate("/dashboard/home/onboarding"); // Redirect to dashboard on successful login
         }, 1000);
       } else {
         setMessageColor("red");

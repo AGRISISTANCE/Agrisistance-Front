@@ -59,14 +59,14 @@ const routes = [
   {
     name: 'Home',
     layout: '/dashboard',
-    path: '/home',
+    path: '/home/*',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <Home />,
   },
   {
     name: 'Profile',
     layout: '/dashboard',
-    path: '/profile',
+    path: '/profile/*',
     icon: <Icon as={MdPerson} width="20px" height="20px" color="inherit" />,
     component: <Profile />,
     secondary: true,
@@ -75,14 +75,14 @@ const routes = [
     name: 'Your Land',
     layout: '/dashboard',
     icon: <Icon as={MdOutlineYard} width="20px" height="20px" color="inherit" />,
-    path: '/yourland',
+    path: '/yourland/*',
     component: <Yourland />,
   },
   {
     name: 'Upgrade plan',
     layout: '/dashboard',
     icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
-    path: '/plans',
+    path: '/plans/*',
     component: <Plan />,
   },
   {
@@ -116,7 +116,7 @@ const routes = [
   {
     name: 'Your Network',
     layout: '/dashboard',
-    path: '/network',
+    path: '/network/*',
     icon: <Icon as={MdGroups} width="20px" height="20px" color="inherit" />,
     component: <Yournetwork />,
   }

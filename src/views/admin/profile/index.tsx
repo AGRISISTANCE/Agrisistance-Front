@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Alert, AlertDescription, Input, InputGroup, InputRightElement,  AlertTitle, CloseButton, Flex, AlertIcon, useDisclosure, Icon } from '@chakra-ui/react';
+import { Alert, AlertDescription, Input, InputGroup, InputRightElement,  AlertTitle, CloseButton, Flex, AlertIcon, useDisclosure, Icon, Button } from '@chakra-ui/react';
 import { EditOutlined } from '@ant-design/icons';
 import { setUser, updateUser } from '../../../redux/userSlice';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { RiEyeCloseLine } from 'react-icons/ri';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RootState } from '../../../redux/store';
 import { apiCall } from '../../../services/api';
+import Tour from 'reactour';
 
 
 const UserProfile: React.FC = () => {
@@ -49,6 +50,41 @@ const UserProfile: React.FC = () => {
       console.error('Failed to fetch user profile:', error);
     }
   };
+
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const steps = [
+    {
+      selector: '.profile',
+      content: (
+        <div>
+          <p>Here you can see details about your profile and modify them.</p>
+        </div>
+      ),
+    },
+    {
+      selector: '', // Target element class
+      content: (
+        <Button p={4} m={4} bg={'#2BCC33'} color={'white'} onClick={() => navigate('/dashboard/yourland/onboarding')}>
+            Go to Your Land Onboarding
+        </Button>
+      ),
+    },
+  ];
+
+  useEffect(() => {
+    if (location.pathname === '/dashboard/profile/onboarding') {
+      setTimeout(() => {
+        setShowOnboarding(true);
+      }, 500); // Adjust the delay as needed
+    } else {
+      setShowOnboarding(false);
+    }
+  }, [location.pathname]);
+
+
 
   useEffect(() => {
     //! Comment when using dummy data
@@ -189,6 +225,7 @@ const UserProfile: React.FC = () => {
       justify="center"
       align="center"
       gap="40px"
+      className="profile"
     >
       
       <Flex
@@ -359,7 +396,15 @@ const UserProfile: React.FC = () => {
         </form>
       </Flex>
 
-      
+      {showOnboarding && (
+        <Tour
+          steps={steps}
+          isOpen={showOnboarding}
+          onRequestClose={() => setShowOnboarding(false)}
+          rounded={5} // Customize tooltip style
+          accentColor="#5cb85c" // Customize accent color
+        />
+      )}
     </Flex>
   );
 };

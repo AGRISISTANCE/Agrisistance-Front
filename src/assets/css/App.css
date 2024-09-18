@@ -6,3 +6,9 @@ body {
 option {
   color: black;
 }
+
+.large-image {
+  max-width: 600px; /* Ensure image doesn't exceed this width */
+  width: 100%; /* Adjust to fit within the container */
+  height: auto; /* Maintain aspect ratio */
+}

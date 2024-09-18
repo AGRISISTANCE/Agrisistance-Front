@@ -138,8 +138,8 @@ export default function Home() {
           />
         </Box>
       </div>
-      <Flex direction="column" gap="10px" align="center">
-        <Text className="selected-land" color="#2ACC32" textAlign="center" fontWeight="bold" fontSize="30px">
+      <Flex className="selected-land" direction="column" gap="10px" align="center">
+        <Text color="#2ACC32" textAlign="center" fontWeight="bold" fontSize="30px">
           Selected Land
         </Text>
         {!selectedLand ? (

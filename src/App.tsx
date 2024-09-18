@@ -12,6 +12,8 @@ import Error from './views/404';
 import Plan from './views/admin/plan';
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store'; // Adjust the import path as needed
+import './input.css';
+
 
 export default function Main() {
   const location = useLocation();

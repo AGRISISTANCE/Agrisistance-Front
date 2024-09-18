@@ -1,11 +1,11 @@
 import {
 	Flex, Text, Box, Progress, CircularProgress, CircularProgressLabel, Slider, SliderTrack, SliderFilledTrack, SliderThumb, SliderMark,
-	Tooltip,
+	Tooltip,Button
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import cropsData from './utilImages/utilImages';
 //import land from '../../../assets/img/land/land';
-import { Button } from '../../../common/Button/index'
+// import { Button } from '../../../common/Button/index'
 //import TotalSpent from '../default/components/TotalSpent';
 import BusinessPlanModal from './components/BusinessPlanModal';
 import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
@@ -23,6 +23,11 @@ import { apiCall } from '../../../services/api';
 import { LandInfo } from '../../../redux/landsSlice'; // Ensure this import is correct
 import Navbar from '../navbar/navbar';
 import crops from './crops/crops_pictures'; 
+import { useLocation, useNavigate } from 'react-router-dom';
+import Tour from 'reactour';
+import images from '../../../layouts/admin/onboarding/images'; //import images for onboarding
+
+
 
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -128,6 +133,96 @@ const Yourland: React.FC = () => {
 	//! Related to the popup
 	const [showPopup, setShowPopup] = useState(false);
 	const [isConfirmPhase, setIsConfirmPhase] = useState(false);
+
+
+	const [showOnboarding, setShowOnboarding] = useState(false);
+
+		const location = useLocation();
+		const navigate = useNavigate();
+		const steps = [
+			{
+				selector: '',
+				content: (
+					<div>
+						<p>Explore various details about your land, including current status and health.</p>
+					</div>
+				),
+			},
+			{
+				selector: '.navbar',
+				content: (
+					<div>
+						<p>Use the navigation bar to explore different sections and tools.</p>
+					</div>
+				),
+			},
+			{
+				selector: '.revenue',
+				content: (
+					<div>
+						<p>Forecast potential revenue based on current and historical data.</p>
+						<img src={images.predictRevenue} alt="Predict Revenue" style={{ width: '600px', height: 'auto' }} />
+					</div>
+				),
+			},
+			{
+				selector: '',
+				content: (
+					<div>
+						<p>Find detailed information on soil maintenance to keep your land fertile.</p>
+						<img src={images.soilMaintenance} alt="Soil Maintenance" style={{ width: '100%' }} />
+					</div>
+				),
+			},
+			{
+				selector: '',
+				content: (
+					<div>
+						<p>Get insights and tips on effective crop maintenance.</p>
+						<img src={images.cropMaintenance} alt="Crop Maintenance" style={{ width: '100%' }} />
+					</div>
+				),
+			},
+			{
+				selector: '',
+				content: (
+					<div>
+						<p>Access detailed statistics to monitor your land's performance.</p>
+						<img src={images.landsStats} alt="Land Statistics" style={{ width: '100%' }} />
+					</div>
+				),
+			},
+			{
+				selector: '',
+				content: (
+					<div>
+						<p>Manage your finances with tools and insights on expenses and revenues.</p>
+						<img src={images.financeManagement} alt="Finance Management" style={{ width: '100%' }} />
+					</div>
+				),
+			},
+			{
+				selector: '',
+				content: (
+					<Button p={4} m={4} bg={'#2BCC33'} color={'white'} onClick={() => navigate('/dashboard/network/onboarding')}>
+					Go to Your Network Onboarding
+					</Button>
+				),
+			},
+		];
+		
+	
+		useEffect(() => {
+		if (location.pathname === '/dashboard/yourland/onboarding') {
+			setTimeout(() => {
+			setShowOnboarding(true);
+			}, 500); // Adjust the delay as needed
+		} else {
+			setShowOnboarding(false);
+		}
+		}, [location.pathname]);
+	
+  
 
 
 	//! new handle submit:
@@ -469,7 +564,7 @@ const Yourland: React.FC = () => {
 		switch (activeSection) {
 			case 'Predict Revenue':
 				return (
-					<Box>
+					<Box className='revenue'>
 						{revenue.length === 0 ? (
 							<Flex direction='column' gap='40px'>
 								<Text background='#fff' padding='20px' borderRadius='20px'>
@@ -528,7 +623,7 @@ const Yourland: React.FC = () => {
 				);
 			case 'Soil maintenance':
 				return (
-					<Box>
+					<Box className='soil'>
 						{showPopup && (
 							<ConfirmationPopup
 								title="Modify Data"
@@ -648,7 +743,7 @@ const Yourland: React.FC = () => {
 				)
 			case 'Crop maintenance':
 				return (
-					<Box>
+					<Box className='crop'>
 						{revenue.length === 0 ? (
 							<Flex direction={'column'} gap={'50px'} align={'center'}>
 								<Text background={'#fff'} padding={'20px'} maxWidth={'100%'} borderRadius={'2xl'}>This section keeps track of your crop maintenance, offering suggestions  to improve the quality and the quality of the crops as well as the growth conditions</Text>
@@ -700,7 +795,7 @@ const Yourland: React.FC = () => {
 				);
 			case 'Land statistics':
 				return (
-					<Box>
+					<Box className='landstat'>
 						{showPopup && (
 							<ConfirmationPopup
 								title="Modify Data"
@@ -808,7 +903,7 @@ const Yourland: React.FC = () => {
 				);
 			case 'Finance management':
 				return (
-					<Box>
+					<Box className='finance'>
 						{showPopup && (
 							<ConfirmationPopup
 								title="Modify Data"
@@ -853,7 +948,7 @@ const Yourland: React.FC = () => {
 		<Navbar />
 		<Flex mt={16} direction="column" p={4}>
 			<Text  mb={4} fontSize='3xl' fontWeight='semibold'>{cityCountry ? `${cityCountry.city}, ${cityCountry.country}` : 'No location available'}</Text>
-			<Flex gap='40px' mb={4}>
+			<Flex  className='navbar' gap='40px' mb={4}>
 				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (
 					<Text
 						key={section}
@@ -915,7 +1010,17 @@ const Yourland: React.FC = () => {
 				)}
 
 			</Box>
-		</Flex></>
+		</Flex>
+		{showOnboarding && (
+			<Tour
+			steps={steps}
+			isOpen={showOnboarding}
+			onRequestClose={() => setShowOnboarding(false)}
+			rounded={5} // Customize tooltip style
+			accentColor="#5cb85c" // Customize accent color
+			/>
+		)}
+		</>
 	);
 }
 export default Yourland;

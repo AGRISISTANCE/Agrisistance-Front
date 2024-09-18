@@ -32,7 +32,7 @@ function Sidebar(props: { routes: RoutesType[]; [x: string]: any }) {
 
 	// SIDEBAR
 	return (
-		<Box display={{ sm: 'none', xl: 'block' }} position='fixed' minH='100%'>
+		<Box className="sidebar" display={{ sm: 'none', xl: 'block' }} position='fixed' minH='100%'>
 			<Box
 				bg={sidebarBg}
 				transition={variantChange}
