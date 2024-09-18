@@ -73,12 +73,12 @@ const MyPosts: React.FC = () => {
     opportunitiesAndPartnership: defaultImages.partner,
     resourcesAndProducts: defaultImages.products,
   };
-
   return (
     <Box>
       <Button my={8} bgColor="#2ACC32" _hover={{ bgColor: "#239B43" }} color="white" mt={4} onClick={() => openModal()}>
         + Add New Post
       </Button>
+
 
       {activePosts.map(post => {
         // // Default image for posts based on category

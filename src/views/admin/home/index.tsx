@@ -106,24 +106,26 @@ export default function Home() {
         console.error('Failed to fetch user profile:', error);
       }
     };
-    fetchUserProfile();
+    //! Comment when using dummy data
+    // fetchUserProfile();
   }, []);
+
 
   //
   return (
-    <Flex direction="column" height="100vh" mt={16}>
-      <Navbar />
-      <Flex
-        align="center"
-        justify="center"
-        width="100%"
-        height="100%"
-        padding="20px"
-        boxSizing="border-box"
-        gap="50px"
-      >
-        <div>
-        <Profile/>
+  <Flex direction="column" height="100vh" mt={16}>
+    <Navbar /> {/* Add className */}
+    <Flex
+      align="center"
+      justify="center"
+      width="100%"
+      height="100%"
+      padding="20px"
+      boxSizing="border-box"
+      gap="50px"
+    >
+      <div className="profile-section"> {/* Add className */}
+        <Profile />
         <Box width="100%" maxW="1200px" mb="20px">
           <iframe
             width="100%"
@@ -135,82 +137,80 @@ export default function Home() {
             allowFullScreen
           />
         </Box>
-        </div>
-        <Flex direction="column" gap="10px" align="center">
-          <Text color="#2ACC32" textAlign="center" fontWeight="bold" fontSize="30px">
-            Selected Land
-          </Text>
-          {!selectedLand ? (
-            "No selected Land"
-          ) : (
-            <Land
-              landId={selectedLand.landId}
-              name={selectedLand.landName}
-              coordinates={[selectedLand.latitude.toString(), selectedLand.longitude.toString()]}
-              select={true} // Make sure it has select option
-            />
-          )}
-        </Flex>
+      </div>
+      <Flex direction="column" gap="10px" align="center">
+        <Text className="selected-land" color="#2ACC32" textAlign="center" fontWeight="bold" fontSize="30px">
+          Selected Land
+        </Text>
+        {!selectedLand ? (
+          "No selected Land"
+        ) : (
+          <Land
+            landId={selectedLand.landId}
+            name={selectedLand.landName}
+            coordinates={[selectedLand.latitude.toString(), selectedLand.longitude.toString()]}
+            select={true}
+          />
+        )}
       </Flex>
-      <Text color="#2ACC32" fontWeight="bold" fontSize="30px" ml="20px">
-        Other Lands:
-      </Text>
-      <Flex wrap="wrap" gap="40px" padding="40px">
+    </Flex>
+    <Text color="#2ACC32" fontWeight="bold" fontSize="30px" ml="20px">
+      Other Lands:
+    </Text>
+    <Flex wrap="wrap" gap="40px" padding="40px" className="other-lands">
       <Flex direction="column">
-            <Button onClick={handleButtonClick} fontSize="25px" >
-              <img src={addIcon} width="25px"/>
-              &nbsp; Add New Land
-            </Button>
-
-            {isOpen && (
-              <Box
-                className="modal-overlay"
-                position="fixed"
-                top="0"
-                left="0"
-                width="100%"
-                height="100%"
-                background="rgba(0,0,0,0.5)"
-                zIndex="999"
+        <Button className="add-new-land" onClick={handleButtonClick} fontSize="25px">
+          <img src={addIcon} width="25px" />
+          &nbsp; Add New Land
+        </Button>
+        {isOpen && (
+          <Box
+            className="modal-overlay"
+            position="fixed"
+            top="0"
+            left="0"
+            width="100%"
+            height="100%"
+            background="rgba(0,0,0,0.5)"
+            zIndex="999"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box background="#fff" borderRadius="30px" position="relative">
+              <AddNewLand />
+              <Button
+                onClick={onClose}
+                position="absolute"
+                top="20px"
+                right="20px"
+                backgroundColor="#000"
+                color="#fff"
+                padding="0"
+                borderRadius="50%"
+                width="40px"
+                height="40px"
+                fontSize="30px"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
+                border="none"
               >
-                <Box background="#fff" borderRadius="30px" position="relative">
-                  <AddNewLand />
-                  <Button
-                    onClick={onClose}
-                    position="absolute"
-                    top="20px"
-                    right="20px" // Adjusted this to make it closer to the edge
-                    backgroundColor="#000" // Set background color if needed
-                    color="#fff"
-                    padding="0"
-                    borderRadius="50%"
-                    width="40px" // Set width and height to make it a perfect circle
-                    height="40px"
-                    fontSize="30px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    border="none" // Remove border if not needed, or style it
-                  >
-                    <IoIosClose />
-                  </Button>
-                </Box>
-              </Box>
-            )}
-          </Flex>
-        {lands.map((land) => (
-            <Land
-              key={land.landId}
-              landId={land.landId}
-              name={land.landName}
-              coordinates={[land.latitude.toString(), land.longitude.toString()]}
-              select={false} // Include select functionality
-            />
-          ))}
+                <IoIosClose />
+              </Button>
+            </Box>
+          </Box>
+        )}
       </Flex>
+      {lands.map((land) => (
+        <Land
+          key={land.landId}
+          landId={land.landId}
+          name={land.landName}
+          coordinates={[land.latitude.toString(), land.longitude.toString()]}
+          select={false}
+        />
+      ))}
     </Flex>
-  );
-}
+  </Flex>
+)}

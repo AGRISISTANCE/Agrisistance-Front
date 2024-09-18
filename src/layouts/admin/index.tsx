@@ -1,56 +1,53 @@
-import React from 'react';
-// Chakra imports
+import React, { useEffect, useState } from 'react';
+// import Tour from 'reactour';
 import { Box } from '@chakra-ui/react';
-// Layout components
 import Sidebar from '../../components/sidebar/Sidebar';
 import { SidebarContext } from '../../contexts/SidebarContext';
-import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import routes from '../../routes';
 
-// Custom Chakra theme
+// Define onboarding steps
+// const steps: Step[] = [
+//   {
+//     target: '.profile-section', // Add this class to the Profile component wrapper
+//     content: 'This is your profile section where you can view and manage your profile details.',
+//   },
+//   {
+//     target: '.selected-land', // Add this class to the Selected Land section
+//     content: 'Here you can see the selected land details.',
+//   },
+//   {
+//     target: '.add-new-land', // Add this class to the "Add New Land" button
+//     content: 'Click here to add a new land to your profile.',
+//   },
+//   {
+//     target: '.other-lands', // Add this class to the Other Lands section
+//     content: 'These are the other lands you have.',
+//   },
+// ];
+
 export default function Dashboard(props: { [x: string]: any }) {
   const { ...rest } = props;
-  // states and functions
-  // const [fixed] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
-  // functions for changing the states from components
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  useEffect(() => {
+    setTimeout(() => {
+      setShowOnboarding(true);
+    }, 500); // Adjust the delay as needed
+  }, []);
+  useEffect(() => {
+    // Delay the onboarding start to ensure elements are in the DOM
+    const timer = setTimeout(() => {
+      setShowOnboarding(true);
+    }, 1000); // Adjust delay as necessary
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const getRoute = () => {
     return window.location.pathname !== '/admin/full-screen-maps';
   };
-  // const getActiveRoute = (routes: RoutesType[]): string => {
-  //   let activeRoute = 'Default Brand Text';
-  //   for (let i = 0; i < routes.length; i++) {
-  //     if (
-  //       window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-  //     ) {
-  //       return routes[i].name;
-  //     }
-  //   }
-  //   return activeRoute;
-  // };
-  // const getActiveNavbar = (routes: RoutesType[]): boolean => {
-  //   let activeNavbar = false;
-  //   for (let i = 0; i < routes.length; i++) {
-  //     if (
-  //       window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-  //     ) {
-  //       return routes[i].secondary;
-  //     }
-  //   }
-  //   return activeNavbar;
-  // };
-  // const getActiveNavbarText = (routes: RoutesType[]): string | boolean => {
-  //   let activeNavbar = false;
-  //   for (let i = 0; i < routes.length; i++) {
-  //     if (
-  //       window.location.href.indexOf(routes[i].layout + routes[i].path) !== -1
-  //     ) {
-  //       return routes[i].name;
-  //     }
-  //   }
-  //   return activeNavbar;
-  // };
+
   const getRoutes = (routes: RoutesType[]): any => {
     return routes.map((route: RoutesType, key: any) => {
       if (route.layout === '/dashboard') {
@@ -62,8 +59,7 @@ export default function Dashboard(props: { [x: string]: any }) {
       }
     });
   };
-  document.documentElement.dir = 'ltr';
-  // const { onOpen } = useDisclosure();
+
   return (
     <Box>
       <SidebarContext.Provider
@@ -104,8 +100,8 @@ export default function Dashboard(props: { [x: string]: any }) {
               </Routes>
             </Box>
           ) : null}
-          <Box>
-          </Box>
+
+          
         </Box>
       </SidebarContext.Provider>
     </Box>
