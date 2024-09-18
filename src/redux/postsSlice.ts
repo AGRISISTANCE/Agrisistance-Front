@@ -18,7 +18,7 @@ interface Post {
 export type CategoryType = 'opportunitiesAndPartnership' | 'businessPromotion' | 'resourcesAndProducts';
 
 // Flag to toggle between dummy and real data
-const USE_DUMMY_DATA = false;
+const USE_DUMMY_DATA = true;
 
 const initialDummyPosts: Post[] = [
   {

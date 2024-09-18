@@ -13,6 +13,7 @@ import { apiCall } from '../../../services/api';
 import { setUser, UserInfo } from '../../../redux/userSlice'; // Adjust the path as necessary
 import { setInitialLands } from '../../../redux/landsSlice';
 import Navbar from '../navbar/navbar';
+import addIcon from "../../../assets/img/dashboards/addIcon.jpg"
 
 export default function Home() {
   const lands = useSelector((state: RootState) => state.lands.lands);
@@ -77,10 +78,10 @@ export default function Home() {
     }
 };
 
-     
-  useEffect(() => {
-    fetchLands();
-  }, []);
+  //! comment when using dummy data
+  // useEffect(() => {
+  //   fetchLands();
+  // }, []);
 
   // fetching user data!
   useEffect(() => {
@@ -110,7 +111,7 @@ export default function Home() {
 
   //
   return (
-    <Flex direction="column" height="100vh">
+    <Flex direction="column" height="100vh" mt={16}>
       <Navbar />
       <Flex
         align="center"
@@ -123,6 +124,17 @@ export default function Home() {
       >
         <div>
         <Profile/>
+        <Box width="100%" maxW="1200px" mb="20px">
+          <iframe
+            width="100%"
+            height="300"
+            src="https://www.youtube.com/embed/?listType=playlist&list=PLY--2DKz-ETN3XDhpM8wN384PWwBp5R6j"
+            title="Agriculture Videos"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </Box>
         </div>
         <Flex direction="column" gap="10px" align="center">
           <Text color="#2ACC32" textAlign="center" fontWeight="bold" fontSize="30px">
@@ -145,7 +157,11 @@ export default function Home() {
       </Text>
       <Flex wrap="wrap" gap="40px" padding="40px">
       <Flex direction="column">
-            <Button onClick={handleButtonClick} fontSize="25px" >+ Add New Land</Button>
+            <Button onClick={handleButtonClick} fontSize="25px" >
+              <img src={addIcon} width="25px"/>
+              &nbsp; Add New Land
+            </Button>
+
             {isOpen && (
               <Box
                 className="modal-overlay"
