@@ -29,15 +29,15 @@ return (
   px={16}
 >
   <Flex
-    align="right"
-    justify={{ base: 'space-between', md: 'flex-end' }} // Space between on small screens, align right on medium/large
+    align={{base:"right", md:"center"}}
+    justify={{ base: 'space-between', md: 'space-between' }} // Space between on small screens, align right on medium/large
     height="100%"
     padding="0 20px"
     boxSizing="border-box"
   >
     <SidebarResponsive routes={routes} />
     
-    <Flex align="center" ml={{ base: '0', md: 'auto' }}> {/* Add margin to push elements */}
+    <Flex align="center" ml='0'> {/* Add margin to push elements */}
       <Image
         src={user.profilePicture || avatar} 
         alt={`${user.firstName} ${user.lastName}`}
