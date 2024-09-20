@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, Button, Flex, Img, Text, useDisclosure } from '@chakra-ui/react';
 import Profile from './components/Profile';
-import avatars from '../../../assets/img/avatars/avatars';
 import Land from './components/Land';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store'; // Ensure this import is correct
