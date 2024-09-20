@@ -5,7 +5,7 @@ import { selectLand, removeLand, setSelectedLand, LandInfo } from '../../../../r
 import land from '../../../../assets/img/land/land';
 import { apiCall } from '../../../../services/api';
 import { RootState } from '../../../../redux/store';
-import ConfirmationPopup from '../../../../common/Popup/ConfirmationPopup'; // Adjust the path as necessary
+import ConfirmationPopup from '../../../../components/Popup/ConfirmationPopup'; // Adjust the path as necessary
 import { useNavigate } from 'react-router-dom';
 
 

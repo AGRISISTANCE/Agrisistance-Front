@@ -8,7 +8,7 @@ import cropsData from './utilImages/utilImages';
 // import { Button } from '../../../common/Button/index'
 //import TotalSpent from '../default/components/TotalSpent';
 import BusinessPlanModal from './components/BusinessPlanModal';
-import ConfirmationPopup from '../../../common/Popup/ConfirmationPopup';
+import ConfirmationPopup from '../../../components/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store';

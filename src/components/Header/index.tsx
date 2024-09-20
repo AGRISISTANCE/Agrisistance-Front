@@ -3,9 +3,9 @@ import React from 'react';
 import { useState } from "react";
 import { Row, Col, Drawer } from "antd";
 import { withTranslation, TFunction } from "react-i18next";
-import Container from "../../common/Container";
-import { SvgIcon } from "../../common/SvgIcon";
-import { Button } from "../../common/Button";
+import Container from "../Container";
+import { SvgIcon } from "../SvgIcon";
+import { Button } from "../Button";
 import {
   HeaderSection,
   LogoContainer,

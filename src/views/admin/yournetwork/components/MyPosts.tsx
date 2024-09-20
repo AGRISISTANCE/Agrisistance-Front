@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store'; // Adjust the import based on your store setup
 import defaultImages from './assets/defaultImages'; // Import default images
 import { apiCall } from '../../../../services/api';
-import ConfirmationPopup from '../../../../common/Popup/ConfirmationPopup';
+import ConfirmationPopup from '../../../../components/Popup/ConfirmationPopup';
 import { useToast } from '@chakra-ui/react';
 
 const MyPosts: React.FC = () => {

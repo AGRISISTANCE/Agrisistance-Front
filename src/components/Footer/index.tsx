@@ -19,9 +19,9 @@ import {
   Buttons,
   FooterNote,
 } from "./styles";
-import phone from "../icons/phone.png";
-import gmail from "../icons/gmail.png";
-import whatsapp from "../icons/whatsapp.png";
+import phone from "./icons/phone.png";
+import gmail from "./icons/gmail.png";
+import whatsapp from "./icons/whatsapp.png";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 // import { useNavigate } from "react-router-dom";
