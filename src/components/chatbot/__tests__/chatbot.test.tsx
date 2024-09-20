@@ -2,22 +2,56 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import ChatBot from "../Chatbot";
+import { apiCall } from "../../../services/api";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import store, { persistor } from "../../../redux/store"; // Adjust path as necessary
 
-// Mock the image imports
+// Mock image imports
 jest.mock(
   "../../../assets/img/icons/farmeremoji.png",
   () => "mocked-farmeremoji.png"
 );
+jest.mock(
+  "../../../assets/img/icons/farmeremoji.png",
+  () => "mocked-header-icon.png"
+);
+
+// Mock the apiCall function
+jest.mock("../../../services/api", () => ({
+  apiCall: jest.fn(),
+}));
+
+beforeEach(() => {
+  (apiCall as jest.Mock).mockReset();
+});
 
 describe("ChatBot Component", () => {
+  test("renders without crashing", () => {
+    render(
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <ChatBot />
+        </PersistGate>
+      </Provider>
+    );
+
+    // Ensure that the chatbot toggle button is present
+    const toggleButton = screen.getByRole("button", { name: /chat/i });
+    expect(toggleButton).toBeInTheDocument();
+  });
+
   test("Chatbot opens and displays initial message", () => {
-    render(<ChatBot />);
+    render(
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <ChatBot />
+        </PersistGate>
+      </Provider>
+    );
 
     // Ensure the chatbot toggle button is present
-    const toggleButton = screen.getByRole("button");
-    expect(toggleButton).toBeInTheDocument();
-
-    // Click the toggle button to open the chatbot
+    const toggleButton = screen.getByRole("button", { name: /chat/i });
     fireEvent.click(toggleButton);
 
     // Check that the initial message is displayed
@@ -27,10 +61,21 @@ describe("ChatBot Component", () => {
   });
 
   test("User can send a message and receive a response", async () => {
-    render(<ChatBot />);
+    // Mock the API call to return a fixed response
+    (apiCall as jest.Mock).mockResolvedValueOnce({
+      result: "You can grow corn by planting seeds in fertile soil.",
+    });
+
+    render(
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <ChatBot />
+        </PersistGate>
+      </Provider>
+    );
 
     // Open the chatbot
-    const toggleButton = screen.getByRole("button");
+    const toggleButton = screen.getByRole("button", { name: /chat/i });
     fireEvent.click(toggleButton);
 
     // Type a message in the input field
@@ -48,12 +93,10 @@ describe("ChatBot Component", () => {
     expect(screen.getByText("...")).toBeInTheDocument();
 
     // Wait for the chatbot's response to be displayed
-    await waitFor(
-      () =>
-        expect(
-          screen.getByText("Thank you for your message!")
-        ).toBeInTheDocument(),
-      { timeout: 2000 } // Increase timeout to 2000ms to allow time for setTimeout
+    await waitFor(() =>
+      expect(
+        screen.getByText("You can grow corn by planting seeds in fertile soil.")
+      ).toBeInTheDocument()
     );
   });
 });
