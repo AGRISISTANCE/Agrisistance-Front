@@ -113,15 +113,16 @@ const ChatBot: React.FC = () => {
   };
 
   return (
-    <div className={`chatbot-container ${isOpen ? "open" : ""}`}>
-      <button
+    <>
+    {!isOpen && <button
         className="chatbot-toggle"
         onClick={handleToggle}
         aria-label="Chat"
       >
         <img src={farmerEmoji} alt="Chat" className="chatbot-icon" />
-      </button>
-      {isOpen && (
+    </button> }
+    {isOpen && (
+    <div className={`chatbot-container ${isOpen ? "open" : ""}`}>
         <div className="chatbot-box">
           <div className="chatbot-header">
             <img
@@ -180,8 +181,10 @@ const ChatBot: React.FC = () => {
             <button onClick={handleSendMessage}>Send</button>
           </div>
         </div>
-      )}
     </div>
+    )}
+    </>
+    
   );
 };
 
