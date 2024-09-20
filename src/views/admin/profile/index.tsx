@@ -18,8 +18,8 @@ const UserProfile: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [successMessageType, setSuccessMessageType] = useState(null); //for email
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false); //for email
   const [showErrorAlert, setShowErrorAlert] = useState<{message: string} | null>(null);
   const [showInformationUpdate, setShowInformationUpdate] = useState(false);
   const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
@@ -27,9 +27,10 @@ const UserProfile: React.FC = () => {
 
   // Helper function to validate password strength
   const validatePassword = (password: string) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&\-_.^])[A-Za-z\d@$!%*#?&\-_.^]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&\-_.^=])[A-Za-z\d@$!%*#?&\-_.^=]{8,}$/;
     return passwordRegex.test(password);
-  };
+};
+
 
   // Helper function to validate email format
   const validateEmail = (email: string) => {
@@ -102,19 +103,20 @@ const UserProfile: React.FC = () => {
         },
       }, token);
 
-      setShowSuccessAlert(true);
+      // Show the 'email sent' message
+      setSuccessMessageType('email-sent');
       setTimeout(() => window.location.reload(), 1000);
 
     } catch (error) {
       console.error('Failed to update email', error);
       setShowErrorAlert({message: 'Failed to update email. Please try again.'});
     }
-  };
+};
 
   useEffect(() => {
-    // Show email success alert if the URL is /dashboard/profile/email-updated-successfully
+    // Show 'email updated' message if the URL is /dashboard/profile/email-updated-successfully
     if (location.pathname === '/dashboard/profile/email-updated-successfully') {
-      setShowSuccessAlert(true);
+      setSuccessMessageType('email-updated');
     }
   }, [location]);
 
@@ -329,14 +331,20 @@ const UserProfile: React.FC = () => {
             Save changes
           </button>
           {/* //! Email */}
-          {showSuccessAlert && (
-        <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
-          <AlertIcon boxSize="40px" mr={0} />
-          <AlertTitle mt={4} mb={1} fontSize="lg">Email Verification Sent!</AlertTitle>
-          <AlertDescription maxWidth="sm">We've sent a verification link to your new email address. Please check your email to complete the process.</AlertDescription>
-          <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowSuccessAlert(false)} />
-        </Alert>
-      )}
+          {successMessageType && (
+          <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
+            <AlertIcon boxSize="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">
+              {successMessageType === 'email-sent' ? 'Email Verification Sent!' : 'Email Successfully Updated!'}
+            </AlertTitle>
+            <AlertDescription maxWidth="sm">
+              {successMessageType === 'email-sent' 
+                ? "We've sent a verification link to your new email address. Please check your email to complete the process."
+                : "Your email has been successfully updated."}
+            </AlertDescription>
+            <CloseButton position="absolute" right="8px" top="8px" onClick={() => setSuccessMessageType(null)} />
+          </Alert>
+        )}
       
           <div
             key={'email'}

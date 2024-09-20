@@ -45,17 +45,19 @@ function ResetPassword() {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
-    const { token } = useParams<{ token: string }>(); // Extract the token from the URL
-
     const handleClick = () => setShow(!show);
 
     // Helper function to validate password strength;
     const validatePassword = (password: string) => {
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&\-_.^])[A-Za-z\d@$!%*#?&\-_.^]{8,}$/;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&\-_.^=])[A-Za-z\d@$!%*#?&\-_.^=]{8,}$/;
         return passwordRegex.test(password);
-      };
-
-
+    };
+    
+    
+    //! getting token from backend
+    const { token } = useParams<{ token: string }>(); // Extract the token from the URL
+    console.log("The token from the URL is:", token); 
+    
     const handleResetPassword = async () => {
         // Clear previous messages
         setMessage("");
@@ -68,7 +70,7 @@ function ResetPassword() {
         }
 
         if (!validatePassword(password)) {
-        setMessage("Password must be at least 8 characters long and include both letters and numbers.");
+        setMessage("Password must be at least 8 characters long and include letters, numbers and special characters.");
         setMessageColor("red");
         return;
         }
@@ -86,19 +88,21 @@ function ResetPassword() {
 
         try {
         const credentials = { newPassword: password };
-
+        console.log("the token getted from the link is: ", token)
         const response = await apiCall(`/auth/reset-password/${token}`, {
-            method: 'PUT',
+            method: 'POST',
             data: credentials,
         });
-
-        setMessage("Password changed successfully! Redirecting...");
-        setMessageColor("green");
-        setTimeout(() => {
-            navigate("/auth/login"); // Redirect to login on successful reset
-        }, 1000);
+        if (response){
+            console.log("response getted from reset pass api: ", response)
+            setMessage("Password changed successfully! Redirecting...");
+            setMessageColor("green");
+            setTimeout(() => {
+                navigate("/auth/login"); // Redirect to login on successful reset
+            }, 1500);
+        }
         } catch (error: any) {
-        setMessage("Password reset failed. Please confirm your inputs and try again.");
+        setMessage("Password reset failed.");
         setMessageColor("red");
         } finally {
         setLoading(false);

@@ -69,9 +69,10 @@ function SignUp() {
 
   // Helper function to validate password strength
   const validatePassword = (password: string) => {
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&\-_.^])[A-Za-z\d@$!%*#?&\-_.^]{8,}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&\-_.^=])[A-Za-z\d@$!%*#?&\-_.^=]{8,}$/;
     return passwordRegex.test(password);
-  };
+};
+
 
   const registerUser = async () => {
     // Clear any previous messages
