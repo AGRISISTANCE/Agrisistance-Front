@@ -36,33 +36,33 @@ function ForgotPassword() {
     const brandStars = useColorModeValue("brand.500", "brand.400");
 
     const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [messageColor, setMessageColor] = useState(""); // Optional: to color the message
-  const [loading, setLoading] = useState(false);
-  const [showCodeAlert, setShowCodeAlert] = useState(false);
+    const [message, setMessage] = useState("");
+    const [messageColor, setMessageColor] = useState(""); // Optional: to color the message
+    const [loading, setLoading] = useState(false);
+    const [showCodeAlert, setShowCodeAlert] = useState(false);
 
-  // Helper function to validate email format
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+    // Helper function to validate email format
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
 
-  const sendVerificationCode = async () => {
-    // Clear previous messages
-    setMessage("");
+    const sendVerificationCode = async () => {
+        // Clear previous messages
+        setMessage("");
 
-    // Client-side validation
-    if (!email) {
-      setMessage("Please enter your email address.");
-      setMessageColor("red");
-      return;
-    }
+        // Client-side validation
+        if (!email) {
+        setMessage("Please enter your email address.");
+        setMessageColor("red");
+        return;
+        }
 
-    if (!validateEmail(email)) {
-      setMessage("Please enter a valid email address.");
-      setMessageColor("red");
-      return;
-    }
+        if (!validateEmail(email)) {
+        setMessage("Please enter a valid email address.");
+        setMessageColor("red");
+        return;
+        }
 
     // Proceed if input is valid
     setLoading(true);

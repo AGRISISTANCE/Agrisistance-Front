@@ -29,8 +29,6 @@ import LandingPage from './views/Landing/landingPage';
 import Error from './views/404';
 import Plan from './views/admin/plan';
 import Yournetwork from './views/admin/yournetwork';
-import EmailUpdatedSuccessfully from './views/admin/profile/emailUpdatedSuccessfully';
-import EmailVerified from './views/auth/emailverified';
 import ForgetPassword from './views/auth/ForgotPassword';
 import ResetPassword from './views/auth/reset-password';
 
@@ -52,7 +50,7 @@ const routes = [
   {
     name: 'Log In',
     layout: '/auth',
-    path: '/login',
+    path: '/login/*',
     icon: <Icon as={MdLock} width="20px" height="20px" color="inherit" />,
     component: <LogInCentered />,
   },
@@ -85,20 +83,7 @@ const routes = [
     path: '/plans/*',
     component: <Plan />,
   },
-  {
-    name: 'email Updated',
-    layout: '/dashboard',
-    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
-    path: '/profile/email-updated-successfully',
-    component: <EmailUpdatedSuccessfully />,
-  },
-  {
-    name: 'email Verified',
-    layout: '/auth',
-    icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
-    path: '/email-verified-successfully',
-    component: <EmailVerified />,
-  },
+
   {
     name: 'forgot password',
     layout: '/auth',

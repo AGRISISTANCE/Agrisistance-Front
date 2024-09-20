@@ -1,8 +1,8 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation  } from "react-router-dom";
 
 // Chakra imports
 import {
@@ -49,6 +49,17 @@ function LogIn() {
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState(""); // Optional: to color the message
   const [loading, setLoading] = useState(false);
+
+  const [showEmailVerificationAlert, setShowEmailVerificationAlert] = useState(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Show email verification success alert if the URL matches
+    if (location.pathname === '/auth/login/email-verified-successfully') {
+      setShowEmailVerificationAlert(true);
+    }
+  }, [location]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -273,8 +284,26 @@ function LogIn() {
             </NavLink>
           </Text>
         </Flex>
+        {showEmailVerificationAlert && (
+        <Alert status="success">
+          <AlertIcon />
+          <Box>
+            <AlertTitle>Email Verified!</AlertTitle>
+            <AlertDescription>
+              Your email has been verified successfully. Please log in to continue.
+            </AlertDescription>
+          </Box>
+          <CloseButton
+            alignSelf="flex-start"
+            position="relative"
+            right={-1}
+            top={-1}
+            onClick={() => setShowEmailVerificationAlert(false)}
+          />
+        </Alert>
+      )}
       </Flex>
-
+      
     </DefaultAuth >
   );
 

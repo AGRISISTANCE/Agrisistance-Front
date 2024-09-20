@@ -33,10 +33,7 @@ export function SidebarLinks(props: { routes: RouteType[] }) {
 			return routes.map((route: RouteType, index: number) => {
 			const isExcludedRoute =
 				route.path === '/signup' ||
-				route.path === '/login' ||
-				route.path === '/profile/email-updated-successfully' ||
-				route.path === '/email-verified-successfully' ||
-				route.path === '/profile/email-verified' ||
+				route.path === '/login/*' ||
 				route.path.startsWith('/reset-password') ||
 				route.path === '/forgot-password';
 		

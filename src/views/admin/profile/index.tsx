@@ -11,10 +11,113 @@ import { apiCall } from '../../../services/api';
 import Tour from 'reactour';
 
 
+
 const UserProfile: React.FC = () => {
   const token = useSelector((state: RootState) => state.token.token);
   const dispatch = useDispatch();
-  
+  const location = useLocation();
+  const navigate = useNavigate();
+
+
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState<{message: string} | null>(null);
+  const [showInformationUpdate, setShowInformationUpdate] = useState(false);
+  const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
+
+
+  // Helper function to validate password strength
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&\-_.^])[A-Za-z\d@$!%*#?&\-_.^]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  // Helper function to validate email format
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleUserInfoChanges = async () => {
+    try {
+      await apiCall('/profile/edit-profile', {
+        method: 'PUT',
+        requireAuth: true,
+        data: {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          phone_number: formData.phoneNumber,
+          country: user.country,
+        },
+      }, token);
+
+      setShowInformationUpdate(true);
+      setIsEditing({ firstName: false, lastName: false, phoneNumber: false, email: false });
+      setTimeout(() => window.location.reload(), 1000);
+
+    } catch (error) {
+      console.error('Failed to update user information', error);
+      setShowErrorAlert({message: 'Failed to update user information. Please try again.'});
+    }
+  };
+
+  const handleChangePassword = async () => {
+    // Validate password before submitting
+    if (!validatePassword(formData.newPassword)) {
+      setShowErrorAlert({message: 'Password must be at least 8 characters long, contain at least one letter, one number, and one special character.'});
+      return;
+    }
+
+    try {
+      await apiCall('/profile/update-password', {
+        method: 'PUT',
+        requireAuth: true,
+        data: {
+          oldPassword: formData.currentPassword,
+          newPassword: formData.newPassword,
+        },
+      }, token);
+
+      setShowPasswordUpdate(true);
+      setTimeout(() => window.location.reload(), 1000);
+
+    } catch (error) {
+      console.error('Failed to update password', error);
+      setShowErrorAlert({message: 'Failed to update password. Please try again.'});
+    }
+  };
+
+  const handleChangeEmail = async () => {
+    // Validate email before submitting
+    if (!validateEmail(formData.email)) {
+      setShowErrorAlert({message: 'Invalid email format. Please enter a valid email address.'});
+      return;
+    }
+
+    try {
+      await apiCall('/profile/update-email', {
+        method: 'PUT',
+        requireAuth: true,
+        data: {
+          eMail: formData.email,
+        },
+      }, token);
+
+      setShowSuccessAlert(true);
+      setTimeout(() => window.location.reload(), 1000);
+
+    } catch (error) {
+      console.error('Failed to update email', error);
+      setShowErrorAlert({message: 'Failed to update email. Please try again.'});
+    }
+  };
+
+  useEffect(() => {
+    // Show email success alert if the URL is /dashboard/profile/email-updated-successfully
+    if (location.pathname === '/dashboard/profile/email-updated-successfully') {
+      setShowSuccessAlert(true);
+    }
+  }, [location]);
+
   // Get the user state from the Redux store
   const user = useSelector((state: any) => state.user);
 
@@ -53,8 +156,7 @@ const UserProfile: React.FC = () => {
 
   const [showOnboarding, setShowOnboarding] = useState(false);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+
   const steps = [
     {
       selector: '.profile',
@@ -122,78 +224,6 @@ const UserProfile: React.FC = () => {
     phoneNumber: false,
   });
 
-  const handleUserInfoChanges = async () => {
-    try {
-      await apiCall('/profile/edit-profile', {
-        method: 'PUT',
-        requireAuth: true,
-        data: {
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          phone_number: formData.phoneNumber,
-          country: user.country, // Assuming user.country is available
-        },
-      }, token);
-
-      setShowInformationUpdate(true);
-
-      setIsEditing({
-        firstName: false,
-        lastName: false,
-        phoneNumber: false,
-        email: false,
-      });
-      console.log("form data after handleUserInfoChanges: ", formData);
-      setTimeout(()=>{
-        window.location.reload();
-      },1000)
-
-    } catch (error) {
-      console.error('Failed to update user information', error);
-    }
-  };
-
-  const handleChangePassword = async () => {
-    try {
-      await apiCall('/profile/update-password', {
-        method: 'PUT',
-        requireAuth: true,
-        data: {
-          oldPassword: formData.currentPassword,
-          newPassword: formData.newPassword,
-        },
-      }, token);
-
-      setShowPasswordUpdate(true);
-      console.log("form data after password: ", formData);
-      setTimeout(()=>{
-        window.location.reload();
-      },1000)
-    } catch (error) {
-      console.error('Failed to update password', error);
-    }
-  };
-
-  const handleChangeEmail = async () => {
-    try {
-      await apiCall('/profile/update-email', {
-        method: 'PUT',
-        requireAuth: true,
-        data: {
-          eMail: formData.email,
-        },
-      }, token);
-
-      setShowSuccessAlert(true);
-      console.log("form data after email change: ", formData);
-      setTimeout(()=>{
-        window.location.reload();
-      },1000)
-    } catch (error) {
-      console.error('Failed to update email', error);
-    }
-  };
-
   const handleEditToggle = (field: keyof typeof isEditing) => {
     setIsEditing((prev) => ({
       ...prev,
@@ -210,10 +240,8 @@ const UserProfile: React.FC = () => {
 
 
 
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [showInformationUpdate, setShowInformationUpdate] = useState(false);
-  const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
 
+  
   
 
 
@@ -235,18 +263,26 @@ const UserProfile: React.FC = () => {
         background="#fff"
         padding="40px"
         gap="20px"
-        >{showInformationUpdate && (
+        >
+          {/* //! errors */}
+          {showErrorAlert && (
+          <Alert status="error" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
+            <AlertIcon boxSize="40px" mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize="lg">Error</AlertTitle>
+            <AlertDescription maxWidth="sm">{showErrorAlert.message}</AlertDescription>
+            <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowErrorAlert(null)} />
+          </Alert>
+        )}
+          {/* //! User informations  */}
+          {showInformationUpdate && (
           <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
             <AlertIcon boxSize="40px" mr={0} />
-            <AlertTitle mt={4} mb={1} fontSize="lg">
-              Information updated successfully
-            </AlertTitle>
-            <AlertDescription maxWidth="sm">
-              Your information have been recorded.
-            </AlertDescription>
+            <AlertTitle mt={4} mb={1} fontSize="lg">Information updated successfully</AlertTitle>
+            <AlertDescription maxWidth="sm">Your information has been recorded.</AlertDescription>
             <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowInformationUpdate(false)} />
           </Alert>
         )}
+
         <form
           style={{
             width: '100%',
@@ -296,15 +332,12 @@ const UserProfile: React.FC = () => {
           {showSuccessAlert && (
         <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
           <AlertIcon boxSize="40px" mr={0} />
-          <AlertTitle mt={4} mb={1} fontSize="lg">
-            Email Verification Sent!
-          </AlertTitle>
-          <AlertDescription maxWidth="sm">
-            We've sent a verification link to your new email address. Please check your email to complete the process.
-          </AlertDescription>
+          <AlertTitle mt={4} mb={1} fontSize="lg">Email Verification Sent!</AlertTitle>
+          <AlertDescription maxWidth="sm">We've sent a verification link to your new email address. Please check your email to complete the process.</AlertDescription>
           <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowSuccessAlert(false)} />
         </Alert>
       )}
+      
           <div
             key={'email'}
             style={{
@@ -337,19 +370,16 @@ const UserProfile: React.FC = () => {
           <button className="btn-save" type="button" onClick={handleChangeEmail}>
             Change email
           </button>
-          {/* //! Password */}
-          {showPasswordUpdate && (
+        {/* //! Password */}
+        {showPasswordUpdate && (
         <Alert status="success" variant="subtle" flexDirection="column" alignItems="center" justifyContent="center" textAlign="center" height="200px">
           <AlertIcon boxSize="40px" mr={0} />
-          <AlertTitle mt={4} mb={1} fontSize="lg">
-            Password changed successfully!
-          </AlertTitle>
-          <AlertDescription maxWidth="sm">
-            Next time login with you new password
-          </AlertDescription>
+          <AlertTitle mt={4} mb={1} fontSize="lg">Password changed successfully!</AlertTitle>
+          <AlertDescription maxWidth="sm">Next time, login with your new password.</AlertDescription>
           <CloseButton position="absolute" right="8px" top="8px" onClick={() => setShowPasswordUpdate(false)} />
         </Alert>
       )}
+
           <InputGroup size="md" style={{
             width: '80%',
             border: `1px solid #78747A`,

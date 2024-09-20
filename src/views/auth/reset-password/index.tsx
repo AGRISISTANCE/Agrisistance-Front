@@ -49,17 +49,11 @@ function ResetPassword() {
 
     const handleClick = () => setShow(!show);
 
-    // Helper function to validate password strength
-    // const validatePassword = (password: string) => {
-    //     // Example: Password must be at least 8 characters long and include letters and numbers
-    //     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-    //     return passwordRegex.test(password);
-    // };
+    // Helper function to validate password strength;
     const validatePassword = (password: string) => {
-        // Password must be at least 8 characters long, include at least one letter, one number, and one special character
-        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&\-_.^])[A-Za-z\d@$!%*#?&\-_.^]{8,}$/;
         return passwordRegex.test(password);
-    };
+      };
 
 
     const handleResetPassword = async () => {
