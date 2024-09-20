@@ -78,7 +78,13 @@ const MyPosts: React.FC = () => {
       // showNotification(response.message, 'success'); // Display success message
       refreshPage(); // Refresh the page after success
     } catch (error) {
-      // showNotification('Failed to archive the post. Please try again.', 'error');
+      toast({
+        title: "Error",
+        description: "Failed to archive the post. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       console.error('Failed to archive post:', error);
     }
   };
@@ -100,7 +106,13 @@ const MyPosts: React.FC = () => {
       // showNotification(response.message, 'success'); // Display success message
       refreshPage(); // Refresh the page after success
     } catch (error) {
-      // showNotification('Failed to repost the post. Please try again.', 'error');
+      toast({
+        title: "Error",
+        description: "Failed to repost the post. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       console.error('Failed to repost post:', error);
     }
   };
@@ -119,10 +131,15 @@ const MyPosts: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
-      // showNotification(response.message, 'success'); // Display success message
       refreshPage(); // Refresh the page after success
     } catch (error) {
-      // showNotification('Failed to delete the post. Please try again.', 'error');
+      toast({
+        title: "Error",
+        description: "Failed to delete the post. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
       console.error('Failed to delete post:', error);
     }
   };
@@ -217,6 +234,7 @@ const MyPosts: React.FC = () => {
             onModify={() => openModal(post)} // Pass the post data to the modal
             onArchive={() => openConfirmationPopup('Are you sure you want to archive this post?', () => archivePost(post.postID), post.postID)}
             onDelete={() => openConfirmationPopup('Are you sure you want to delete this post?', () => deletePost(post.postID), post.postID)}
+            onRepost={() => openConfirmationPopup('Are you sure you want to repost this post?', () => repostPost(post.postID), post.postID)}
           />
         );
       })}
