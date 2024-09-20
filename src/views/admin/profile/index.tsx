@@ -9,6 +9,7 @@ import { MdOutlineRemoveRedEye } from 'react-icons/md';
 import { RootState } from '../../../redux/store';
 import { apiCall } from '../../../services/api';
 import Tour from 'reactour';
+import Navbar from '../navbar/navbar';
 
 
 
@@ -248,6 +249,9 @@ const UserProfile: React.FC = () => {
 
 
   return (
+    <>
+    <Navbar />
+    
     <Flex
       width="100%"
       display="flex"
@@ -256,6 +260,7 @@ const UserProfile: React.FC = () => {
       align="center"
       gap="40px"
       className="profile"
+      mt={"16"}
     >
       
       <Flex
@@ -444,8 +449,8 @@ const UserProfile: React.FC = () => {
         />
       )}
     </Flex>
-  );
-};
+    </>);
+  };
 
 export default UserProfile;
 

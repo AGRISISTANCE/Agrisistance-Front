@@ -73,8 +73,8 @@ export function SidebarResponsive(props: { routes: RoutesType[] }) {
 					as={IoMenuOutline}
 					color={menuColor}
 					my='auto'
-					w='20px'
-					h='20px'
+					w='30px'
+					h='30px'
 					me='10px'
 					_hover={{ cursor: 'pointer' }}
 				/>
@@ -103,7 +103,6 @@ export function SidebarResponsive(props: { routes: RoutesType[] }) {
 					</DrawerBody>
 				</DrawerContent>
 			</Drawer>
-			<Icon as={MdLogout} width="20px" height="20px" color="inherit" />
 		</Flex>
 	);
 }
