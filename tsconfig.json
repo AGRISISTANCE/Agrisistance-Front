@@ -1,17 +1,9 @@
 {
   "compilerOptions": {
-    "typeRoots": [
-      "node_modules/@types",
-      "src/types"
-    ],
-    "types": ["jest", "node"],
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "types": ["jest", "node", "cypress"], // Add "cypress" here
     "target": "es2016",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "es2015.iterable"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext", "es2015.iterable"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -37,6 +29,7 @@
   },
   "include": [
     "./src",
+    "cypress", // Include the cypress folder
     "**/*.ts",
     "**/*.tsx"
   ]

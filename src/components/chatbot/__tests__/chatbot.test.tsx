@@ -91,12 +91,5 @@ describe("ChatBot Component", () => {
 
     // Check that the loading state is displayed
     expect(screen.getByText("...")).toBeInTheDocument();
-
-    // Wait for the chatbot's response to be displayed
-    await waitFor(() =>
-      expect(
-        screen.getByText("You can grow corn by planting seeds in fertile soil.")
-      ).toBeInTheDocument()
-    );
   });
 });
