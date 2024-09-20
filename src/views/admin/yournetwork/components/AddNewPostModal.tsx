@@ -73,10 +73,11 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
   };
 
   useEffect(() => {
+    console.log("printing post object: ", post)
     if (post) {
-      setTitle(post.content.title);
-      setDescription(post.content.description);
-      setCategory(post.content.category);
+      setTitle(post.title);
+      setDescription(post.description);
+      // setCategory(post.type);
       // Handle image if needed
     } else {
       setTitle('');

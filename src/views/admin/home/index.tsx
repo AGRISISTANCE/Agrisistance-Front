@@ -68,8 +68,8 @@ export default function Home() {
         suggestedImprovementSoil: [] as string[], 
         suggestedImprovementCrop: [] as string[], 
       }));
-      //! commentd when using dummy data
-      // dispatch(setInitialLands(mappedLands));
+      //! comment when using dummy data
+      dispatch(setInitialLands(mappedLands));
       console.log("Initial lands set successfully", mappedLands);
       
     } catch (error) {

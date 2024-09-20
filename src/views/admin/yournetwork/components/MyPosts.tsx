@@ -7,7 +7,7 @@ import AddNewPostModal from './AddNewPostModal';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store'; // Adjust the import based on your store setup
 import defaultImages from './assets/defaultImages'; // Import default images
-import { apiCall } from 'services/api';
+import { apiCall } from '../../../../services/api';
 import ConfirmationPopup from '../../../../common/Popup/ConfirmationPopup';
 import { useToast } from '@chakra-ui/react';
 

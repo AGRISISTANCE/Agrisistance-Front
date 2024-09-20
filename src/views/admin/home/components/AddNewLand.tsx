@@ -169,24 +169,24 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
           token
       );
 
-  
       if (addLandResponse) {
         landId = addLandResponse.land_id;
         console.log('Land added successfully:', addLandResponse.message);
     }
 
-      // // Step 2: Generate Business Plan
-      // setProgressMessage('Generating business plan and predictions...');
-      // await apiCall(
-      //   '/model/generate-business-plan',
-      //   {
-      //     method: 'POST',
-      //     data: { land_id: landId },
-      //     requireAuth: true,
-      //   },
-      //   token
-      // );
-      // console.log('Business plan and predictions generated successfully for land:', landId);
+      // Step 2: Generate Business Plan
+      setProgressMessage('Generating business plan and predictions...');
+      const response2 = await apiCall(
+        '/model/generate-business-plan',
+        {
+          method: 'POST',
+          data: { land_id: landId },
+          requireAuth: true,
+        },
+        token
+      );
+      console.log('Business plan and predictions generated successfully for land:', landId);
+      console.log('response getted from generate business plan api: ', response2)
 
 
       // Step 3: Get Land by ID
@@ -199,7 +199,6 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         },
         token
       );
-  
       
       console.log("data getted from get landById: ", landId," : ", landResponse)
       const selectedLand = mapLandDataToSelectedLand(landResponse);
@@ -209,7 +208,6 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       dispatch(setSelectedLand(selectedLand));
       console.log('Selected land updated in Redux store with: ', selectedLand);
   
-
       // Step 5: Finish loading
       setProgressMessage('Completed!');
       setTimeout(() => {
@@ -223,27 +221,29 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       setHasError(true)
       setProgressMessage('An error occurred. Please try again.');
       
-      //   //! Deleting land after fail
-      //   setTimeout(async ()=> {
-      //   console.log('Attempting to delete land with ID:', landId);
-      //   setProgressMessage('Deleting the created land.');
-      //   const response = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
-      //   console.log('Delete response:', response);
-        
-      //   if (response.message === 'Land deleted successfully') {
-      //     // dispatch(removeLand(landId));
-      //     setProgressMessage('land deleted successfully, rediricting...');
-      //     console.log('Land deleted successfully');
-      //   } else {
-      //     console.warn('Unexpected delete response:', response);
-      //   }
+      // Optionally handle cleanup (like deleting the land if partially created)
+        if (landId) {
+            console.log('Attempting to delete land with ID:', landId);
+            try {
+                setProgressMessage('Deleting the created land.');
+                const deleteResponse = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
 
-      //   // Optionally, keep the loading indicator and allow the user to retry
-      //   setTimeout(() => {
-      //     setShowProgress(false);
-      //     window.location.reload();
-      //   }, 2000);
-      // },2000)
+                if (deleteResponse.message === 'Land deleted successfully') {
+                    console.log('Land deleted successfully');
+                } else {
+                    console.warn('Unexpected delete response:', deleteResponse);
+                }
+            } catch (deleteError) {
+                console.error('Failed to delete land after error:', deleteError);
+            }
+        }
+
+        // Optionally, keep the loading indicator and allow the user to retry
+        //!Commented to debug and read console
+        // setTimeout(() => {
+        //     setShowProgress(false);
+        //     window.location.reload(); // Or allow retry
+        // }, 2000);
       
     }
   }

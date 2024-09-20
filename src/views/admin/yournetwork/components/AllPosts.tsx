@@ -1,14 +1,13 @@
-// import images temporarely
-import farmer from './assets/farmer.jpg';
-import tool from './assets/tool.jpg';
-import land from './assets/land.jpg';
+// Import images temporarily
 import defaultImages from './assets/defaultImages'; // Import default images
+import noPostsImage from './assets/noposts.png'; // Import the no posts image
 
 // components/AllPosts.tsx
 import React from 'react';
 import PostCard from './PostCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store'; 
+import { Box, Img } from '@chakra-ui/react';
 
 interface AllPostsProps {
   category?: string;
@@ -16,11 +15,7 @@ interface AllPostsProps {
 
 const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
   const posts = useSelector((state: RootState) => state.posts);
-  const Pictures = {
-    farmer,
-    land,
-    tool
-  };
+
 
   const categoryImages: Record<string, string> = {
     businessPromotion: defaultImages.business,
@@ -28,49 +23,40 @@ const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
     resourcesAndProducts: defaultImages.products,
   };
 
-  // // Function to get the default image based on category
-  // const getCategoryImage = (category: string) => categoryImages[category] || defaultImages.products; // Fallback image
-
-
   // Check posts here
   console.log('Current Posts State:', posts);
 
+  // Filter posts by category
+  const filteredPosts = posts.filter(post => post.type === (category || post.type));
+
   return (
     <div>
-      {posts
-        .filter(post => post.type === (category || post.type)) // Filter by category if provided
-        .map(post => {
-          
+      {filteredPosts.length === 0 ? (
+        <Box display="flex" justifyContent="center" flexDir="column" alignItems="center" textAlign="center">
+          <h1>Oops... There are no posts in this category.</h1>
+          <Img
+            height="auto" // Maintain aspect ratio
+            maxHeight="512px" // Set a max height
+            width="100%" // Full width
+            objectFit="contain" // Ensure the image scales without stretching
+            src={noPostsImage}
+            alt="No posts available"
+          />
+      </Box>
+      ) : (
+        filteredPosts.map(post => {
+          console.log('Post Object:', post);
           // Get the default image for the post type
           const postImage = categoryImages[post.type] || defaultImages.products;
 
           // Use the default avatar if no author picture is provided
-          // const authorPicture = post.authorPicture ? post.authorPicture : defaultImages.avatar;
           const authorPicture = defaultImages.avatar;
-
-          // Type guard to ensure post.authorPicture is a valid key          
-          // Log the entire post object to inspect its properties
-          console.log('Post Object:', post);
-
-          // Log the value of post.authorPicture
-          console.log('Author Picture Key:', post.image);
-
-
-          // ! Commented because of default images
-          // Get the picture based on post.authorPicture
-          // const authorPicture = Pictures[post.authorPicture as keyof typeof Pictures];
-          // const postPicture = Pictures[post.image as keyof typeof Pictures];
-
-          // Log the picture path or undefined
-          // console.log('Resolved Picture for author : ', authorPicture);
-          // console.log('Resolved Picture for post : ', postPicture);
-
 
           return (
             <PostCard
               key={post.postID}
               author={{
-                profilePicture: authorPicture, // Use the resolved image or fallback
+                profilePicture: authorPicture,
                 name: post.authorName,
                 country: post.authorCountry,
                 phoneNumber: post.authorPhoneNumber,
@@ -84,7 +70,8 @@ const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
               }}
             />
           );
-        })}
+        })
+      )}
     </div>
   );
 };
