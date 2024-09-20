@@ -21,6 +21,7 @@ interface PostCardProps {
   onModify?: () => void;
   onArchive?: () => void;
   onDelete?: () => void;
+  onRepost?: () => void;
 }
 
 const PostCard: React.FC<PostCardProps> = ({
@@ -31,6 +32,7 @@ const PostCard: React.FC<PostCardProps> = ({
   onModify,
   onArchive,
   onDelete,
+  onRepost,
 }) => {
   return (
     <Box
@@ -105,7 +107,7 @@ const PostCard: React.FC<PostCardProps> = ({
           <Divider my={4} />
           <Flex justifyContent="space-between">
             <Button onClick={onModify} colorScheme="blue">Modify</Button>
-            <Button onClick={onArchive} colorScheme={isArchived ? "green" : "yellow"}>
+            <Button onClick={isArchived ? onRepost : onArchive} colorScheme={isArchived ? "green" : "yellow"}>
               {isArchived ? "Repost" : "Archive"}
             </Button>
             <Button onClick={onDelete} colorScheme="red">Delete</Button>

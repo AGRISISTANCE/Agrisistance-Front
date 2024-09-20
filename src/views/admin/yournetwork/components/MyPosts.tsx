@@ -9,6 +9,7 @@ import { RootState } from '../../../../redux/store'; // Adjust the import based 
 import defaultImages from './assets/defaultImages'; // Import default images
 import { apiCall } from 'services/api';
 import ConfirmationPopup from '../../../../common/Popup/ConfirmationPopup';
+import { useToast } from '@chakra-ui/react';
 
 const MyPosts: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -21,6 +22,8 @@ const MyPosts: React.FC = () => {
   const [confirmationAction, setConfirmationAction] = useState<() => void>(() => () => {});
   const [confirmationMessage, setConfirmationMessage] = useState('');
   const [currentPostId, setCurrentPostId] = useState<string | null>(null);
+
+  const toast = useToast(); // Initialize Chakra's useToast hook
 
   const openModal = (post?: any) => {
     setCurrentPost(post || null); // Set the post data or null for a new post
@@ -50,20 +53,76 @@ const MyPosts: React.FC = () => {
     setShowPopup(true);
   };
 
+  // Reloads the page after a short timeout
+  const refreshPage = (delay: number = 1500) => {
+    setTimeout(() => {
+      window.location.reload();
+    }, delay);
+  };
+
   const archivePost = async (postID: string) => {
     try {
-      console.log('Archived');
-      // Add API request once backend is ready
+      const response = await apiCall('/network/archive-post', {
+        method: 'PATCH',
+        data: { post_id: postID },
+        requireAuth: true,
+      }, token);
+
+      toast({
+        title: "Post archived.",
+        description: response.message,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      // showNotification(response.message, 'success'); // Display success message
+      refreshPage(); // Refresh the page after success
     } catch (error) {
+      // showNotification('Failed to archive the post. Please try again.', 'error');
       console.error('Failed to archive post:', error);
+    }
+  };
+
+  const repostPost = async (postID: string) => {
+    try {
+      const response = await apiCall('/network/unarchive-post', {
+        method: 'PATCH',
+        data: { post_id: postID },
+        requireAuth: true,
+      }, token);
+      toast({
+        title: "Post unarchived.",
+        description: response.message,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      // showNotification(response.message, 'success'); // Display success message
+      refreshPage(); // Refresh the page after success
+    } catch (error) {
+      // showNotification('Failed to repost the post. Please try again.', 'error');
+      console.error('Failed to repost post:', error);
     }
   };
 
   const deletePost = async (postID: string) => {
     try {
-      console.log('Deleted');
-      // Add API request once backend is ready
+      const response = await apiCall('/network/delete-post', {
+        method: 'DELETE',
+        data: { post_id: postID },
+        requireAuth: true,
+      }, token);
+      toast({
+        title: "Post deleted.",
+        description: response.message,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      // showNotification(response.message, 'success'); // Display success message
+      refreshPage(); // Refresh the page after success
     } catch (error) {
+      // showNotification('Failed to delete the post. Please try again.', 'error');
       console.error('Failed to delete post:', error);
     }
   };
@@ -114,6 +173,7 @@ const MyPosts: React.FC = () => {
             isMyPost
             onModify={() => openModal(post)} // Pass the post data to the modal
             onArchive={() => openConfirmationPopup('Are you sure you want to archive this post?', () => archivePost(post.postID), post.postID)}
+            onRepost={() => openConfirmationPopup('Are you sure you want to Repost this post?', () => repostPost(post.postID), post.postID)}
             onDelete={() => openConfirmationPopup('Are you sure you want to delete this post?', () => deletePost(post.postID), post.postID)}
           />
         );
