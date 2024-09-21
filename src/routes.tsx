@@ -95,7 +95,7 @@ const routes = [
     name: 'reset password',
     layout: '/auth',
     icon: <Icon as={MdUpgrade} width="20px" height="20px" color="inherit" />,
-    path: '/reset-password/*',
+    path: '/reset-password/:token',
     component: <ResetPassword />,
   },
   {

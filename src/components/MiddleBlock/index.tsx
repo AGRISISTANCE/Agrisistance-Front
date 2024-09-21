@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Row, Col } from "antd";
 // import { Slide } from "react-awesome-reveal"; // Commented out for now
-import { Button } from "../../common/Button";
+import { Button } from "../Button";
 import { MiddleBlockSection, Content, ContentWrapper } from "./styles";
 
 interface MiddleBlockProps {

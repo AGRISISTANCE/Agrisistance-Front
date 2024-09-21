@@ -2,7 +2,7 @@ import { Center, Flex, Img, Text } from "@chakra-ui/react";
 import Header from "./Header";
 import React from "react";
 import { useNavigate } from 'react-router-dom';
-import { Button } from "../../common/Button";
+import { Button } from "../../components/Button";
 import image404 from "./404image.png"
 interface ErrorProps {
     header?: boolean;

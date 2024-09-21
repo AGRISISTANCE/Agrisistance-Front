@@ -3,8 +3,8 @@ import { Row, Col } from "antd";
 import React from 'react';
 
 import { ContentBlockProps } from "./types";
-import { Button } from "../../common/Button";
-import { SvgIcon } from "../../common/SvgIcon";
+import { Button } from "../Button";
+import { SvgIcon } from "../SvgIcon";
 import {
   ContentSection,
   Content,

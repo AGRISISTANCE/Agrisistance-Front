@@ -39,7 +39,6 @@ function ForgotPassword() {
     const [message, setMessage] = useState("");
     const [messageColor, setMessageColor] = useState(""); // Optional: to color the message
     const [loading, setLoading] = useState(false);
-    const [showCodeAlert, setShowCodeAlert] = useState(false);
 
     // Helper function to validate email format
     const validateEmail = (email: string) => {
@@ -71,7 +70,7 @@ function ForgotPassword() {
 
     try {
     const credentials = {
-        eMail: email,
+        email: email,
     };
 
     const response = await apiCall('/auth/forgot-password', {
@@ -80,13 +79,9 @@ function ForgotPassword() {
     });
 
     // Assuming the API returns a success message if the email exists
-    if (response.success) {
-        setMessage("Verification code sent! Please check your email.");
+    if (response) {
         setMessageColor("green");
-        setShowCodeAlert(true);
-    } else {
-        setMessage(response.message || "An error occurred. Please try again.");
-        setMessageColor("red");
+        setMessage(response.message || "Verification code sent! Please check your email.");
     }
     } catch (error: any) {
     setMessage("Password reset failed. Please confirm your email and try again.");
@@ -171,7 +166,7 @@ function ForgotPassword() {
                             Send verification code
                         </Button>
                         {message && (
-                            <Text color={message.includes("success") ? "green.500" : "red.500"} mb="24px">
+                            <Text color={`${messageColor}.500`} mb="24px">
                                 {message}
                             </Text>
                         )}
@@ -192,27 +187,6 @@ function ForgotPassword() {
                         </NavLink>
                     </Text>
                 </Flex>
-
-
-                {/* Password Reset Alert */}
-                {showCodeAlert && (
-                    <Alert status="success">
-                        <AlertIcon />
-                        <Box>
-                            <AlertTitle>Verification sent!</AlertTitle>
-                            <AlertDescription>
-                                Your verification code has been sent. check .
-                            </AlertDescription>
-                        </Box>
-                        <CloseButton
-                            alignSelf="flex-start"
-                            position="relative"
-                            right={-1}
-                            top={-1}
-                            onClick={() => setShowCodeAlert(false)}
-                        />
-                    </Alert>
-                )}
             </Flex>
 
         </DefaultAuth >

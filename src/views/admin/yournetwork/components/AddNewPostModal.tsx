@@ -14,6 +14,7 @@ import {
   Input,
   Textarea,
   Select,
+  useToast 
 } from '@chakra-ui/react';
 import {useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store';
@@ -25,59 +26,26 @@ import { defaultImages, authorImage, Category } from './assets/base64defaultImag
 
 const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: any }> = ({ isOpen, onClose, post }) => {
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
-  const dispatch = useDispatch();
-
+  const toast = useToast();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<CategoryType>('opportunitiesAndPartnership');
   const [image, setImage] = useState<File | null>(null);
 
-  // const resizeImage = (file: File) => {
-  //   return new Promise<Blob>((resolve, reject) => {
-  //     const img = document.createElement('img');
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       img.src = e.target.result;
-  //       img.onload = () => {
-  //         const canvas = document.createElement('canvas');
-  //         const ctx = canvas.getContext('2d');
-  //         if (ctx) {
-  //           canvas.width = img.width / 2;  // Resize as needed
-  //           canvas.height = img.height / 2;
-  //           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  //           canvas.toBlob((blob) => {
-  //             if (blob) resolve(blob);
-  //             else reject('Failed to resize image');
-  //           }, 'image/jpeg');
-  //         }
-  //       };
-  //     };
-  //     reader.readAsDataURL(file);
-  //   });
-  // };
-  
-  // const toBase64 = (file: File) => {
-  //   return resizeImage(file).then(blob => {
-  //     return new Promise<string | null>((resolve, reject) => {
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(blob);
-  //       reader.onload = () => resolve(reader.result as string);
-  //       reader.onerror = error => reject(null);
-  //     });
-  //   });
-  // };
-
+  useEffect(()=>{
+    console.log("category value changed to: ",category)
+  },[category])
 
   const getDefaultImageForCategory = (category: Category) => {
     return defaultImages[category];
   };
 
   useEffect(() => {
-    console.log("printing post object: ", post)
+    console.log("printing post opened object: ", post)
     if (post) {
       setTitle(post.title);
       setDescription(post.description);
-      // setCategory(post.type);
+      setCategory(post.type);
       // Handle image if needed
     } else {
       setTitle('');
@@ -89,18 +57,6 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
 
   const createNewPost = async () => {
     try {
-      // let base64Image = null;
-      // if (image) {
-      //   base64Image = await toBase64(image);
-      // }
-      
-      // console.log('Base64 image:', base64Image);
-      
-      const defaultImage = getDefaultImageForCategory(category);
-      
-      //! empty because too large not supported
-      // post_image: base64Image, // Should be in the format "data:image/jpeg;base64,..."
-      // post_image: defaultImage, // Should be in the format "data:image/jpeg;base64,..."
       const postData = {
         post_title: title,
         post_content: description,
@@ -115,43 +71,31 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
         data: postData,
         requireAuth: true,
       }, token);
-
-      // Dispatch the new post to Redux store
-      // dispatch(addPost({
-      //   postID: response.post_id,
-      //   title: title,
-      //   type: category,
-      //   description: description,
-      //   image: base64Image,
-      //   authorId: '', // Assuming you get the author data from a different part of the state
-      //   authorName: '',
-      //   authorPhoneNumber: '',
-      //   authorCountry: '',
-      //   authorPicture: '',
-      //   postDate: new Date().toISOString(),
-      //   active: true,
-      // }));
-
+      toast({
+        title: "Post created.",
+        description: "Your post has been successfully created.",
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
       console.log('Post created successfully');
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 1500);
       } catch (error) {
         console.error('Failed to create new post:', error);
+        toast({
+          title: "Error",
+          description: "Failed to create the post. Please try again.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     };
 
   const updatePost = async () => {
     try {
-      // let base64Image = null;
-      // if (image) {
-      //   base64Image = await toBase64(image);
-      // }
-
-      // const defaultImage = getDefaultImageForCategory(category);
-        //! empty because too large not supported
-        // post_image: base64Image,
-        // post_image: defaultImage,
       const postData = {
         post_title: title,
         post_content: description,
@@ -159,7 +103,7 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
       };
 
 
-      console.log("updating post with data: ")
+      console.log("updating post with data: ", postData)
       
       const response = await apiCall(`/network/update-post/${post.postID}`, {
         method: 'PUT',
@@ -167,24 +111,28 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
         requireAuth: true,
       }, token);
 
-      // Update the post in Redux store
-    //   dispatch(updatePost({
-    //     index: post.index, // Assuming you know the index of the post in the Redux store
-    //     updates: {
-    //       title,
-    //       type: category,
-    //       description,
-    //       image: base64Image || '',
-    //     },
-    //   })
-    // );
+
 
       console.log('Post updated successfully');
+      toast({
+        title: "Post updated.",
+        description: "Your post has been successfully updated.",
+        status: "success",
+        duration: 1500,
+        isClosable: true,
+      });
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 1500);
     } catch (error) {
       console.error('Failed to update post:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update the post. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -217,9 +165,9 @@ const AddNewPostModal: React.FC<{ isOpen: boolean; onClose: () => void; post?: a
           <FormControl mt={4}>
             <FormLabel>Category</FormLabel>
             <Select value={category} onChange={(e) => setCategory(e.target.value as CategoryType)}>
-              <option value="Business Promotion">Business Promotion</option>
-              <option value="Opportunities and Partnerships">Opportunities and Partnerships</option>
-              <option value="Products and Resources">Products and Resources</option>
+              <option value="businessPromotion">Business Promotion</option>
+              <option value="opportunitiesAndPartnership">Opportunities and Partnerships</option>
+              <option value="resourcesAndProducts">Products and Resources</option>
             </Select>
           </FormControl>
 

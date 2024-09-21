@@ -49,6 +49,7 @@ function LogIn() {
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState(""); // Optional: to color the message
   const [loading, setLoading] = useState(false);
+  const [showOnBoarding, setShowOnBoarding] = useState(false)
 
   const [showEmailVerificationAlert, setShowEmailVerificationAlert] = useState(false);
 
@@ -58,6 +59,7 @@ function LogIn() {
     // Show email verification success alert if the URL matches
     if (location.pathname === '/auth/login/email-verified-successfully') {
       setShowEmailVerificationAlert(true);
+      setShowOnBoarding(true)
     }
   }, [location]);
 
@@ -114,7 +116,11 @@ function LogIn() {
     
         setTimeout(() => {
           dispatch(setToken(response.token));
+          if (showOnBoarding){
+            navigate("/dashboard/home/onboarding"); // Redirect to dashboard on successful login  
+          } else {
           navigate("/dashboard/home"); // Redirect to dashboard on successful login
+        }
         }, 1000);
       } else {
         setMessageColor("red");

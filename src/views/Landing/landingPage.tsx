@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy } from 'react';
-import { Button } from "../../common/Button";
-import { SvgIcon } from "../../common/SvgIcon";
+import { Button } from "../../components/Button";
+import { SvgIcon } from "../../components/SvgIcon";
 import { Fade } from 'react-awesome-reveal';
 import { Col } from 'antd';
 import { NavLink } from 'react-router-dom';
@@ -23,8 +23,8 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 const Contact = lazy(() => import("../../components/ContactForm"));
-const Container = lazy(() => import("../../common/Container"));
-const ScrollToTop = lazy(() => import("../../common/ScrollToTop"));
+const Container = lazy(() => import("../../components/Container"));
+const ScrollToTop = lazy(() => import("../../components/ScrollToTop"));
 
 const LandingPage: React.FC = () => {
     const [isPreloadComplete, setIsPreloadComplete] = useState(false);

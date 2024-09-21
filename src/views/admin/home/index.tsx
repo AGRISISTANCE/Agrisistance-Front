@@ -78,9 +78,9 @@ export default function Home() {
 };
 
   //! comment when using dummy data
-  useEffect(() => {
-    fetchLands();
-  }, []);
+  // useEffect(() => {
+  //   fetchLands();
+  // }, []);
 
   // fetching user data!
   useEffect(() => {
