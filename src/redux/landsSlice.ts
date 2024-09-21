@@ -50,7 +50,7 @@ interface LandsState {
 }
 
 // Flag to toggle between dummy and real data
-const USE_DUMMY_DATA = false;
+const USE_DUMMY_DATA = true;
 
 const initialDummyLands: LandInfo[] = [
   {
@@ -161,60 +161,60 @@ const initialDummyLands: LandInfo[] = [
 
 const initialState: LandsState = {
   lands: USE_DUMMY_DATA ? initialDummyLands : [],
-  selectedLand: null
+  // selectedLand: null
   //! Uncomment when using dummy data
-  // selectedLand: {
-  //   landId: '2',
-  //   owner: 'user2',
-  //   landName: 'Sunny Meadows',
-  //   latitude: 7.0549637,
-  //   longitude: 38.2404379,
-  //   landSize: 75,
-  //   budgetForLand: 7000,
-  //   oxygen_level: 21,
-  //   nitrogen: 20,
-  //   potassium: 25,
-  //   phosphorus: 15,
-  //   humidity: 55,
-  //   ph_level: 7.0,
-  //   LandBusinessPlan: [
-  //     {
-  //       title: 'Crop Rotation',
-  //       description: 'Implement crop rotation to maintain soil fertility and manage pests.'
-  //     }
-  //   ],
-  //   crops: [
-  //     {
-  //       CropName: 'salad green',
-  //       CropImage: 'wheat.png',
-  //       recommendationPercentage: 90,
-  //       cropSize: 25,
-  //       expectedMoneyRevenue: 2500,
-  //       expectedWeightRevenue: 600,
-  //       cropCost: 600,
-  //       cropProfit: 1900
-  //     },
-  //     {
-  //       CropName: 'sweet potato',
-  //       CropImage: 'barley.png',
-  //       recommendationPercentage: 60,
-  //       cropSize: 15,
-  //       expectedMoneyRevenue: 1800,
-  //       expectedWeightRevenue: 400,
-  //       cropCost: 450,
-  //       cropProfit: 1350
-  //     }
-  //   ],
-  //   waterSufficecy: 85,
-  //   sunlight: 75,
-  //   pestisedesLevel: 3,
-  //   landUse: 95,
-  //   humanCoverage: 50,
-  //   waterAvaliability: 80,
-  //   distributionOptimality: 90,
-  //   suggestedImprovementSoil: ['Add compost', 'Reduce tillage'],
-  //   suggestedImprovementCrop: ['Use cover crops', 'Adjust planting density']
-  // },
+  selectedLand: {
+    landId: '2',
+    owner: 'user2',
+    landName: 'Sunny Meadows',
+    latitude: 7.0549637,
+    longitude: 38.2404379,
+    landSize: 75,
+    budgetForLand: 7000,
+    oxygen_level: 21,
+    nitrogen: 20,
+    potassium: 25,
+    phosphorus: 15,
+    humidity: 55,
+    ph_level: 7.0,
+    LandBusinessPlan: [
+      {
+        title: 'Crop Rotation',
+        description: 'Implement crop rotation to maintain soil fertility and manage pests.'
+      }
+    ],
+    crops: [
+      {
+        CropName: 'salad green',
+        CropImage: 'wheat.png',
+        recommendationPercentage: 90,
+        cropSize: 25,
+        expectedMoneyRevenue: 2500,
+        expectedWeightRevenue: 600,
+        cropCost: 600,
+        cropProfit: 1900
+      },
+      {
+        CropName: 'sweet potato',
+        CropImage: 'barley.png',
+        recommendationPercentage: 60,
+        cropSize: 15,
+        expectedMoneyRevenue: 1800,
+        expectedWeightRevenue: 400,
+        cropCost: 450,
+        cropProfit: 1350
+      }
+    ],
+    waterSufficecy: 85,
+    sunlight: 75,
+    pestisedesLevel: 3,
+    landUse: 95,
+    humanCoverage: 50,
+    waterAvaliability: 80,
+    distributionOptimality: 90,
+    suggestedImprovementSoil: ['Add compost', 'Reduce tillage'],
+    suggestedImprovementCrop: ['Use cover crops', 'Adjust planting density']
+  },
 };
 
 const landsSlice = createSlice({

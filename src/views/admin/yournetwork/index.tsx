@@ -26,12 +26,14 @@ const Network: React.FC = () => {
   //   persistor.purge();
   // }, []);
 
+  const [loading, setLoading] = useState(true);
 
   //Get all posts from backend
   //! COMMENT when using dummy data
   useEffect(() => {
     const fetchAllPosts = async () => {
       try {
+        setLoading(true); // Start loading
         const posts = await apiCall('/network/get-all-posts', {
           method: 'GET',
           requireAuth: true,
@@ -57,6 +59,8 @@ const Network: React.FC = () => {
         dispatch(setPosts(mappedPosts));
       } catch (error) {
         console.error('Failed to fetch all posts:', error);
+      }finally {
+        setLoading(false); // End loading
       }
     };
 
@@ -136,7 +140,7 @@ const Network: React.FC = () => {
   const renderContent = () => {
     switch (activeSection) {
       case 'All Posts':
-        return <AllPosts />;
+        return <AllPosts loading={loading}/>;
       case 'Business Promotion':
         return <AllPosts category='businessPromotion' />;
       case 'Opportunities and Partnerships':

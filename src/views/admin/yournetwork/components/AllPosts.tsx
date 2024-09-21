@@ -7,13 +7,14 @@ import React from 'react';
 import PostCard from './PostCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store'; 
-import { Box, Img } from '@chakra-ui/react';
+import { Box, Img, Spinner, Text } from '@chakra-ui/react';
 
 interface AllPostsProps {
   category?: string;
+  loading?: boolean;
 }
 
-const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
+const AllPosts: React.FC<AllPostsProps> = ({ category,loading }) => {
   const posts = useSelector((state: RootState) => state.posts);
 
 
@@ -30,28 +31,30 @@ const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
   const filteredPosts = posts.filter(post => post.type === (category || post.type));
 
   return (
-    <div>
-      {filteredPosts.length === 0 ? (
-        <Box display="flex" justifyContent="center" flexDir="column" alignItems="center" textAlign="center">
-          <h1>Oops... There are no posts in this category.</h1>
+    <Box>
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+          <Spinner size="xl" color="green.500" />
+        </Box>
+      ) : filteredPosts.length === 0 ? (
+        <Box display="flex" justifyContent="center" flexDir="column" alignItems="center" textAlign="center" p={5}>
+          <Text fontSize="xl" color="gray.500">Oops... There are no posts in this category.</Text>
           <Img
-            height="auto" // Maintain aspect ratio
-            maxHeight="512px" // Set a max height
-            width="100%" // Full width
-            objectFit="contain" // Ensure the image scales without stretching
+            height="auto"
+            maxHeight="512px"
+            width="100%"
+            objectFit="contain"
             src={noPostsImage}
             alt="No posts available"
+            mt={4}
           />
-      </Box>
+        </Box>
       ) : (
         filteredPosts.map(post => {
           console.log('Post Object:', post);
-          // Get the default image for the post type
           const postImage = categoryImages[post.type] || defaultImages.products;
-
-          // Use the default avatar if no author picture is provided
           const authorPicture = defaultImages.avatar;
-
+  
           return (
             <PostCard
               key={post.postID}
@@ -72,8 +75,9 @@ const AllPosts: React.FC<AllPostsProps> = ({ category }) => {
           );
         })
       )}
-    </div>
+    </Box>
   );
+  
 };
 
 export default AllPosts;
