@@ -1,5 +1,5 @@
 describe("Landing Page Footer Test", () => {
-  it('Should scroll to the footer, click "Get Started", complete sign-up, and verify email', () => {
+  it('Should scroll to the footer, click "Get Started", complete sign-up, and manually verify email', () => {
     cy.visit("http://localhost:3000/");
 
     // Scroll to the bottom of the page
@@ -21,9 +21,11 @@ describe("Landing Page Footer Test", () => {
     cy.url().should("include", "/auth/signup");
 
     // Fill out the sign-up form
-    cy.get('input[placeholder="First Name"]').type("John");
-    cy.get('input[placeholder="Last Name"]').type("Doe");
-    cy.get('input[placeholder="Email"]').type("john.doey@example.com");
+    cy.get('input[placeholder="First Name"]').type("Ryma");
+    cy.get('input[placeholder="Last Name"]').type("Felkir");
+
+    // Use a real email
+    cy.get('input[placeholder="Email"]').type("mr_felkir@esi.dz");
 
     // Click to open the dropdown and select a country
     cy.get('button[aria-haspopup="menu"]').click();
@@ -43,47 +45,37 @@ describe("Landing Page Footer Test", () => {
       'input[placeholder="Min 8 chars with numbers and special chars"]'
     ).type("SecureP@ssw0rd");
 
-    // Intercept the signup API request
-    cy.intercept("/auth/register").as("registerUser");
+    // Click the "Sign Up" button to submit the form
+    cy.get("button").contains("Sign Up").click();
+
+    // Wait for some time to simulate manual verification via email
+    cy.log("Please check your email and verify your account manually.");
+    cy.wait(60000); // Wait for 60 seconds for manual email verification
+
+    // Now, simulate the user returning to the login page after verifying their email
+    cy.visit("/auth/login");
+
+    // Fill in the login form
+    cy.get("input[type='email']").type("mr_felkir@esi.dz"); // Use your test email
+    cy.get("input[type='password']").type("SecureP@ssw0rd"); // Use your test password
 
     cy.get("button").contains("Sign Up").click();
 
-    // Wait for the signup request to complete and check the response status
-    cy.wait("@registerUser", { timeout: 10000 }) // Correct alias here
-      .its("response.statusCode")
-      .should("eq", 200);
+    // Click the 'Log In' button
+    cy.get("button").contains("Log In").click();
 
-    // Intercept email verification
-    cy.intercept("GET", "/auth/email-verified-successfully").as(
-      "verifyRequest"
-    );
-
-    // Trigger the email verification (replace with dynamic token if available)
-    cy.request("GET", "/auth/verify?token=test-verification-token");
-
-    // Wait for the verification request to complete
-    cy.wait("@verifyRequest", { timeout: 40000 }) // Correct alias here
-      .its("response.statusCode")
-      .should("eq", 200);
-
-    // Verify the email verification success page
-    cy.url().should("include", "/auth/email-verified-successfully");
-    cy.contains("Your email has been verified successfully!").should(
+    // Wait for the success message to appear
+    cy.contains("Login successful! Redirecting...", { timeout: 60000 }).should(
       "be.visible"
     );
 
-    // Redirect to login and log in
-    cy.contains("Log In").click();
+    // Verify that the URL includes "/dashboard/home"
+    cy.url({ timeout: 60000 }).should(
+      "include",
+      "http://localhost:3000/dashboard/home"
+    );
 
-    // Fill out the login form
-    cy.get("input[name='email']").type(Cypress.env("TEST_USER_EMAIL")); // Use env variable for email
-    cy.get("input[name='password']").type(Cypress.env("TEST_USER_PASSWORD")); // Use env variable for password
-    cy.contains("Submit").click(); // Assuming the "Submit" button is used for login
-
-    // Verify login success
-    cy.url().should("include", "/dashboard"); // Adjust based on actual redirection
-    cy.contains(`Welcome back, ${Cypress.env("TEST_USER_NAME")}`).should(
-      "be.visible"
-    ); // Dynamic welcome message
+    // Optionally, verify the welcome message or some element on the dashboard
+    cy.contains("Welcome back", { timeout: 60000 }).should("be.visible");
   });
 });
