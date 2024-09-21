@@ -1,5 +1,5 @@
 // components/PostCard.tsx
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Box, Text, Image, Flex, Button, Divider } from '@chakra-ui/react';
 
 interface PostCardProps {
@@ -11,8 +11,10 @@ interface PostCardProps {
   };
   content: {
     category: string;
-    title: string;
-    description: string;
+    title: ReactNode; // Changed from string to ReactNode
+    description: ReactNode; // Changed from string to ReactNode
+    // title: string;
+    // description: string;
     image: string;
     date: string;
   };
@@ -91,7 +93,7 @@ const PostCard: React.FC<PostCardProps> = ({
             <Box overflow="hidden" borderRadius="md" mb={2}>
               <Image
                 src={content.image}
-                alt={content.title}
+                alt={content.title as string}
                 maxW="50%"
                 height="auto"
                 // objectFit="cover"

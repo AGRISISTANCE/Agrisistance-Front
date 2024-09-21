@@ -11,7 +11,13 @@ import { apiCall } from '../../../../services/api';
 import ConfirmationPopup from '../../../../components/Popup/ConfirmationPopup';
 import { useToast } from '@chakra-ui/react';
 
-const MyPosts: React.FC = () => {
+interface MyPostsProps {
+  searchQuery: string; // Add searchQuery prop
+}
+
+
+const MyPosts: React.FC<MyPostsProps> = ({searchQuery}) => {
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState<any>(null); // Track the current post being edited
   const posts = useSelector((state: RootState) => state.posts);
@@ -144,6 +150,15 @@ const MyPosts: React.FC = () => {
     }
   };
 
+  const highlightText = (text: string, query: string) => {
+    if (!query) return text; // If there's no query, return the original text
+    const parts = text.split(new RegExp(`(${query})`, 'gi')); // Split text by the search query
+    return parts.map((part, index) => 
+      part.toLowerCase() === query.toLowerCase() ? <span key={index} style={{ backgroundColor: 'yellow' }}>{part}</span> : part
+    );
+  };
+
+
   const categoryImages: Record<string, string> = {
     businessPromotion: defaultImages.business,
     opportunitiesAndPartnership: defaultImages.partner,
@@ -224,8 +239,8 @@ const MyPosts: React.FC = () => {
             }}
             content={{
               category: post.type,
-              title: post.title,
-              description: post.description,
+              title: highlightText(post.title, searchQuery),
+              description: highlightText(post.description, searchQuery),
               image: postImage, // Use default image based on post type
               date: post.postDate,
             }}

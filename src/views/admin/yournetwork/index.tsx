@@ -1,6 +1,6 @@
 // components/Network.tsx
 import React, { useEffect, useState } from 'react';
-import { Box, Tabs, TabList, TabPanels, Tab, TabPanel, Flex, Text, Button } from '@chakra-ui/react';
+import { Box, Tabs, TabList, TabPanels, Tab, TabPanel, Flex, Text, Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import AllPosts from './components/AllPosts';
 import MyPosts from './components/MyPosts';
 import { apiCall } from '../../../services/api';
@@ -12,6 +12,7 @@ import { setPosts } from '../../../redux/postsSlice';
 import images from '../../../layouts/admin/onboarding/images'; //import images for onboarding
 import { useLocation, useNavigate } from 'react-router-dom';
 import Tour from 'reactour';
+import { SearchIcon } from '@chakra-ui/icons';
 
 
 const Network: React.FC = () => {
@@ -19,13 +20,30 @@ const Network: React.FC = () => {
   const token = useSelector((state: RootState) => state.token.token); // Assuming you store the token in Redux
   const dispatch = useDispatch();
   const [activeSection, setActiveSection] = useState('All Posts');
+  const [searchQuery, setSearchQuery] = useState(''); // State for search input
+  const posts = useSelector((state: RootState) => state.posts); // Fetch posts from Redux
+  const [filteredPosts, setFilteredPosts] = useState(posts); // State to store filtered posts
+
 
   // ! DONT TOUCH! Added just to solve some problem
   // useEffect(() => {
   //   // Purge persisted state on component mount
   //   persistor.purge();
   // }, []);
-
+  useEffect(() => {
+    // Filter posts based on search query
+    if (searchQuery.trim() === '') {
+      setFilteredPosts(posts); // Reset to all posts when query is empty
+    } else {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = posts.filter(post =>
+        post.title.toLowerCase().includes(lowercasedQuery) ||
+        post.description.toLowerCase().includes(lowercasedQuery) ||
+        post.authorName.toLowerCase().includes(lowercasedQuery)
+      );
+      setFilteredPosts(filtered);
+    }
+  }, [searchQuery, posts]); // Re-run filter when searchQuery or posts change
   const [loading, setLoading] = useState(true);
 
   //Get all posts from backend
@@ -140,15 +158,15 @@ const Network: React.FC = () => {
   const renderContent = () => {
     switch (activeSection) {
       case 'All Posts':
-        return <AllPosts loading={loading}/>;
+        return <AllPosts loading={loading} searchQuery={searchQuery}/>;
       case 'Business Promotion':
-        return <AllPosts category='businessPromotion' />;
+        return <AllPosts category='businessPromotion' searchQuery={searchQuery} />;
       case 'Opportunities and Partnerships':
-        return <AllPosts category='opportunitiesAndPartnership' />;
+        return <AllPosts category='opportunitiesAndPartnership' searchQuery={searchQuery} />;
       case 'Products and Resources':
-        return <AllPosts category='resourcesAndProducts' />;
+        return <AllPosts category='resourcesAndProducts' searchQuery={searchQuery} />;
       case 'My Posts':
-        return <MyPosts />;
+        return <MyPosts searchQuery={searchQuery}/>;
       default:
         return null;
     }
@@ -158,7 +176,14 @@ const Network: React.FC = () => {
     <>
     <Navbar/>
     <Box mt={16} p={5}>
-      <Flex className='navbar' gap='40px' mb={4}>
+      <Flex className='navbar' gap='30px' mb={4}>
+      <InputGroup mb={4} maxW="400px">
+          <Input
+            placeholder="Search posts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // Update search input state
+          />
+        </InputGroup>
         {['All Posts', 'Business Promotion', 'Opportunities and Partnerships', 'Products and Resources', 'My Posts'].map(section => (
           <Text
             key={section}
