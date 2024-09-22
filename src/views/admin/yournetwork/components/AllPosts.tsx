@@ -37,7 +37,7 @@ interface AllPostsProps {
   console.log('Current Posts State:', posts);
 
   // Filter posts by category
-  const filteredPosts = posts.filter(post => post.type === (category || post.type));
+  const filteredPosts = posts.filter(post => post.active && post.type === (category || post.type));
   return (
     <Box>
       {loading ? (
