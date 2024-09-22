@@ -315,7 +315,7 @@ const Yourland: React.FC = () => {
 							},
 							token
 						);
-						console.log("Land updated successfully:", updateResponse.data.message);
+						console.log("Land updated successfully:", updateResponse);
 						
 						// Step 2: Generate NEW Business Plan
 						setProgressMessage('Generating business plan and predictions...');
