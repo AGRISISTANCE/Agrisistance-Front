@@ -20,11 +20,41 @@ export const mapLandDataToSelectedLand = (landData: any): LandInfo => {
     phosphorus: landData.land.phosphorus,
     humidity: landData.weather.humidity || 0, // Fixed here
     ph_level: landData.land.ph_level,
+    // LandBusinessPlan: [
+    //   {
+    //     title: 'Executive Summary',
+    //     description: landData.business_plan.executive_summary || '', // Ensure this is a string
+    //   },
+    // ],
     LandBusinessPlan: [
       {
         title: 'Executive Summary',
         description: landData.business_plan.executive_summary || '', // Ensure this is a string
       },
+      {
+        title: 'Resources',
+        description: landData.business_plan.resources || '', // Ensure this is a string
+      },
+      {
+        title: 'Crop Information',
+        description: landData.business_plan.crops || '', // Ensure this is a string
+      },
+      {
+        title: 'Weather Considerations',
+        description: landData.business_plan.weather_considerations || '', // Ensure this is a string
+      },
+      {
+        title: 'Soil Maintenance',
+        description: landData.business_plan.soil_maintenance || '', // Ensure this is a string
+      },
+      {
+        title: 'Profit Estimations',
+        description: landData.business_plan.profit_estimations || '', // Ensure this is a string
+      },
+      {
+        title: 'Other Recommendations',
+        description: landData.business_plan.other_recommendations || '', // Ensure this is a string
+      }
     ],
     crops: landData.crops.map((crop: any) => {
       const recommendationPercentage = totalCropArea > 0 ? (crop.crop_area / totalCropArea) * 100 : 0;
