@@ -26,6 +26,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Tour from 'reactour';
 import images from '../../../layouts/admin/onboarding/images'; //import images for onboarding
 import { mapLandDataToSelectedLand } from '../home/components/utils/landMapper'; // Import the utility function
+import erroranimated from "../../../assets/img/dashboards/erroranimated.json";
 
 
 
@@ -304,7 +305,7 @@ const Yourland: React.FC = () => {
 					setProgressMessage('Updating land...');
 
 					try {
-						// Call the update land API (uncomment once confirmed)
+						// STEP1: Call the update land API (uncomment once confirmed)
 						const updateResponse = await apiCall(
 							`/land/update-land/${selectedLand.landId}`,
 							{
@@ -315,11 +316,25 @@ const Yourland: React.FC = () => {
 							token
 						);
 						console.log("Land updated successfully:", updateResponse.data.message);
+						
+						// Step 2: Generate NEW Business Plan
+						setProgressMessage('Generating business plan and predictions...');
+						const response2 = await apiCall(
+						  '/model/generate-business-plan',
+						  {
+							method: 'POST',
+							data: { land_id: selectedLand.landId },
+							requireAuth: true,
+						  },
+						  token
+						);
+						console.log('Business plan and predictions generated successfully for land:', selectedLand.landId);
+						console.log('response getted from generate business plan api: ', response2)
 
 						// Show a new progress message for fetching the updated land data
 						setProgressMessage('Fetching updated land data...');
 
-						// Fetch the updated land data from the server
+						//STEP3: Fetch the updated land data from the server
 						const landResponse = await apiCall(
 							`/land/get-land/${selectedLand.landId}`,
 							{
@@ -348,12 +363,14 @@ const Yourland: React.FC = () => {
 						}, 2000); // Keep "Fetching updated land data..." message for 2 seconds
 
 					} catch (apiError) {
+						setHasError(true)
 						// Handle errors from the API call
 						console.error("Failed to update land:", apiError);
 						setProgressMessage('Error occurred!');
 						setTimeout(() => {
 							setShowProgress(false);
-						}, 1000);
+							setHasError(false)
+						}, 2500);
 					}
 				}, 1000); // Show "Starting..." message for 1 second
 
@@ -552,6 +569,7 @@ const Yourland: React.FC = () => {
 		}));
 	  };
 
+	const [hasError, setHasError] = useState(false);
 
 
 	//! Component rendering
@@ -1006,7 +1024,7 @@ const Yourland: React.FC = () => {
 							zIndex={1000} // Ensure it's above the blur overlay
 						>
 							<Lottie
-								animationData={animationData}
+								animationData={hasError ? erroranimated : animationData}
 								play
 								loop
 								style={{ width: "100%", maxWidth: "300px", height: "auto" }}
