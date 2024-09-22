@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Button, Text, useDisclosure } from '@chakra-ui/react';
+import { Flex, Button, Text, useDisclosure, useToast } from '@chakra-ui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLand, removeLand, setSelectedLand, LandInfo } from '../../../../redux/landsSlice'; // Ensure this import is correct
 import land from '../../../../assets/img/land/land';
@@ -36,6 +36,8 @@ export default function Land({
 
   const [showDeletePopup, setShowDeletePopup] = useState(false); // State for showing the confirmation popup
   const navigate = useNavigate();
+
+  const toast = useToast(); // Initialize Chakra's useToast hook
 
   const handleSelect = () => {
     const loadData = async () => {
