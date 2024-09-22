@@ -547,8 +547,8 @@ const Yourland: React.FC = () => {
 	const soilRanges = {
 		oxygen: { unit: '%', min: 0, max: 100 },
 		nitrogen: { unit: 'kg/ha', min: 0, max: 300 }, // example range for nitrogen
-		potassium: { unit: 'kg/ha', min: 0, max: 200 }, // example range for potassium
-		phosphorus: { unit: 'kg/ha', min: 0, max: 100 }, // example range for phosphorus
+		potassium: { unit: 'kg/ha', min: 0, max: 300 }, // example range for potassium
+		phosphorus: { unit: 'kg/ha', min: 0, max: 300 }, // example range for phosphorus
 		humidity: { unit: '%', min: 0, max: 100 },
 		ph: { unit: '', min: 1, max: 14 }, // pH has no unit
 	}
