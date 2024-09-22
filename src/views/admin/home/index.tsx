@@ -78,9 +78,9 @@ export default function Home() {
 };
 
   //! comment when using dummy data
-  // useEffect(() => {
-  //   fetchLands();
-  // }, []);
+  useEffect(() => {
+    fetchLands();
+  }, []);
 
   // fetching user data!
   useEffect(() => {
@@ -105,6 +105,7 @@ export default function Home() {
         console.error('Failed to fetch user profile:', error);
       }
     };
+    
     //! Comment when using dummy data
     fetchUserProfile();
   }, []);

@@ -25,6 +25,7 @@ import { apiCall } from "../../../../services/api";
 import { RootState } from "../../../../redux/store";
 
 import { selectLand, removeLand, setInitialLands, LandInfo, setSelectedLand } from '../../../../redux/landsSlice'; // Ensure this import is correct
+import { mapLandDataToSelectedLand } from './utils/landMapper'; // Adjust path based on your file structure
 
 
 interface AddNewLandProps {
@@ -63,56 +64,6 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
   const [progressMessage, setProgressMessage] = useState<string>("Starting...");
 
   const token = useSelector((state: RootState) => state.token.token); // Get the token from the state
-
-  const mapLandDataToSelectedLand = (landData: any): LandInfo => {
-    // Calculate the total crop area for all crops
-    const totalCropArea = landData.crops.reduce((total: number, crop: any) => total + (crop.crop_area || 0), 0);
-  
-      return {
-        landId: landData.land.land_id,
-        owner: landData.land.user_id,
-        landName: landData.land.land_name,
-        latitude: landData.land.latitude,
-        longitude: landData.land.longitude,
-        landSize: landData.land.land_size,
-        budgetForLand: landData.finance[0]?.investment_amount || 0,
-        oxygen_level: landData.land.oxygen_level,
-        nitrogen: landData.land.nitrogen,
-        potassium: landData.land.potassium,
-        phosphorus: landData.land.phosphorus,
-        humidity: landData.weather[0]?.humidity || 0,
-        ph_level: landData.land.ph_level,
-        LandBusinessPlan: landData.business_plan.map((plan: any) => ({
-          title: 'Executive Summary', // or any appropriate title
-          description: plan.executive_summary || '', // Ensure this is a string
-        })),
-        crops: landData.crops.map((crop: any) => {
-          const recommendationPercentage = totalCropArea > 0 
-            ? (crop.crop_area / totalCropArea) * 100 
-            : 0;
-
-          return {
-            CropName: crop.crop_name || '', // Ensure default values
-            CropImage: crop.crop_name || '', // Ensure default values
-            recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)), // Limit to 2 decimal places
-            cropSize: crop.crop_area || 0,
-            expectedMoneyRevenue: crop.expected_money_return || 0,
-            expectedWeightRevenue: crop.expected_wight_return || 0,
-            cropCost: crop.crop_investment || 0,
-            cropProfit: (crop.expected_money_return || 0) - (crop.crop_investment || 0),
-          };
-        }),
-        waterSufficecy: landData.crop_maintenance[0]?.water_sufficienty || 0,
-        sunlight: landData.weather[0]?.sunlight || 0,
-        pestisedesLevel: landData.crop_maintenance[0]?.pesticide_level || 0,
-        landUse: (landData.land_statistics[0]?.land_use || 0) * 100,
-        humanCoverage: (landData.land_statistics[0]?.human_coverage || 0) * 100,
-        waterAvaliability: landData.land_statistics[0]?.water_availability || 0,
-        distributionOptimality: landData.land_statistics[0]?.distribution_optimality || 0,
-        suggestedImprovementSoil: landData.suggested_improvements?.soil || [],
-        suggestedImprovementCrop: landData.suggested_improvements?.crop || [],
-      };
-  };
 
 
   const handleAddLand = async () => {
@@ -201,12 +152,10 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
       );
       
       console.log("data getted from get landById: ", landId," : ", landResponse)
-      const selectedLand = mapLandDataToSelectedLand(landResponse);
-      console.log("data after being mapped: ", selectedLand)
-      
+      const mappedLand = mapLandDataToSelectedLand(landResponse);    
       // Dispatch the action to update the selected land in the Redux store
-      dispatch(setSelectedLand(selectedLand));
-      console.log('Selected land updated in Redux store with: ', selectedLand);
+      dispatch(setSelectedLand(mappedLand));
+      console.log('Selected land updated in Redux store with: ', mappedLand);
   
       // Step 5: Finish loading
       setProgressMessage('Completed!');
@@ -217,26 +166,27 @@ export default function AddNewLand({ initialStep = 0 }: AddNewLandProps) {
         navigate("/dashboard/yourland");
       }, 2000);
     } catch (error) {
-      console.error('Error during the land creation and mapping process:', error);
+      console.error('Error during the land creation process:', error);
       setHasError(true)
       setProgressMessage('An error occurred. Please try again.');
-      
-      // Optionally handle cleanup (like deleting the land if partially created)
-        if (landId) {
-            console.log('Attempting to delete land with ID:', landId);
-            try {
-                setProgressMessage('Deleting the created land.');
-                const deleteResponse = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
-
-                if (deleteResponse.message === 'Land deleted successfully') {
-                    console.log('Land deleted successfully');
-                } else {
-                    console.warn('Unexpected delete response:', deleteResponse);
-                }
-            } catch (deleteError) {
-                console.error('Failed to delete land after error:', deleteError);
-            }
-        }
+      setTimeout(async ()=>{
+        // Optionally handle cleanup (like deleting the land if partially created)
+          if (landId) {
+              console.log('Attempting to delete land with ID:', landId);
+              try {
+                  setProgressMessage('Deleting the created land.');
+                  const deleteResponse = await apiCall(`/land/delete-land/${landId}`, { method: 'DELETE', requireAuth: true }, token);
+  
+                  if (deleteResponse.message === 'Land deleted successfully') {
+                      console.log('Land deleted successfully');
+                  } else {
+                      console.warn('Unexpected delete response:', deleteResponse);
+                  }
+              } catch (deleteError) {
+                  console.error('Failed to delete land after error:', deleteError);
+              }
+          }
+      },2000)
 
         // Optionally, keep the loading indicator and allow the user to retry
         //!Commented to debug and read console

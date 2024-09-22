@@ -947,7 +947,20 @@ const Yourland: React.FC = () => {
 	return (<>
 		<Navbar />
 		<Flex mt={16} direction="column" p={4}>
-			<Text  mb={4} fontSize='3xl' fontWeight='semibold'>{cityCountry ? `${cityCountry.city}, ${cityCountry.country}` : 'No location available'}</Text>
+		<Text mb={4} fontSize='3xl' fontWeight='semibold'>
+			{cityCountry ? (
+				cityCountry.city === "Error" && cityCountry.country === "Error" ? (
+				'Location informations unavailable'
+				) : (
+				`${cityCountry.city !== "Error" ? cityCountry.city : ''}${
+					cityCountry.city !== "Error" && cityCountry.country !== "Error" ? ', ' : ''
+				}${cityCountry.country !== "Error" ? cityCountry.country : ''}`
+				)
+			) : (
+				'No location available'
+			)}
+			</Text>
+
 			<Flex  className='navbar' gap='40px' mb={4}>
 				{['Predict Revenue', 'Soil maintenance', 'Crop maintenance', 'Land statistics', 'Finance management'].map(section => (
 					<Text
