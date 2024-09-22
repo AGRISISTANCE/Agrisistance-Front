@@ -12,7 +12,7 @@ import ConfirmationPopup from '../../../components/Popup/ConfirmationPopup';
 import { MapContainer, TileLayer, Marker, useMap, Popup } from 'react-leaflet';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../redux/store';
-import { Crop, setSelectedLand } from '../../../redux/landsSlice';
+import { Crop, setInitialLands, setSelectedLand, LandInfo } from '../../../redux/landsSlice';
 import axios from 'axios';
 import CropBarChart from './components/CropBarChart';
 import 'leaflet/dist/leaflet.css';
@@ -20,12 +20,12 @@ import L from "leaflet";
 import Lottie from 'react-lottie-player';
 import animationData from "../../../assets/img/dashboards/cropanimated.json";
 import { apiCall } from '../../../services/api';
-import { LandInfo } from '../../../redux/landsSlice'; // Ensure this import is correct
 import Navbar from '../navbar/navbar';
 import crops from './crops/crops_pictures'; 
 import { useLocation, useNavigate } from 'react-router-dom';
 import Tour from 'reactour';
 import images from '../../../layouts/admin/onboarding/images'; //import images for onboarding
+import { mapLandDataToSelectedLand } from '../home/components/utils/landMapper'; // Import the utility function
 
 
 
@@ -224,66 +224,60 @@ const Yourland: React.FC = () => {
 	
   
 
+	//! fetching lands data:
+	  const fetchLands = async () => {
+		try {
+		  // Directly call apiCall and get the parsed data
+		  const lands = await apiCall('/land/get-all-lands', {
+			method: 'GET',
+			requireAuth: true,
+		  }, token);
+	
+		  console.log("API Response:", lands); // Log the response to confirm it's an array
+	
+		  const mappedLands = lands.map((land: any) => ({
+			landId: land.land_id,
+			owner: user.userId,
+			landName: land.land_name,
+			latitude: land.latitude,
+			longitude: land.longitude,
+			landSize: land.land_size,
+			budgetForLand: 0,
+			oxygen_level: 0,
+			nitrogen: 0,
+			potassium: 0,
+			phosphorus: 0,
+			humidity: 0,
+			ph_level: 0,
+			LandBusinessPlan: [] as LandBusinessPlan[], 
+			crops: [] as Crop[], 
+			waterSufficecy: 0, 
+			sunlight: 0, 
+			pestisedesLevel: 0, 
+			landUse: 0, 
+			humanCoverage: 0, 
+			waterAvaliability: 0, 
+			distributionOptimality: 0, 
+			suggestedImprovementSoil: [] as string[], 
+			suggestedImprovementCrop: [] as string[], 
+		  }));
+		  //! comment when using dummy data
+		  dispatch(setInitialLands(mappedLands));
+		  console.log("Initial lands set successfully", mappedLands);
+		  
+		} catch (error) {
+		  console.error('Failed to fetch lands:', error);
+		}
+	};
 
 	//! new handle submit:
 	const handleSubmit = async () => {
 		if (!isConfirmPhase) {
 			setIsConfirmPhase(true); // Switch to confirmation phase
 		} else {
-
-			const mapLandDataToSelectedLand = (landData: any): LandInfo => {
-				// Calculate the total crop area for all crops
-				const totalCropArea = landData.crops.reduce((total: number, crop: any) => total + crop.crop_area, 0);
-			  
-				return {
-				  landId: landData.land[0].land_id,
-				  owner: landData.land[0].user_id,
-				  landName: landData.land[0].land_name,
-				  latitude: landData.land[0].latitude,
-				  longitude: landData.land[0].longitude,
-				  landSize: landData.land[0].land_size,
-				  budgetForLand: landData.finance[0]?.investment_amount || 0,
-				  oxygen_level: landData.land[0].oxygen_level,
-				  nitrogen: landData.land[0].nitrogen,
-				  potassium: landData.land[0].potassium,
-				  phosphorus: landData.land[0].phosphorus,
-				  humidity: landData.weather[0]?.humidity || 0,
-				  ph_level: landData.land[0].ph_level,
-				  LandBusinessPlan: landData.business_plan.map((plan: any) => ({
-					title: 'Executive Summary', // or any appropriate title
-					description: plan.executive_summary,
-				  })),
-				  crops: landData.crops.map((crop: any) => {
-					const recommendationPercentage = totalCropArea > 0 
-					  ? (crop.crop_area / totalCropArea) * 100 
-					  : 0;
-			
-					return {
-					  CropName: crop.crop_name,
-					  CropImage: crop.crop_name, // Set the image name as the crop name
-					  recommendationPercentage: parseFloat(recommendationPercentage.toFixed(2)), // Limit to 2 decimal places
-					  cropSize: crop.crop_area,
-					  expectedMoneyRevenue: crop.expected_money_return,
-					  expectedWeightRevenue: crop.expected_wight_return,
-					  cropCost: crop.crop_investment,
-					  cropProfit: crop.expected_money_return - crop.crop_investment,
-					};
-				  }),
-				  waterSufficecy: landData.crop_maintenance[0]?.water_sufficienty || 0,
-				  sunlight: landData.weather[0]?.sunlight || 0,
-				  pestisedesLevel: landData.crop_maintenance[0]?.pesticide_level || 0,
-				  landUse: (landData.land_statistics[0]?.land_use * 100) || 0,
-				  humanCoverage: (landData.land_statistics[0]?.human_coverage * 100) || 0,
-				  waterAvaliability: landData.land_statistics[0]?.water_availability || 0,
-				  distributionOptimality: landData.land_statistics[0]?.distribution_optimality || 0,
-				  suggestedImprovementSoil: landData.suggested_improvements?.soil || [],
-				  suggestedImprovementCrop: landData.suggested_improvements?.crop || [],
-				};
-			  };
-
 			setShowPopup(false);
-	
-			// Collect the slider values
+
+			// Prepare the request body with updated land details
 			const requestBody = {
 				latitude: landDetails.latitude,
 				longitude: landDetails.longitude,
@@ -297,75 +291,75 @@ const Yourland: React.FC = () => {
 				humidity: soil.humidity,
 				budget: budget,
 			};
-	
-			console.log("you will be requesting changes to this new land: ", selectedLand ,". into this land :", requestBody)
+
+			console.log("You will be requesting changes to this new land: ", selectedLand, ". Into this land:", requestBody);
 
 			try {
-				// Show "Starting..." message for 1 second
+				// Show progress messages to the user
 				setShowProgress(true);
 				setProgressMessage('Starting...');
-	
-				setTimeout(async () => {
-					// Show "Getting prediction..." message while fetching the API
-					setProgressMessage('Getting prediction...');
-					
 
-					//! Remove this once you confirm update land is working
+				setTimeout(async () => {
+					// Set message while fetching the API
+					setProgressMessage('Updating land...');
+
 					try {
-					console.log("this is commented for now we will fix it very soon...")
-					// 	const response = await apiCall(
-					// 		`/land/update-land/${selectedLand.landId}`,
-					// 		{
-					// 			method: 'PUT',
-					// 			data: requestBody,
-					// 			requireAuth: true,
-					// 		},
-					// 		token
-					// 	);
-					// 	console.log("Land updated successfully:", response.data.message);
-						
-						
-					// 	setProgressMessage('Fetching updated land data...');
-					// 	//! Updating new land according to new business plan
-					// 	const landResponse = await apiCall(
-					// 		`/land/get-land/${selectedLand.landId}`,
-					// 		{
-					// 		method: 'GET',
-					// 		requireAuth: true,
-					// 		},
-					// 		token
-					// 	);
-					
-					// 	console.log("data getted from get landById after changes for: ", selectedLand.landId," : ", landResponse)
-					// 	const selectedLandMapped = mapLandDataToSelectedLand(landResponse);
-					// 	console.log("data after being mapped: ", selectedLandMapped)
-						
-					// 	// Dispatch the action to update the selected land in the Redux store
-					// 	dispatch(setSelectedLand(selectedLandMapped));
-					// 	console.log('Selected land updated in Redux store with: ', selectedLand);
-					
-						// Show "Completed!" message for 1 second after successful API call
+						// Call the update land API (uncomment once confirmed)
+						const updateResponse = await apiCall(
+							`/land/update-land/${selectedLand.landId}`,
+							{
+								method: 'PUT',
+								data: requestBody,
+								requireAuth: true,
+							},
+							token
+						);
+						console.log("Land updated successfully:", updateResponse.data.message);
+
+						// Show a new progress message for fetching the updated land data
+						setProgressMessage('Fetching updated land data...');
+
+						// Fetch the updated land data from the server
+						const landResponse = await apiCall(
+							`/land/get-land/${selectedLand.landId}`,
+							{
+								method: 'GET',
+								requireAuth: true,
+							},
+							token
+						);
+						console.log("Fetched updated land data for: ", selectedLand.landId, " : ", landResponse);
+
+						// Map the fetched data to the format expected by your application using the utility function
+						const updatedLandData = mapLandDataToSelectedLand(landResponse);
+						console.log("Mapped updated land data: ", updatedLandData);
+
+						// Dispatch the action to update the selected land in the Redux store
+						dispatch(setSelectedLand(updatedLandData));
+						console.log('Selected land updated in Redux store with: ', updatedLandData);
+						fetchLands()
+						// Show "Completed!" message for 1 second after the process
 						setTimeout(() => {
 							setProgressMessage('Completed!');
 							setTimeout(() => {
 								setShowProgress(false);
 								window.location.reload();
 							}, 1000);
-						}, 2000); // Keep "Getting prediction..." message for 2 seconds
-	
+						}, 2000); // Keep "Fetching updated land data..." message for 2 seconds
+
 					} catch (apiError) {
+						// Handle errors from the API call
 						console.error("Failed to update land:", apiError);
-						// Show error message for 1 second
 						setProgressMessage('Error occurred!');
 						setTimeout(() => {
 							setShowProgress(false);
 						}, 1000);
 					}
 				}, 1000); // Show "Starting..." message for 1 second
-	
+
 			} catch (error) {
+				// Handle any unexpected errors
 				console.error("Unexpected error occurred:", error);
-				// Show error message for 1 second if any unexpected error occurs
 				setProgressMessage('Unexpected error!');
 				setTimeout(() => {
 					setShowProgress(false);
@@ -374,6 +368,7 @@ const Yourland: React.FC = () => {
 		}
 	};
 
+	
 	const handleCancel = () => {
 		setShowPopup(false);
 		setIsConfirmPhase(false);

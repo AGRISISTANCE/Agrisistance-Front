@@ -51,9 +51,23 @@ export default function Land({
         if (landResponse) {
           const mappedLand = mapLandDataToSelectedLand(landResponse);
           dispatch(setSelectedLand(mappedLand));
+          toast({
+            title: "Land selected successfully",
+            description: `land ${mappedLand.landName} Selected successfully`,
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
         }
       } catch (error) {
         console.error('Error loading data:', error);
+        toast({
+          title: "Error while selecting land",
+          description: `Failed to select that specefic land`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       } finally {
         setLoading(false);
       }
@@ -76,10 +90,30 @@ export default function Land({
         // dispatch(removeLand(landId));
         console.log('Land deleted successfully');
         dispatch(setSelectedLand(null));
-        window.location.reload();
+        toast({
+          title: "Land deleted successfully",
+          description: response.message,
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setTimeout(()=>{
+
+          window.location.reload();
+        },2000)
       } else {
         console.warn('Unexpected delete response:', response);
-        window.location.reload();
+        toast({
+          title: "Error while deleting land",
+          description: response.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        setTimeout(()=>{
+
+          window.location.reload();
+        },2000)
       }
     } catch (error) {
       console.error('Error deleting land:', error);
@@ -159,3 +193,7 @@ export default function Land({
     </>
   );
 }
+function toast(arg0: { title: string; description: any; status: string; duration: number; isClosable: boolean; }) {
+  throw new Error('Function not implemented.');
+}
+
