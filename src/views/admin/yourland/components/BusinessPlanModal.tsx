@@ -78,7 +78,7 @@ const BusinessPlanModal: React.FC<BusinessPlanModalProps> = ({ isDisabled, busin
                   </Text>
                 </Box>
               ))}
-              <ChakraButton width={'fit-content'} colorScheme='#2ACC32' bg={'#2ACC32'} alignSelf={'center'}>Download</ChakraButton>
+              {/* <ChakraButton width={'fit-content'} colorScheme='#2ACC32' bg={'#2ACC32'} alignSelf={'center'}>Download</ChakraButton> */}
             </Flex>
             <ChakraButton colorScheme="" padding={'10px'} border={'2px'} borderRadius={'50%'} position={'absolute'} top={'-20px'} right={'-40px'} onClick={onClose}>
               <IoClose />
