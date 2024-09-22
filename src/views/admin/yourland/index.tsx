@@ -938,7 +938,7 @@ const Yourland: React.FC = () => {
 									Your budget
 								</Text>
 								<Flex width='100%' background='#F1F1F1' borderRadius='16px' padding='20px' margin='0px 20px 20px 20px'>
-									<Text>{budget ? `${budget} ETB` : 'No budget set'}</Text>
+									<Text>{budget ? `${budget} $` : 'No budget set'}</Text>
 								</Flex>
 								<Button
 									onClick={openPopupWithInputs}
