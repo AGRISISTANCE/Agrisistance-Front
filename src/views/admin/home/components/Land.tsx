@@ -92,6 +92,7 @@ export default function Land({
         // dispatch(removeLand(landId));
         console.log('Land deleted successfully');
         dispatch(setSelectedLand(null));
+        dispatch(removeLand(landId));
         toast({
           title: "Land deleted successfully",
           description: response.message,
